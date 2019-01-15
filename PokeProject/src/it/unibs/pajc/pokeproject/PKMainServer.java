@@ -11,8 +11,8 @@ public class PKMainServer {
 	
 	
 	public static void loadPkmn() {
-		//in futuro verranno caricati da file
-		
+		Pokemon bulbasaur = new Pokemon("Bulbasaur", "Erba");
+		System.out.println(bulbasaur.stats.get("Attack"));
 	}
 	
 }
