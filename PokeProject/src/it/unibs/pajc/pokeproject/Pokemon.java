@@ -6,7 +6,7 @@ public class Pokemon {
 	private String name;
 	private String type;
 	public PKMove[] moves = new PKMove[4];
-	public HashMap<String, Integer> stats = new HashMap<>();
+	private HashMap<String, Integer> stats = new HashMap<>();
 	
 	
 	
@@ -15,6 +15,26 @@ public class Pokemon {
 		this.type = type;
 		fillStats(name);
 		fillMoves();
+	}
+	
+	public int getAttack() {
+		return stats.get("Attack");
+	}
+	
+	public int getDefense() {
+		return stats.get("Defense");
+	}
+	
+	public int getSpeed() {
+		return stats.get("Speed");
+	}
+	
+	public int getLevel() {
+		return stats.get("Level");
+	}
+	
+	public int getHP() {
+		return stats.get("HP");
 	}
 	
 	/*
@@ -69,4 +89,10 @@ public class Pokemon {
 			break;
 		}
 	}
+	
+	//il damage sono il numero di PS che il server dirà al pkmn di togliersi
+	private void getDamage(int damage) {
+		stats.put("HP", stats.get("HP") - damage);
+	}
+	
 }
