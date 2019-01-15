@@ -5,19 +5,26 @@ import java.util.*;
 public class Pokemon {
 	private String name;
 	private String type;
-	private PKMove[] moves = new PKMove[4];
-	public HashMap<String, Integer> stats;
+	public PKMove[] moves = new PKMove[4];
+	public HashMap<String, Integer> stats = new HashMap<>();
 	
 	
 	
 	public Pokemon(String name,  String type) {
 		this.name = name;
 		this.type = type;
-		this.stats = fillStats(stats, name);
+		fillStats(name);
+		fillMoves();
 	}
 	
-	private HashMap<String, Integer> fillStats(HashMap<String, Integer> stats, String name) {
-		String filename = name + ".txt";
+	/*
+	 * TODO LIST
+	 * fix percorso file, fix nome file, controlli file
+	 * 
+	 */
+	
+	private void fillStats(String name) {
+		String filename = name + ".pk";
 		File poke = new File(filename);
 		if(poke.isFile())
 		{
@@ -43,7 +50,23 @@ public class Pokemon {
 					e.printStackTrace();
 				}
 			}
-		}
-		return stats;		
+		}	
 	}	
+	
+	private void fillMoves() {
+		moves[0] = new PKMove("Azione", 10);
+		moves[1] = new PKMove("Forza", 20);
+		moves[2] = new PKMove("Ruggito", 0);
+		switch(type) {
+		case "Erba":
+			moves[3] = new PKMove("Foglielama", 30);
+			break;
+		case "Fuoco":
+			moves[3] = new PKMove("Lanciafiamme", 40);
+			break;
+		case "Acqua":
+			moves[3] = new PKMove("Idropulsar", 35);
+			break;
+		}
+	}
 }
