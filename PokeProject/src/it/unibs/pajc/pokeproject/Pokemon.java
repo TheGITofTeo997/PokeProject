@@ -5,7 +5,7 @@ import java.util.*;
 public class Pokemon {
 	private String name;
 	private String type;
-	public PKMove[] moves = new PKMove[4];
+	private PKMove[] moves = new PKMove[4];
 	private HashMap<String, Integer> stats = new HashMap<>();
 	
 	
@@ -48,9 +48,7 @@ public class Pokemon {
 		File poke = new File(filename);
 		if(poke.isFile())
 		{
-			BufferedReader br=null;
-			try {
-				br = new BufferedReader(new FileReader(poke));
+			try (BufferedReader br = new BufferedReader(new FileReader(poke))) {
 				String text;
 				while((text=br.readLine())!=null) {
 					StringTokenizer st = new StringTokenizer(text, ":");
@@ -62,13 +60,6 @@ public class Pokemon {
 			}
 			catch(IOException e) {
 				e.printStackTrace();
-			}
-			finally {
-				try {
-					br.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
 			}
 		}	
 	}	
