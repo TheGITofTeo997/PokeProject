@@ -29,7 +29,10 @@ public class PKMainClient {
 			String request, response;
 			while((request = stdin.readLine()) != null) {
 				toServer.println(request);
+				response = fromServer.readLine();
+				System.out.println("Received " + response + " from server");
 			}
+			
 		}
 		catch(Exception e) {
 			e.printStackTrace();

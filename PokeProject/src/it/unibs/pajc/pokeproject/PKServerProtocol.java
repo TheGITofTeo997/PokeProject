@@ -20,7 +20,8 @@ public class PKServerProtocol extends Thread{
 			toClient = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
 			String request;
 			while((request = fromClient.readLine()) != null) {
-				System.out.println("Server received" + request + "damage from" + socket.getInetAddress());
+				System.out.println("Server received " + request + " damage from " + socket.getInetAddress());
+				System.out.println("Sending " + request);
 				toClient.println(request);
 			}
 		}
