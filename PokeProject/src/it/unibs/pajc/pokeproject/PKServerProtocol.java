@@ -40,11 +40,11 @@ public class PKServerProtocol extends Thread{
 			for(Iterator<Integer> iter = clientList.keySet().iterator(); iter.hasNext(); )
 			{
 				key = iter.next();		
-				System.out.println(clientList.get(key));
+				PKServerWindow.appendTextToConsole("\n" + clientList.get(key).toString());
 			}
 			clientPorts.add(key);	
 			//stampa arraylist
-			for(int j=0;j<clientPorts.size();j++) System.out.println(clientPorts.get(j));
+			for(int j=0;j<clientPorts.size();j++) PKServerWindow.appendTextToConsole("\n" + clientPorts.get(j).toString());
 			
 			while((request = fromClient.readLine()) != null) {
 			//quando riceve un messaggio da un client il server invia il messaggio all'altro client
@@ -60,8 +60,6 @@ public class PKServerProtocol extends Thread{
 			}
 			PKServerWindow.appendTextToConsole("\nServer received " + request + " damage from " + socketPlayer.getInetAddress());
 			PKServerWindow.appendTextToConsole("\nSending " + request);
-			//System.out.println("Server received " + request + " damage from " + socketPlayer.getInetAddress());
-			//System.out.println("Sending " + request);
 			toClient.println(request);				
 		}
 		}
