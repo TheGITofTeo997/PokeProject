@@ -10,7 +10,7 @@ public class PKMainClient {
 	}
 	
 	public void sendChosenPokemon(Pokemon chosen) {
-		// implementazione 
+		// implementazione socket 
 	}
 
 }

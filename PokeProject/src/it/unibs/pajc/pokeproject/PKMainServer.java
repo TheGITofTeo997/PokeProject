@@ -1,21 +1,53 @@
 package it.unibs.pajc.pokeproject;
 
 import java.util.*;
+import java.io.IOException;
+import java.net.*;
 
 public class PKMainServer {
 	private static final int ID0 = 0;
 	private static final int ID1 = 1;
+	private static Pokemon trainerPoke0;
+	private static Pokemon trainerPoke1;
+	
+	
+	
 
 	public static void main(String[] args) {
-		loadPkmn();
+		initialize();
 		
 	}
-	
-	
+			
 	public static void loadPkmn() {
 		Pokemon bulbasaur = new Pokemon("Bulbasaur", "Erba");
 		Pokemon charmander = new Pokemon("Charmander", "Fuoco");
 		Pokemon squirtle = new Pokemon ("Squirtle", "Acqua");
+	}
+	
+	public static void initialize() {
+		loadPkmn();
+	    openConnection();
+	    trainerPoke0.setID(ID0);
+	    trainerPoke1.setID(ID1);
+
+	    
+	}
+	
+	public static void openConnection() {
+		ServerSocket server;
+		try {
+			server = new ServerSocket(50000);
+			System.out.println("Server started on port 50000...");
+			while(true) {  
+		    Socket client = server.accept();
+		    PKServerProtocol protocol = new PKServerProtocol(client);
+			}
+		} 
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	    
 	}
 	
 	
@@ -33,6 +65,8 @@ public class PKMainServer {
 		int damageToSend=0;
 		return damageToSend;
 	}
+	
+	
 	
 	//Il server riceverà in ingresso i due pkmn e ad ognuno assegnerà l'ID, in base al quale
 	//attaccheranno e verranno identificati all'interno dei metodi.

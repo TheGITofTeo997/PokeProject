@@ -7,6 +7,7 @@ public class Pokemon {
 	private String type;
 	private PKMove[] moves = new PKMove[4];
 	private HashMap<String, Integer> stats = new HashMap<>();
+	private int ID;
 	
 	
 	
@@ -15,6 +16,14 @@ public class Pokemon {
 		this.type = type;
 		fillStats(name);
 		fillMoves();
+	}
+	
+	public int getID() {
+		return ID;
+	}
+
+	public void setID(int ID) {
+		this.ID = ID;
 	}
 	
 	public int getAttack() {
