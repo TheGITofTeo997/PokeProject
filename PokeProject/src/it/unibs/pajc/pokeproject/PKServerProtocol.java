@@ -4,25 +4,30 @@ import java.io.*;
 import java.net.*;
 
 public class PKServerProtocol extends Thread{
-	private Socket socket;
-	private BufferedReader fromClient;
-	private PrintWriter toClient;
+	private Socket socketPlayer1;
+	private Socket socketPlayer2;
+	private BufferedReader fromClient1;
+	private PrintWriter toClient1;
+	private BufferedReader fromClient2;
+	private PrintWriter toClient2;
 	
 	public PKServerProtocol(Socket socket) {
-		this.socket = socket;
+		this.socketPlayer1 = socket;
 		this.start();
 	}
 	
 	public void run() {
-		System.out.println("Serving client with address "+ socket.getInetAddress());
+		System.out.println("Serving client with address "+ socketPlayer1.getInetAddress());
 		try {		
-			fromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			toClient = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
+			fromClient1 = new BufferedReader(new InputStreamReader(socketPlayer1.getInputStream()));
+			toClient1 = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socketPlayer1.getOutputStream())), true);
+			fromClient2 = new BufferedReader(new InputStreamReader(socketPlayer2.getInputStream()));
+			toClient2 = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socketPlayer2.getOutputStream())), true);
 			String request;
-			while((request = fromClient.readLine()) != null) {
-				System.out.println("Server received " + request + " damage from " + socket.getInetAddress());
+			while((request = fromClient1.readLine()) != null) {
+				System.out.println("Server received " + request + " damage from " + socketPlayer1.getInetAddress());
 				System.out.println("Sending " + request);
-				toClient.println(request);
+				toClient2.println(request);
 			}
 		}
 		catch(Exception e)
