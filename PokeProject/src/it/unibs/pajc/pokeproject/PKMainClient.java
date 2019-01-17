@@ -19,7 +19,7 @@ public class PKMainClient {
 	
 	public static void connectToServer() {
 		try {
-			socket = new Socket("10.0.83.63", 50000);
+			socket = new Socket("25.101.251.30", 50000);
 			System.out.println("Successfully connected to server at" + socket.getInetAddress());
 		}
 		catch(Exception e) {
