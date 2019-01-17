@@ -30,7 +30,7 @@ public class PKServerProtocol extends Thread{
 	}
 	
 	public void run() {
-		System.out.println("Serving client with address "+ socketPlayer.getInetAddress());
+		PKServerWindow.appendTextToConsole("\nServing client with address "+ socketPlayer.getInetAddress());
 		clientList.put(socketPlayer.getPort(), socketPlayer);//aggiunta del client all'hashmap
 		try {		
 			fromClient = new BufferedReader(new InputStreamReader(socketPlayer.getInputStream()));
@@ -58,8 +58,10 @@ public class PKServerProtocol extends Thread{
 				toClient = new PrintWriter(new BufferedWriter(new OutputStreamWriter(clientList.get(port_receiver).getOutputStream())),true);
 				toClient.println(request);
 			}
-			System.out.println("Server received " + request + " damage from " + socketPlayer.getInetAddress());
-			System.out.println("Sending " + request);
+			PKServerWindow.appendTextToConsole("\nServer received " + request + " damage from " + socketPlayer.getInetAddress());
+			PKServerWindow.appendTextToConsole("\nSending " + request);
+			//System.out.println("Server received " + request + " damage from " + socketPlayer.getInetAddress());
+			//System.out.println("Sending " + request);
 			toClient.println(request);				
 		}
 		}

@@ -12,8 +12,8 @@ public class PKMainServer {
 	
 	
 	
-
-	public static void main(String[] args) {
+	//Questo era il vecchio main, ora non è più entrypoint poichè viene fatto dalla window
+	public static void serverStart() {
 		initialize();
 		
 	}
@@ -37,7 +37,7 @@ public class PKMainServer {
 		ServerSocket server;
 		try {
 			server = new ServerSocket(50000);
-			System.out.println("Server started on port 50000...");
+			PKServerWindow.appendTextToConsole("\nServer started on port 50000...");
 			while(true) {  
 		    Socket client = server.accept();
 		    PKServerProtocol protocol = new PKServerProtocol(client);
