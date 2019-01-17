@@ -2,32 +2,36 @@ package it.unibs.pajc.pokeproject;
 
 import java.io.*;
 import java.net.*;
+import java.util.*;
 
 public class PKServerProtocol extends Thread{
-	private Socket socketPlayer1;
-	private Socket socketPlayer2;
-	private BufferedReader fromClient1;
-	private PrintWriter toClient1;
-	private BufferedReader fromClient2;
-	private PrintWriter toClient2;
+	private Socket socketPlayer;
+	private BufferedReader fromClient;
+	private PrintWriter toClient;
+	private HashMap<Integer, java.net.Socket> clientList = new HashMap<>();
+	private static int i=0;
+
 	
 	public PKServerProtocol(Socket socket) {
-		this.socketPlayer1 = socket;
+		this.socketPlayer = socket;
 		this.start();
 	}
 	
 	public void run() {
-		System.out.println("Serving client with address "+ socketPlayer1.getInetAddress());
+		System.out.println("Serving client with address "+ socketPlayer.getInetAddress());
+		clientList.put(i++, socketPlayer);
 		try {		
-			fromClient1 = new BufferedReader(new InputStreamReader(socketPlayer1.getInputStream()));
-			toClient1 = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socketPlayer1.getOutputStream())), true);
-			fromClient2 = new BufferedReader(new InputStreamReader(socketPlayer2.getInputStream()));
-			toClient2 = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socketPlayer2.getOutputStream())), true);
+			fromClient = new BufferedReader(new InputStreamReader(socketPlayer.getInputStream()));
+			toClient = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socketPlayer.getOutputStream())), true);
 			String request;
-			while((request = fromClient1.readLine()) != null) {
-				System.out.println("Server received " + request + " damage from " + socketPlayer1.getInetAddress());
+			while((request = fromClient.readLine()) != null) {
+				System.out.println("Server received " + request + " damage from " + socketPlayer.getInetAddress());
 				System.out.println("Sending " + request);
-				toClient2.println(request);
+				toClient.println(request);
+				System.out.println(clientList.get(0));
+				System.out.println(clientList.get(1));
+				
+				
 			}
 		}
 		catch(Exception e)
