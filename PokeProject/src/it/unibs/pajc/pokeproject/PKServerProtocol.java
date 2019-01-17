@@ -5,6 +5,8 @@ import java.net.*;
 
 public class PKServerProtocol extends Thread{
 	private Socket socket;
+	private BufferedReader fromClient;
+	private PrintWriter toClient;
 	
 	public PKServerProtocol(Socket socket) {
 		this.socket = socket;
@@ -14,7 +16,13 @@ public class PKServerProtocol extends Thread{
 	public void run() {
 		System.out.println("Serving client with address "+ socket.getInetAddress());
 		try {		
-			ObjectInputStream inFromClient = new ObjectInputStream(socket.getInputStream());		
+			fromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			toClient = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
+			String request;
+			while((request = fromClient.readLine()) != null) {
+				System.out.println("Server received" + request + "damage from" + socket.getInetAddress());
+				toClient.println(request);
+			}
 		}
 		catch(Exception e)
 		{
