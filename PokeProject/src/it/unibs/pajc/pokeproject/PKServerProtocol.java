@@ -49,18 +49,17 @@ public class PKServerProtocol extends Thread{
 			while((request = fromClient.readLine()) != null) {
 			//quando riceve un messaggio da un client il server invia il messaggio all'altro client
 			//semplicemente cambiando socket
-			if(socketPlayer.getPort() == clientPorts.get(0)) {
-				int port_receiver = clientPorts.get(1);
-				toClient = new PrintWriter(new BufferedWriter(new OutputStreamWriter(clientList.get(port_receiver).getOutputStream())),true);
-				toClient.println(request);
-			}else if(socketPlayer.getPort() == clientPorts.get(1)){
-				int port_receiver = clientPorts.get(0);
-				toClient = new PrintWriter(new BufferedWriter(new OutputStreamWriter(clientList.get(port_receiver).getOutputStream())),true);
-				toClient.println(request);
-			}
-			PKServerWindow.appendTextToConsole("\nServer received " + request + " damage from " + socketPlayer.getInetAddress());
-			PKServerWindow.appendTextToConsole("\nSending " + request);
-			toClient.println(request);				
+				int port_receiver;
+				if(socketPlayer.getPort() == clientPorts.get(0)) {
+					port_receiver = clientPorts.get(1);
+					toClient = new PrintWriter(new BufferedWriter(new OutputStreamWriter(clientList.get(port_receiver).getOutputStream())),true);
+				}else if(socketPlayer.getPort() == clientPorts.get(1)){
+					port_receiver = clientPorts.get(0);
+					toClient = new PrintWriter(new BufferedWriter(new OutputStreamWriter(clientList.get(port_receiver).getOutputStream())),true);
+				}
+				PKServerWindow.appendTextToConsole("\nServer received " + request + " damage from " + socketPlayer.getInetAddress());
+				PKServerWindow.appendTextToConsole("\nSending " + request);
+				toClient.println(request);				
 		}
 		}
 		catch(Exception e)

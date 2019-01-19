@@ -25,13 +25,10 @@ public class PKMainClient {
 			System.out.println("Successfully connected to server at" + socket.getInetAddress());
 			fromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			toServer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
-			BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
-			String request, response;
-			while((request = stdin.readLine()) != null) {
-				toServer.println(request);
-				response = fromServer.readLine();
-				System.out.println("Received " + response + " from server");
-			}
+			PKClientSender sender = new PKClientSender(toServer);
+			sender.start();
+			PKClientReceiver receiver = new PKClientReceiver(fromServer);
+			receiver.start();
 			
 		}
 		catch(Exception e) {
