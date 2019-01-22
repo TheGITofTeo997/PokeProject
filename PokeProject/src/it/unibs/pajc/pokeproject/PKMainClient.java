@@ -6,19 +6,15 @@ import java.net.*;
 public class PKMainClient {
 	
 	private static Socket socket;
-	private static Pokemon chosenPokemon;
 	private static BufferedReader fromServer;
 	private static PrintWriter toServer;
+	private static PrintWriter toServerID;
 	
 	public static void main(String[] args) {
 		connectToServer();
 
 	}
-	
-	public static void sendChosenPokemon(Pokemon chosen) {
-		// implementazione socket 
-	}
-	
+		
 	public static void connectToServer() {
 		try {
 			socket = new Socket("25.101.251.30", 50000);

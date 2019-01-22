@@ -12,10 +12,14 @@ public class PKClientSender extends Thread {
 		this.toServer = toServer;
 	}
 	
+	public void sendData(int data) {
+		toServer.println(data);
+	}
+	
 	public void run() {
-		try (BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in))){
-			String request;
-			while((request = stdin.readLine()) != null) {
+		try {
+			String request = "TEST";
+			while(true) {
 				toServer.println(request);
 			}
 		}

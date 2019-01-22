@@ -7,9 +7,6 @@ public class Pokemon {
 	private String type;
 	private PKMove[] moves = new PKMove[4];
 	private HashMap<String, Integer> stats = new HashMap<>();
-	private int ID;
-	
-	
 	
 	public Pokemon(String name,  String type) {
 		this.name = name;
@@ -19,11 +16,15 @@ public class Pokemon {
 	}
 	
 	public int getID() {
-		return ID;
+		return stats.get("ID");
+	}
+	
+	public String getName() {
+		return name;
 	}
 
-	public void setID(int ID) {
-		this.ID = ID;
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	public int getAttack() {
@@ -74,18 +75,18 @@ public class Pokemon {
 	}	
 	
 	private void fillMoves() {
-		moves[0] = new PKMove("Azione", 10);
-		moves[1] = new PKMove("Forza", 20);
+		moves[0] = new PKMove("Azione", 40);
+		moves[1] = new PKMove("Forza", 80);
 		moves[2] = new PKMove("Ruggito", 0);
 		switch(type) {
 		case "Erba":
-			moves[3] = new PKMove("Foglielama", 30);
+			moves[3] = new PKMove("Foglielama", 90);
 			break;
 		case "Fuoco":
-			moves[3] = new PKMove("Lanciafiamme", 40);
+			moves[3] = new PKMove("Lanciafiamme", 90);
 			break;
 		case "Acqua":
-			moves[3] = new PKMove("Idropulsar", 35);
+			moves[3] = new PKMove("Idropulsar", 60);
 			break;
 		}
 	}

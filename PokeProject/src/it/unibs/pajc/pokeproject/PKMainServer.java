@@ -7,6 +7,7 @@ import java.net.*;
 public class PKMainServer {
 	private static final int ID0 = 0;
 	private static final int ID1 = 1;
+	private static HashMap<Integer, String> database = new HashMap<>();
 	private static Pokemon trainerPoke0;
 	private static Pokemon trainerPoke1;
 	
@@ -20,9 +21,19 @@ public class PKMainServer {
 			
 	public static void loadPkmn() {
 		Pokemon bulbasaur = new Pokemon("Bulbasaur", "Erba");
-		Pokemon charmander = new Pokemon("Charmander", "Fuoco");
+		Pokemon charmander = new Pokemon("Charmander", "Fuoco");		
 		Pokemon squirtle = new Pokemon ("Squirtle", "Acqua");
+		Pokemon chikorita = new Pokemon("Chikorita", "Erba");
+		Pokemon cyndaquil = new Pokemon("Cyndaquil", "Fuoco");
+		Pokemon totodile = new Pokemon("Totodile", "Acqua");
+		database.put(bulbasaur.getID(), bulbasaur.getName());
+		database.put(charmander.getID(), charmander.getName());
+		database.put(squirtle.getID(), squirtle.getName());
+		database.put(chikorita.getID(), chikorita.getName());
+		database.put(cyndaquil.getID(), cyndaquil.getName());
+		database.put(totodile.getID(), totodile.getName());
 	}
+	
 	
 	public static void initialize() {
 		loadPkmn();
