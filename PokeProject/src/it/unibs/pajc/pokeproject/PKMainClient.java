@@ -8,7 +8,6 @@ public class PKMainClient {
 	private static Socket socket;
 	private static BufferedReader fromServer;
 	private static PrintWriter toServer;
-	private static PrintWriter toServerID;
 	
 	public static void main(String[] args) {
 		connectToServer();
@@ -23,6 +22,7 @@ public class PKMainClient {
 			toServer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
 			PKClientSender sender = new PKClientSender(toServer);
 			sender.start();
+			sender.sendData(001);
 			PKClientReceiver receiver = new PKClientReceiver(fromServer);
 			receiver.start();
 			

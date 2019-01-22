@@ -7,20 +7,21 @@ import java.io.PrintWriter;
 public class PKClientSender extends Thread {
 
 	private PrintWriter toServer;
+	private int dataToSend = -1;
 	
 	public PKClientSender(PrintWriter toServer) {
 		this.toServer = toServer;
 	}
 	
 	public void sendData(int data) {
-		toServer.println(data);
+		dataToSend = data;
 	}
 	
 	public void run() {
 		try {
-			String request = "TEST";
-			while(true) {
-				toServer.println(request);
+			while(dataToSend>-1) {
+				toServer.println(dataToSend);
+				dataToSend = -1;
 			}
 		}
 		catch(Exception e) {
