@@ -48,7 +48,9 @@ public class PKServerProtocol extends Thread{
 			
 			while((request = fromClient.readLine()) != null) {
 			//quando riceve un messaggio da un client il server invia il messaggio all'altro client
-			//semplicemente cambiando socket
+			//semplicemente cambiando socket, la comunicazione avviene solo quando tutti e 2 i client
+			//sono connessi
+				if(clientPorts.size() == 2) { //stiamo mandando dei danni
 				int port_receiver;
 				if(socketPlayer.getPort() == clientPorts.get(0)) {
 					port_receiver = clientPorts.get(1);
@@ -59,7 +61,11 @@ public class PKServerProtocol extends Thread{
 				}
 				PKServerWindow.appendTextToConsole("\nServer received " + request + " damage from " + socketPlayer.getInetAddress());
 				PKServerWindow.appendTextToConsole("\nSending " + request);
-				toClient.println(request);				
+				toClient.println(request);		
+				}
+				else { //stiamo mandando degli id
+					
+				}
 		}
 		}
 		catch(Exception e)

@@ -5,9 +5,8 @@ import java.io.IOException;
 import java.net.*;
 
 public class PKMainServer {
-	private static final int ID0 = 0;
-	private static final int ID1 = 1;
 	private static HashMap<Integer, String> database = new HashMap<>();
+	private static ArrayList<Integer> ids = new ArrayList<>();
 	private static Pokemon trainerPoke0;
 	private static Pokemon trainerPoke1;
 	
@@ -38,9 +37,6 @@ public class PKMainServer {
 	public static void initialize() {
 		loadPkmn();
 	    openConnection();
-	    
-	    //trainerPoke0.setID(ID0);
-	    //trainerPoke1.setID(ID1);
 
 	    
 	}
@@ -60,7 +56,7 @@ public class PKMainServer {
 		}
 	}
 	
-	
+	/*
 	public int setPriorityBattle(Pokemon p0, Pokemon p1) {
 		int speedP0 = p0.getSpeed();
 		int speedP1 = p1.getSpeed();
@@ -69,7 +65,7 @@ public class PKMainServer {
 		}
 		else
 			return ID1;
-	}
+	}*/
 	
 	public int damageToSend(int pwrAttack) {
 		int damageToSend=0;
