@@ -1,7 +1,6 @@
 package it.unibs.pajc.pokeproject;
 
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
 import java.awt.BorderLayout;
@@ -10,8 +9,15 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
+import javax.swing.text.DefaultCaret;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+
+import java.awt.ScrollPane;
+import javax.swing.ScrollPaneConstants;
 
 public class PKServerWindow extends Thread{
 
@@ -53,11 +59,6 @@ public class PKServerWindow extends Thread{
 		frmPokeserverV.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmPokeserverV.getContentPane().setLayout(null);
 		
-		consoleTextArea = new JTextArea();
-		consoleTextArea.setEditable(false);
-		consoleTextArea.setBounds(10, 334, 424, 116);
-		frmPokeserverV.getContentPane().add(consoleTextArea);
-		
 		JLabel lblConsole = new JLabel("Console");
 		lblConsole.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblConsole.setBounds(10, 317, 66, 14);
@@ -71,7 +72,18 @@ public class PKServerWindow extends Thread{
 		});
 		btnStart.setBounds(162, 36, 121, 60);
 		frmPokeserverV.getContentPane().add(btnStart);
+		//frmPokeserverV.getContentPane().add(consoleTextArea);
+				
+		JScrollPane scrollPane = new JScrollPane(consoleTextArea);
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane.setBounds(10, 335, 428, 119);
+		frmPokeserverV.getContentPane().add(scrollPane);
 		
+		consoleTextArea = new JTextArea();
+		DefaultCaret caret = (DefaultCaret)consoleTextArea.getCaret();
+		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+		scrollPane.setViewportView(consoleTextArea);
+		consoleTextArea.setEditable(false);
 	}
 	
 	public static void appendTextToConsole(String text) {

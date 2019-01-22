@@ -27,6 +27,7 @@ public class PKMainServer {
 	public static void initialize() {
 		loadPkmn();
 	    openConnection();
+	    
 	    //trainerPoke0.setID(ID0);
 	    //trainerPoke1.setID(ID1);
 
@@ -46,8 +47,6 @@ public class PKMainServer {
 		catch (IOException e) {
 			e.printStackTrace();
 		}
-
-	    
 	}
 	
 	
