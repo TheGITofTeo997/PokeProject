@@ -1,21 +1,23 @@
 package it.unibs.pajc.pokeproject;
 
-import java.io.BufferedReader;
+import java.io.*;
 
 public class PKClientReceiver extends Thread {
 
-	private BufferedReader fromServer;
+	private ObjectInputStream fromServer;
+	private IdentifiedQueue<PKMessage> toReceive;
 	
-	public PKClientReceiver(BufferedReader fromServer) {
+	public PKClientReceiver(ObjectInputStream fromServer, IdentifiedQueue<PKMessage> toReceive) {
 		this.fromServer = fromServer;
+		this.toReceive = toReceive;
 	}
 	
 	public void run() {
 		try {
-			String response;
-			while(true) {
-				response = fromServer.readLine();
-				System.out.println("Received " + response + " from server");
+			while(!toReceive.isEmpty()) {
+				PKMessage receivedMsg = (PKMessage)fromServer.readObject();
+				toReceive.add(receivedMsg);
+				System.out.println("Received " + receivedMsg.getCommandBody() + " from server");
 			}
 		}
 		catch(Exception e) {

@@ -1,27 +1,21 @@
 package it.unibs.pajc.pokeproject;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 
 public class PKClientSender extends Thread {
 
-	private PrintWriter toServer;
-	private int dataToSend = -1;
+	private ObjectOutputStream toServer;
+	private IdentifiedQueue<PKMessage> toSend;
 	
-	public PKClientSender(PrintWriter toServer) {
+	public PKClientSender(ObjectOutputStream toServer, IdentifiedQueue<PKMessage> toSend) {
 		this.toServer = toServer;
+		this.toSend = toSend;
 	}
-	
-	public void sendData(int data) {
-		dataToSend = data;
-	}
-	
+		
 	public void run() {
 		try {
-			while(dataToSend>-1) {
-				toServer.println(dataToSend);
-				dataToSend = -1;
+			while(!toSend.isEmpty()) {
+				toServer.writeObject(toSend.poll());
 			}
 		}
 		catch(Exception e) {

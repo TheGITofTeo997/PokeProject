@@ -1,21 +1,48 @@
 package it.unibs.pajc.pokeproject;
 
 import java.util.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.*;
 
 public class PKMainServer {
-	private static HashMap<Integer, String> database = new HashMap<>();
-	private static ArrayList<Integer> ids = new ArrayList<>();
+	private static TreeMap<Integer, Pokemon> pkDatabase = new TreeMap<>();
+	private static ArrayList<Pokemon> loadedPkmn = new ArrayList<>();
 	private static Pokemon trainerPoke0;
 	private static Pokemon trainerPoke1;
-	
+	private static ArrayList<IdentifiedQueue<PKMessage>> fromQueues = new ArrayList<>();
+	private static ArrayList<IdentifiedQueue<PKMessage>> toQueues = new ArrayList<>();
+	private static final int QUEUE_LIST_SIZE=2;
 	
 	
 	//Questo era il vecchio main, ora non è più entrypoint poichè viene fatto dalla window
 	public static void serverStart() {
 		initialize();
 		
+	}
+	
+	private static void setupQueues() {
+		fromQueues.add(new IdentifiedQueue<>(10));
+		fromQueues.add(new IdentifiedQueue<>(10));
+		toQueues.add(new IdentifiedQueue<>(10));
+		toQueues.add(new IdentifiedQueue<>(10));
+	}
+	
+	public static void executeCommand(PKMessage msg) {
+		switch(msg.getCommandBody()) {
+		case "msg_selected_pokemon":
+			break;
+		case "msg_selected_move":
+			break;
+		case "msg_rematch_yes":
+			break;
+		case "msg_rematch_no":
+			break;	
+		}
 	}
 			
 	public static void loadPkmn() {
@@ -25,30 +52,72 @@ public class PKMainServer {
 		Pokemon chikorita = new Pokemon("Chikorita", "Erba");
 		Pokemon cyndaquil = new Pokemon("Cyndaquil", "Fuoco");
 		Pokemon totodile = new Pokemon("Totodile", "Acqua");
-		database.put(bulbasaur.getID(), bulbasaur.getName());
-		database.put(charmander.getID(), charmander.getName());
-		database.put(squirtle.getID(), squirtle.getName());
-		database.put(chikorita.getID(), chikorita.getName());
-		database.put(cyndaquil.getID(), cyndaquil.getName());
-		database.put(totodile.getID(), totodile.getName());
+		loadedPkmn.add(bulbasaur);
+		loadedPkmn.add(charmander);
+		loadedPkmn.add(squirtle);
+		loadedPkmn.add(chikorita);
+		loadedPkmn.add(cyndaquil);
+		loadedPkmn.add(totodile);
 	}
 	
 	
 	public static void initialize() {
-		loadPkmn();
+		checkForFileExistance();
 	    openConnection();
 
 	    
 	}
 	
+	private static void checkForFileExistance() {
+		File pkDbase = new File("pkDatabase.dat");
+		if(pkDbase.exists()) {
+			try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(pkDbase))){
+				pkDatabase = (TreeMap<Integer, Pokemon>)ois.readObject();
+				PKServerWindow.appendTextToConsole("\nLoaded PK treemap...");
+			}
+			catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+		else {
+			loadPkmn();
+			for(int i=0; i<loadedPkmn.size(); i++)
+				pkDatabase.put(loadedPkmn.get(i).getID(), loadedPkmn.get(i));
+			try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(pkDbase))){
+				oos.writeObject(pkDatabase);
+			}
+			catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	public static void openConnection() {
 		ServerSocket server;
 		try {
+			int i=0;
 			server = new ServerSocket(50000);
 			PKServerWindow.appendTextToConsole("\nServer started on port 50000...");
 			while(true) {  
 		    Socket client = server.accept();
 		    PKServerProtocol protocol = new PKServerProtocol(client);
+		    	if(fromQueues.get(i).getId()==-1) {
+		    		protocol.setInputBuffer(fromQueues.get(i));
+		    		fromQueues.get(i).setId(protocol.getIdCounter());
+		    	}
+		    	else {
+		    		protocol.setInputBuffer(fromQueues.get(++i));
+		    		fromQueues.get(i).setId(protocol.getIdCounter());
+		    	}
+		    	i=0;
+		    	if(toQueues.get(i).getId()==-1) {
+		    		protocol.setOutputBuffer(toQueues.get(i));
+		    		toQueues.get(i).setId(protocol.getIdCounter());
+		    	}
+		    	else {
+		    		protocol.setOutputBuffer(toQueues.get(++i));
+		    		toQueues.get(i).setId(protocol.getIdCounter());
+		    	}   	
 			}
 		} 
 		catch (IOException e) {

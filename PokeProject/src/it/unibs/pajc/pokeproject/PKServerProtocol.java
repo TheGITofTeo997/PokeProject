@@ -12,29 +12,34 @@ import java.util.*;
  * controlla l'hashmap prende il socket della porta del client2, creando un printwriter, e invia il messaggio
  * a client2.
  * 
- * DA RISOLVERE --> Il client non si aggiorna, dunque il messaggio ricevuto si legge solo dopo l'invio
- * 
  * 
  */
 public class PKServerProtocol extends Thread{
 	private Socket socketPlayer;
-	private BufferedReader fromClient;
-	private PrintWriter toClient;
+	private ObjectInputStream fromClient;
+	private ObjectOutputStream toClient;
+	private IdentifiedQueue<PKMessage> inputBuffer;
+	private IdentifiedQueue<PKMessage> outputBuffer;
+	private int idCounter;
 	private static HashMap<Integer, java.net.Socket> clientList = new HashMap<>(); //hashmap contenente i socket dei client
 	private static ArrayList<Integer> clientPorts = new ArrayList<>(); //arraylist contenente porte dei client
+	private static int idGen=0;
 
+	
 	
 	public PKServerProtocol(Socket socket) {
 		this.socketPlayer = socket;
 		this.start();
+		idCounter = idGen;
+		idGen++;
 	}
 	
 	public void run() {
 		PKServerWindow.appendTextToConsole("\nServing client with address "+ socketPlayer.getInetAddress());
 		clientList.put(socketPlayer.getPort(), socketPlayer);//aggiunta del client all'hashmap
 		try {		
-			fromClient = new BufferedReader(new InputStreamReader(socketPlayer.getInputStream()));
-			String request;	
+			fromClient = new ObjectInputStream(socketPlayer.getInputStream());
+			toClient = new ObjectOutputStream(socketPlayer.getOutputStream());
 			//iteratore per scorrere hashmap e aggiungere l'elenco delle porte all'arraylist
 			int key=0;
 			for(Iterator<Integer> iter = clientList.keySet().iterator(); iter.hasNext(); )
@@ -44,34 +49,35 @@ public class PKServerProtocol extends Thread{
 			}
 			clientPorts.add(key);	
 			//stampa arraylist
-			for(int j=0;j<clientPorts.size();j++) PKServerWindow.appendTextToConsole("\n" + clientPorts.get(j).toString());
-			
-			while((request = fromClient.readLine()) != null) {
-			//quando riceve un messaggio da un client il server invia il messaggio all'altro client
-			//semplicemente cambiando socket, la comunicazione avviene solo quando tutti e 2 i client
-			//sono connessi
-				if(clientPorts.size() == 2) { //stiamo mandando dei danni
-				int port_receiver;
-				if(socketPlayer.getPort() == clientPorts.get(0)) {
-					port_receiver = clientPorts.get(1);
-					toClient = new PrintWriter(new BufferedWriter(new OutputStreamWriter(clientList.get(port_receiver).getOutputStream())),true);
-				}else if(socketPlayer.getPort() == clientPorts.get(1)){
-					port_receiver = clientPorts.get(0);
-					toClient = new PrintWriter(new BufferedWriter(new OutputStreamWriter(clientList.get(port_receiver).getOutputStream())),true);
-				}
-				PKServerWindow.appendTextToConsole("\nServer received " + request + " damage from " + socketPlayer.getInetAddress());
-				PKServerWindow.appendTextToConsole("\nSending " + request);
-				toClient.println(request);		
-				}
-				else { //stiamo mandando degli id
-					
-				}
-		}
+			for(int j=0;j<clientPorts.size();j++) 
+				PKServerWindow.appendTextToConsole("\n" + clientPorts.get(j).toString());		
+			while(true) {			
+				PKMessage receivedMsg = (PKMessage)fromClient.readObject();
+				receivedMsg.setClientID(idCounter);
+				inputBuffer.add(receivedMsg);
+				PKServerWindow.appendTextToConsole("\nServer received " + receivedMsg.getCommandBody() + " from " + socketPlayer.getInetAddress());
+				PKMessage toSendMsg = outputBuffer.poll();
+				toClient.writeObject(toSendMsg);
+			}
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
 	}
+
+	public void setInputBuffer(IdentifiedQueue<PKMessage> inputBuffer) {
+		this.inputBuffer = inputBuffer;
+	}
+
+	public void setOutputBuffer(IdentifiedQueue<PKMessage> outputBuffer) {
+		this.outputBuffer = outputBuffer;
+	}
+
+	public int getIdCounter() {
+		return idCounter;
+	}
+	
+	
 
 }
