@@ -2,7 +2,7 @@ package it.unibs.pajc.pokeproject;
 import java.io.*;
 import java.util.*;
 
-public class Pokemon {
+public class Pokemon implements Serializable{
 	private String name;
 	private String type;
 	private PKMove[] moves = new PKMove[4];

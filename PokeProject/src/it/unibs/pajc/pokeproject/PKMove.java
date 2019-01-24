@@ -1,6 +1,8 @@
 package it.unibs.pajc.pokeproject;
 
-public class PKMove {
+import java.io.*;
+
+public class PKMove implements Serializable{
 	private String name;
 	private int pwr;
 	
