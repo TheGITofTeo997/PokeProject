@@ -2,10 +2,29 @@ package it.unibs.pajc.pokeproject;
 import java.io.*;
 import java.util.*;
 
-public class Pokemon implements Serializable{
+public class Pokemon implements Serializable {
+	private static final int NUMBER_OF_MOVES = 4;
+	private static final int MOVE_1 = 0;
+	private static final int MOVE_2 = 1;
+	private static final int MOVE_3 = 2;
+	private static final int MOVE_4 = 3;
+	
+	private static final String ATTACK = "Attack";
+	private static final String DEFENSE = "Defense";
+	private static final String SPEED = "Speed";
+	private static final String HP = "HP";
+	private static final String LEVEL = "Level";
+	private static final String ID = "ID";
+	
+	private static final String GRASS = "Erba";
+	private static final String WATER = "Acqua";
+	private static final String FIRE = "Fuoco";
+	
+	
+	
 	private String name;
 	private String type;
-	private PKMove[] moves = new PKMove[4];
+	private PKMove[] moves = new PKMove[NUMBER_OF_MOVES];
 	private HashMap<String, Integer> stats = new HashMap<>();
 	
 	public Pokemon(String name,  String type) {
@@ -16,7 +35,7 @@ public class Pokemon implements Serializable{
 	}
 	
 	public int getID() {
-		return stats.get("ID");
+		return stats.get(ID);
 	}
 	
 	public String getName() {
@@ -28,23 +47,23 @@ public class Pokemon implements Serializable{
 	}
 	
 	public int getAttack() {
-		return stats.get("Attack");
+		return stats.get(ATTACK);
 	}
 	
 	public int getDefense() {
-		return stats.get("Defense");
+		return stats.get(DEFENSE);
 	}
 	
 	public int getSpeed() {
-		return stats.get("Speed");
+		return stats.get(SPEED);
 	}
 	
 	public int getLevel() {
-		return stats.get("Level");
+		return stats.get(LEVEL);
 	}
 	
 	public int getHP() {
-		return stats.get("HP");
+		return stats.get(HP);
 	}
 	
 	/*
@@ -75,25 +94,25 @@ public class Pokemon implements Serializable{
 	}	
 	
 	private void fillMoves() {
-		moves[0] = new PKMove("Azione", 40);
-		moves[1] = new PKMove("Forza", 80);
-		moves[2] = new PKMove("Ruggito", 0);
+		moves[MOVE_1] = new PKMove("Azione", 40);
+		moves[MOVE_2] = new PKMove("Forza", 80);
+		moves[MOVE_3] = new PKMove("Ruggito", 0);
 		switch(type) {
-		case "Erba":
-			moves[3] = new PKMove("Foglielama", 90);
+		case GRASS:
+			moves[MOVE_4] = new PKMove("Foglielama", 90);
 			break;
-		case "Fuoco":
-			moves[3] = new PKMove("Lanciafiamme", 90);
+		case FIRE:
+			moves[MOVE_4] = new PKMove("Lanciafiamme", 90);
 			break;
-		case "Acqua":
-			moves[3] = new PKMove("Idropulsar", 60);
+		case WATER:
+			moves[MOVE_4] = new PKMove("Idropulsar", 60);
 			break;
 		}
 	}
 	
 	//il damage sono il numero di PS che il server dirà al pkmn di togliersi
 	private void getDamage(int damage) {
-		stats.put("HP", stats.get("HP") - damage);
+		stats.put(HP, stats.get(HP) - damage);
 	}
 	
 }

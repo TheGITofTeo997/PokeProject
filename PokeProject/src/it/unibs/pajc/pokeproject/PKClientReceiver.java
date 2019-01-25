@@ -14,10 +14,12 @@ public class PKClientReceiver extends Thread {
 	
 	public void run() {
 		try {
-			while(!toReceive.isEmpty()) {
-				PKMessage receivedMsg = (PKMessage)fromServer.readObject();
-				toReceive.add(receivedMsg);
-				System.out.println("Received " + receivedMsg.getCommandBody() + " from server");
+			while(true) {
+				if(toReceive.isEmpty())
+				{
+					PKMessage receivedMsg = (PKMessage)fromServer.readObject();
+					if(toReceive.add(receivedMsg)) System.out.println("Succesfully added received message to the queue :)");
+				}
 			}
 		}
 		catch(Exception e) {

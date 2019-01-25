@@ -2,7 +2,7 @@ package it.unibs.pajc.pokeproject;
 
 import java.io.*;
 
-public class PKMessage {
+public class PKMessage implements Serializable {
 	private String commandBody;
 	private int clientID;
 	private int dataToCarry;

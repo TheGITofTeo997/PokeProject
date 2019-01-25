@@ -3,11 +3,12 @@ package it.unibs.pajc.pokeproject;
 import java.util.concurrent.*;
 
 public class IdentifiedQueue<E> extends ArrayBlockingQueue<E>{
-	private int id=-1;
+	private int id;
 	
 	
 	public IdentifiedQueue(int capacity) {
 		super(capacity);
+		id = -1; // inizializzazione di default dell'id
 	}
 
 
@@ -15,7 +16,7 @@ public class IdentifiedQueue<E> extends ArrayBlockingQueue<E>{
 		return id;
 	}
 
-
+	// questo metodo sarà invocato nel MainServer per settare l'id della coda usando quello del ServerProtocol
 	public void setId(int id) {
 		this.id = id;
 	}
