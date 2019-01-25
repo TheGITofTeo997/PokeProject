@@ -2,13 +2,13 @@ package it.unibs.pajc.pokeproject;
 
 import java.io.*;
 
-public class PKClientSender extends Thread {
-
-	private ObjectOutputStream toServer;
+public class PKServerSender extends Thread{
+	
+	private ObjectOutputStream toClient;
 	private IdentifiedQueue<PKMessage> toSend;
 	
-	public PKClientSender(ObjectOutputStream toServer, IdentifiedQueue<PKMessage> toSend) {
-		this.toServer = toServer;
+	public PKServerSender (ObjectOutputStream toClient, IdentifiedQueue<PKMessage> toSend) {
+		this.toClient = toClient;
 		this.toSend = toSend;
 	}
 		
@@ -16,7 +16,7 @@ public class PKClientSender extends Thread {
 		try {
 			while(true) {
 				if(!toSend.isEmpty())
-					toServer.writeObject(toSend.poll());
+					toClient.writeObject(toSend.poll());
 			}
 		}
 		catch(Exception e) {
@@ -24,3 +24,4 @@ public class PKClientSender extends Thread {
 		}
 	}
 }
+
