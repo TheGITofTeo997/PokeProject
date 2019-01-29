@@ -10,7 +10,7 @@ import java.awt.event.ActionEvent;
 
 public class PKClientWindow {
 
-	private JFrame frame;
+	private JFrame frmPokebattleClientV;
 	private IpFrame ipWindow;
 	
 	/**
@@ -21,7 +21,7 @@ public class PKClientWindow {
 			public void run() {
 				try {
 					PKClientWindow window = new PKClientWindow();
-					window.frame.setVisible(true);
+					window.frmPokebattleClientV.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -40,28 +40,30 @@ public class PKClientWindow {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame();
-		frame.setResizable(false);
-		frame.setBounds(100, 100, 600, 450);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);	
+		frmPokebattleClientV = new JFrame();
+		frmPokebattleClientV.setTitle("PokeBattle Client v0.1");
+		frmPokebattleClientV.setResizable(false);
+		frmPokebattleClientV.setBounds(100, 100, 600, 450);
+		frmPokebattleClientV.setLocationRelativeTo(null);
+		frmPokebattleClientV.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmPokebattleClientV.getContentPane().setLayout(null);	
 		
 		JButton btnSinglePlayer = new JButton("Single Player");
 		btnSinglePlayer.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		btnSinglePlayer.setBounds(119, 164, 152, 58);
-		frame.getContentPane().add(btnSinglePlayer);
+		frmPokebattleClientV.getContentPane().add(btnSinglePlayer);
 		
 		JButton btnMultiPlayer = new JButton("Multi Player");
 		btnMultiPlayer.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		btnMultiPlayer.setBounds(325, 164, 152, 58);
-		frame.getContentPane().add(btnMultiPlayer);
+		frmPokebattleClientV.getContentPane().add(btnMultiPlayer);
 		
 		
 		btnMultiPlayer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				ipWindow = new IpFrame();
 				ipWindow.setVisible(true);
-			    frame.setVisible(false);
+			    frmPokebattleClientV.setVisible(false);
 			}
 		});
 	}
