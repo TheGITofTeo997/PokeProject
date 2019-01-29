@@ -22,7 +22,7 @@ import javax.swing.ScrollPaneConstants;
 public class PKServerWindow extends Thread{
 
 	private JFrame frmPokeserverV;
-	private Thread serverRunner = new Thread(() -> {PKMainServer.serverStart();});
+	private PKMainServer pkServer = new PKMainServer();
 	private static JTextArea consoleTextArea;
 
 	/**
@@ -67,7 +67,7 @@ public class PKServerWindow extends Thread{
 		JButton btnStart = new JButton("Start Server ->");
 		btnStart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				serverRunner.start();
+				pkServer.start();
 			}
 		});
 		btnStart.setBounds(162, 36, 121, 60);

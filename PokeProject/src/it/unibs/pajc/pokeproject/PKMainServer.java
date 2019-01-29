@@ -4,7 +4,7 @@ import java.util.*;
 import java.io.*;
 import java.net.*;
 
-public class PKMainServer {
+public class PKMainServer extends Thread{
 	private static final int FIRST_QUEUE = 0;
 	private static final int SECOND_QUEUE = 1;
 	private static final int DEFALT_QUEUE_ID = -1;
@@ -26,23 +26,23 @@ public class PKMainServer {
 	private static ArrayList<Pokemon> loadedPkmn = new ArrayList<>();
 	//private static Pokemon trainerPoke0;
 	//private static Pokemon trainerPoke1;
-	private static ArrayList<IdentifiedQueue<PKMessage>> fromQueues = new ArrayList<>(); 
+	private ArrayList<IdentifiedQueue<PKMessage>> fromQueues = new ArrayList<>(); 
 	// coda da cui il server prenderà i messaggi che i client hanno mandato
-	private static ArrayList<IdentifiedQueue<PKMessage>> toQueues = new ArrayList<>(); 
+	private ArrayList<IdentifiedQueue<PKMessage>> toQueues = new ArrayList<>(); 
 	// coda in cui il server metterà i messaggi da inviare ai client
 	
 	//Questo era il vecchio main, ora non è più entrypoint poichè viene fatto dalla window
-	public static void serverStart(){
+	public void run(){
 		initialize();
 	}
 	
-	public static void initialize() {
+	public void initialize() {
 		checkForFileExistance();
 		setupQueues();
 	    openConnection();
 	}
 	
-	private static void checkForFileExistance() {
+	private void checkForFileExistance() {
 		File pkDbaseFile = new File(DATABASE_LOCATION);
 		if(pkDbaseFile.exists()) { // dobbiamo leggere il file solo se esiste
 			try(ObjectInputStream databaseReader = new ObjectInputStream(new FileInputStream(pkDbaseFile))){
@@ -66,14 +66,14 @@ public class PKMainServer {
 		}
 	}
 	
-	private static void setupQueues() { // le code vengono create qui e vengono messe negli arraylist
+	private void setupQueues() { // le code vengono create qui e vengono messe negli arraylist
 		fromQueues.add(new IdentifiedQueue<>(QUEUE_SIZE));
 		fromQueues.add(new IdentifiedQueue<>(QUEUE_SIZE));
 		toQueues.add(new IdentifiedQueue<>(QUEUE_SIZE));
 		toQueues.add(new IdentifiedQueue<>(QUEUE_SIZE));
 	}
 	
-	public static void openConnection() {
+	public void openConnection() {
 		ServerSocket server;
 		try {
 			int i=0;
@@ -112,7 +112,7 @@ public class PKMainServer {
 		}
 	}
 	
-	public static void loadPkmn() {
+	public void loadPkmn() {
 		Pokemon bulbasaur = new Pokemon("Bulbasaur", ERBA);
 		Pokemon charmander = new Pokemon("Charmander", FUOCO);		
 		Pokemon squirtle = new Pokemon ("Squirtle", ACQUA);
@@ -127,7 +127,7 @@ public class PKMainServer {
 		loadedPkmn.add(totodile);
 	}
 	
-	public static void executeCommand(PKMessage msg) {
+	public void executeCommand(PKMessage msg) {
 		switch(msg.getCommandBody()) {
 		case MSG_SELECTED_POKEMON:
 			break;
@@ -140,7 +140,7 @@ public class PKMainServer {
 		}
 	}
 	
-	private static void test() {
+	private void test() {
 		/*
 		 * Prendo il messaggio che il primo client ha inviato, che si trova nella prima coda di ricezione, e lo metto
 		 * sulla seconda di invio, quella per mandare al secondo client.

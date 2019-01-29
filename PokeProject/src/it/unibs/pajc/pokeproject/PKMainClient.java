@@ -4,7 +4,7 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
-public class PKMainClient{
+public class PKMainClient extends Thread{
 	
 	private static final String DATABASE_LOCATION = "pkDatabase.dat";
 	private static final String ACQUA = "Acqua";
@@ -18,24 +18,28 @@ public class PKMainClient{
 	private static final String MSG_OPPONENT_POKEMON = "msg_opponent_pokemon";
 	private static final String MSG_START_BATTLE = "msg_start_battle";
 	private static final String MSG_WAITING = "msg_waiting";
-	private static final String SERVER_IP = "127.0.0.1";
 	private static final int SERVER_PORT = 50000;
-	private static Socket socket;
-	private static ObjectInputStream fromServer;
-	private static ObjectOutputStream toServer;
-	private static ArrayList<Pokemon> loadedPkmn = new ArrayList<>();
-	private static TreeMap<Integer, Pokemon> pkDatabase = new TreeMap<>();
-	private static IdentifiedQueue<PKMessage> toSend = new IdentifiedQueue<>(10);
-	private static IdentifiedQueue<PKMessage> toReceive = new IdentifiedQueue<>(10);
-	private static PKMessage test = new PKMessage("msg_test" , 0);
+	private String SERVER_IP;
+	private Socket socket;
+	private ObjectInputStream fromServer;
+	private ObjectOutputStream toServer;
+	private ArrayList<Pokemon> loadedPkmn = new ArrayList<>();
+	private TreeMap<Integer, Pokemon> pkDatabase = new TreeMap<>();
+	private IdentifiedQueue<PKMessage> toSend = new IdentifiedQueue<>(10);
+	private IdentifiedQueue<PKMessage> toReceive = new IdentifiedQueue<>(10);
+	private PKMessage test = new PKMessage("msg_test" , 0);
 	
 	
-	public static void main(String[] args) {
+	//vecchio main
+	public void run() {
 		checkForFileExistance();
-		connectToServer();
 	}
 	
-	private static void checkForFileExistance() {
+	public void setIP(String IP) {
+		this.SERVER_IP = IP;
+	}
+	
+	private void checkForFileExistance() {
 		File pkDbase = new File(DATABASE_LOCATION);
 		if(pkDbase.exists()) {
 			try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(pkDbase))){
@@ -58,7 +62,7 @@ public class PKMainClient{
 		}
 	}
 	
-	public static void connectToServer() {
+	public void connectToServer() {
 		try {
 			socket = new Socket(SERVER_IP, SERVER_PORT);
 			socket.setKeepAlive(true); // Potrebbe non servire
@@ -70,12 +74,15 @@ public class PKMainClient{
 			fromServer = new ObjectInputStream(socket.getInputStream());
 			PKClientReceiver receiver = new PKClientReceiver(fromServer, toReceive);
 			receiver.start();
-			toSend.add(test);
+			//test message
+			//toSend.add(new PKMessage("msg_waiting"));
+			//
 			while(true) {
+				executeCommand(new PKMessage(MSG_WAITING));
 				if(!toReceive.isEmpty())
 				{
 					PKMessage receivedMsg = toReceive.poll();
-					System.out.println("Received " + receivedMsg.getCommandBody() + " from server(actually sent by client" + receivedMsg.getClientID() +")");
+					System.out.println("Received " + receivedMsg.getCommandBody() + " from server(actually sent by client" + receivedMsg.getClientID() +")");			
 				}
 			}
 		}
@@ -84,7 +91,7 @@ public class PKMainClient{
 		}
 	}
 	
-	public static void executeCommand(PKMessage msg) {
+	public void executeCommand(PKMessage msg) {
 		switch(msg.getCommandBody()) {
 		case MSG_WAITING:
 			break;
@@ -105,7 +112,7 @@ public class PKMainClient{
 		}
 	}
 		
-	private static void loadPkmn() {
+	private void loadPkmn() {
 		Pokemon bulbasaur = new Pokemon("Bulbasaur", ERBA);
 		Pokemon charmander = new Pokemon("Charmander", FUOCO);			
 		Pokemon squirtle = new Pokemon ("Squirtle", ACQUA);

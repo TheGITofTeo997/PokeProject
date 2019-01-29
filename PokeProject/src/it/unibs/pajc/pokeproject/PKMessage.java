@@ -12,6 +12,11 @@ public class PKMessage implements Serializable {
 		this.dataToCarry = dataToCarry;
 	}
 	
+	public PKMessage(String commandBody) {
+		this.commandBody = commandBody;
+		this.dataToCarry = 0;
+	}
+	
 	public String getCommandBody() {
 		return commandBody;
 	}
