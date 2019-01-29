@@ -18,8 +18,10 @@ public class IpFrame extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textField;
+	private PokeChooserFrame chooserWindow;
 	private PKMainClient pkClient = new PKMainClient();
 
+	
 	/**
 	 * Create the frame.
 	 */
@@ -54,12 +56,18 @@ public class IpFrame extends JFrame {
 		
 		
 		btnConnect.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent e) {
 				pkClient.start();
 				pkClient.setIP(textField.getText());
 				pkClient.connectToServer();
+				//se il client è riuscito a connettersi (TODO)
+				
+				chooserWindow = new PokeChooserFrame();
+				chooserWindow.setVisible(true);
+				setVisible(false);
 				
 			}
 		});
+		
 	}
 }

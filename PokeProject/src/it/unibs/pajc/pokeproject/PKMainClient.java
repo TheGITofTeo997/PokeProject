@@ -39,10 +39,6 @@ public class PKMainClient extends Thread{
 		this.SERVER_IP = IP;
 	}
 	
-	public boolean isConnected() {
-		return socket.isConnected();
-	}
-	
 	private void checkForFileExistance() {
 		File pkDbase = new File(DATABASE_LOCATION);
 		if(pkDbase.exists()) {
@@ -81,6 +77,7 @@ public class PKMainClient extends Thread{
 			//test message
 			//toSend.add(new PKMessage("msg_waiting"));
 			//
+			
 			while(true) {
 				executeCommand(new PKMessage(MSG_WAITING));
 				if(!toReceive.isEmpty())
