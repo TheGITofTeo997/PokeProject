@@ -11,7 +11,7 @@ import java.awt.event.ActionEvent;
 public class PKClientWindow {
 
 	private JFrame frame;
-	private ipFrame ipWindow;
+	private IpFrame ipWindow;
 	
 	/**
 	 * Launch the application.
@@ -59,8 +59,9 @@ public class PKClientWindow {
 		
 		btnMultiPlayer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				ipWindow = new ipFrame();
+				ipWindow = new IpFrame();
 				ipWindow.setVisible(true);
+			    frame.setVisible(false);
 			}
 		});
 	}

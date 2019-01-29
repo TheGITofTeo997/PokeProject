@@ -14,7 +14,7 @@ import java.awt.Window.Type;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class ipFrame extends JFrame {
+public class IpFrame extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textField;
@@ -23,7 +23,7 @@ public class ipFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public ipFrame() {
+	public IpFrame() {
 		setType(Type.POPUP);
 		setTitle("Insert Server IP");
 		setResizable(false);
@@ -57,6 +57,7 @@ public class ipFrame extends JFrame {
 				pkClient.start();
 				pkClient.setIP(textField.getText());
 				pkClient.connectToServer();
+				
 			}
 		});
 	}
