@@ -28,7 +28,7 @@ public class PokeChooserFrame extends JFrame {
 		contentPane.setLayout(null);
 		
 		JLabel label = new JLabel("");
-		label.setBounds(10, 11, 274, 263);
+		label.setBounds(10, 11, 153, 160);
 		contentPane.add(label);
 		
 		
