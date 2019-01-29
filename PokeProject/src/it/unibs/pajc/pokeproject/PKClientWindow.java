@@ -60,7 +60,7 @@ public class PKClientWindow {
 		
 		
 		btnMultiPlayer.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent e) {
 				ipWindow = new IpFrame();
 				ipWindow.setVisible(true);
 			    frmPokebattleClientV.setVisible(false);

@@ -67,7 +67,7 @@ public class PKServerWindow extends Thread{
 		
 		JButton btnStart = new JButton("Start Server ->");
 		btnStart.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent e) {
 				pkServer.start();
 			}
 		});
