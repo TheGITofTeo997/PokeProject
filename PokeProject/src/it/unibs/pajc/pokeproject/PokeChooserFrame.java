@@ -28,7 +28,6 @@ public class PokeChooserFrame extends JFrame {
 		contentPane.setLayout(null);
 		
 		JLabel label = new JLabel("");
-		label.setIcon(new ImageIcon(getClass().getResource("/img/bulbasaur-3.gif")));
 		label.setBounds(10, 11, 274, 263);
 		contentPane.add(label);
 		
