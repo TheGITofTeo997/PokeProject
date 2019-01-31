@@ -62,7 +62,7 @@ public class PKMainClient extends Thread{
 		}
 	}
 	
-	public void connectToServer() {
+	public boolean connectToServer() {
 		try {
 			socket = new Socket(SERVER_IP, SERVER_PORT);
 			socket.setKeepAlive(true); // Potrebbe non servire
@@ -78,18 +78,19 @@ public class PKMainClient extends Thread{
 			//toSend.add(new PKMessage("msg_waiting"));
 			//
 			
-			while(true) {
+			/*while(true) {
 				executeCommand(new PKMessage(MSG_WAITING));
 				if(!toReceive.isEmpty())
 				{
 					PKMessage receivedMsg = toReceive.poll();
 					System.out.println("Received " + receivedMsg.getCommandBody() + " from server(actually sent by client" + receivedMsg.getClientID() +")");			
 				}
-			}
+			}*/
 		}
 		catch(Exception e) {
 			e.printStackTrace();
 		}
+		return socket.isConnected();
 	}
 	
 	public void executeCommand(PKMessage msg) {

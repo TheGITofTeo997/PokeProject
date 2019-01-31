@@ -59,13 +59,11 @@ public class IpFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				pkClient.start();
 				pkClient.setIP(textField.getText());
-				pkClient.connectToServer();
-				//se il client è riuscito a connettersi (TODO)
-				
-				chooserWindow = new PokeChooserFrame();
-				chooserWindow.setVisible(true);
-				setVisible(false);
-				
+				if(pkClient.connectToServer()) {
+					chooserWindow = new PokeChooserFrame();
+					chooserWindow.setVisible(true);
+					setVisible(false);
+				}
 			}
 		});
 		
