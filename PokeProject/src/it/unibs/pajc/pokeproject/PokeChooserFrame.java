@@ -33,10 +33,10 @@ public class PokeChooserFrame extends JFrame {
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(false);
-		setBounds(100, 100, 656, 463);
+		setBounds(100, 100, 650, 460);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
-		contentPane.setBackground(Color.PINK);
+		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
@@ -75,6 +75,11 @@ public class PokeChooserFrame extends JFrame {
 		totodile.setIcon(new ImageIcon(new ImageIcon(PokeChooserFrame.class.getResource("/img/Totodile.gif")).getImage().getScaledInstance(RES, RES, Image.SCALE_DEFAULT))); //gif scale
 		totodile.setBounds(493, 249, 96, 96);
 		contentPane.add(totodile);
+		
+		JLabel background = new JLabel("");
+		background.setIcon(new ImageIcon(PokeChooserFrame.class.getResource("/img/chooser_back.jpg")));
+		background.setBounds(0, 0, 644, 431);
+		contentPane.add(background);
 		
 		
 	}
