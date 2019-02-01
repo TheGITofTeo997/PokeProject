@@ -64,6 +64,7 @@ public class PKClientWindow {
 				ipWindow = new IpFrame();
 				ipWindow.setVisible(true);
 			    frmPokebattleClientV.setVisible(false);
+			    
 			}
 		});
 	}

@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
@@ -20,8 +21,7 @@ import javax.swing.SwingConstants;
 
 public class PokeChooserFrame extends JFrame {
 
-	private JPanel contentPane;
-	
+	private JPanel contentPane;	
 
 	/**
 	 * Create the frame.
@@ -38,12 +38,10 @@ public class PokeChooserFrame extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
-		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon(PokeChooserFrame.class.getResource("/img/bulbasaur-3.gif")));
-		lblNewLabel.setBounds(41, 31, 147, 164);
-		contentPane.add(lblNewLabel);
-		
+		JLabel bulbasaur = new JLabel("");
+		bulbasaur.setIcon(new ImageIcon(new ImageIcon(PokeChooserFrame.class.getResource("/img/bulbasaur.gif")).getImage().getScaledInstance(96, 96, Image.SCALE_DEFAULT))); //gif scale
+		bulbasaur.setBounds(73, 59, 96, 96);
+		contentPane.add(bulbasaur);
 		
 		
 	}
