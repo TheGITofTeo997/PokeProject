@@ -73,7 +73,6 @@ public class PKServerWindow extends Thread{
 		});
 		btnStart.setBounds(162, 36, 121, 60);
 		frmPokeserverV.getContentPane().add(btnStart);
-		//frmPokeserverV.getContentPane().add(consoleTextArea);
 				
 		JScrollPane scrollPane = new JScrollPane(consoleTextArea);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
