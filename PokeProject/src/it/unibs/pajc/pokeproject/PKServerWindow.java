@@ -55,7 +55,7 @@ public class PKServerWindow extends Thread{
 	private void initialize() {
 		frmPokeserverV = new JFrame();
 		frmPokeserverV.setResizable(false);
-		frmPokeserverV.setTitle("PokeServer v0.1");
+		frmPokeserverV.setTitle("PokeServer v0.1a");
 		frmPokeserverV.setBounds(100, 100, 460, 500);
 		frmPokeserverV.setLocationRelativeTo(null);
 		frmPokeserverV.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
