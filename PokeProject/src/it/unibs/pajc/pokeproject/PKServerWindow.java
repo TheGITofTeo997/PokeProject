@@ -18,6 +18,7 @@ import javax.swing.JScrollPane;
 
 import java.awt.ScrollPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.ImageIcon;
 
 public class PKServerWindow extends Thread{
 
@@ -73,7 +74,7 @@ public class PKServerWindow extends Thread{
 		});
 		btnStart.setBounds(162, 36, 121, 60);
 		frmPokeserverV.getContentPane().add(btnStart);
-				
+		
 		JScrollPane scrollPane = new JScrollPane(consoleTextArea);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPane.setBounds(10, 335, 428, 119);
@@ -81,9 +82,14 @@ public class PKServerWindow extends Thread{
 		
 		consoleTextArea = new JTextArea();
 		DefaultCaret caret = (DefaultCaret)consoleTextArea.getCaret();
-		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 		scrollPane.setViewportView(consoleTextArea);
 		consoleTextArea.setEditable(false);
+		
+		JLabel background = new JLabel("");
+		background.setIcon(new ImageIcon(PKServerWindow.class.getResource("/img/server_back.jpg")));
+		background.setBounds(0, 0, 454, 471);
+		frmPokeserverV.getContentPane().add(background);
+		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 	}
 	
 	public static void appendTextToConsole(String text) {
