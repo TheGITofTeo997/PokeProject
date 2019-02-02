@@ -1,3 +1,12 @@
+Changelog commit: d5e7247
+
+-Code cleaning
+-JAR rebuilt and working
+-Added missing back sprites
+-Minor fixes to server and chooser
+-Added some graphics
+
+
 Changelog commit: 5bee42d
 
 -Code readability:
