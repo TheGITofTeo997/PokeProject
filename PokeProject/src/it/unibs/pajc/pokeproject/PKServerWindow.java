@@ -3,20 +3,15 @@ package it.unibs.pajc.pokeproject;
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JButton;
-import javax.swing.SwingConstants;
 import javax.swing.text.DefaultCaret;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 
-import java.awt.ScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.ImageIcon;
 
@@ -55,7 +50,7 @@ public class PKServerWindow extends Thread{
 	private void initialize() {
 		frmPokeserverV = new JFrame();
 		frmPokeserverV.setResizable(false);
-		frmPokeserverV.setTitle("PokeServer v0.1a");
+		frmPokeserverV.setTitle("PokeServer v0.1b");
 		frmPokeserverV.setBounds(100, 100, 460, 500);
 		frmPokeserverV.setLocationRelativeTo(null);
 		frmPokeserverV.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -70,9 +65,10 @@ public class PKServerWindow extends Thread{
 		btnStart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				pkServer.start();
+				btnStart.setEnabled(false);
 			}
 		});
-		btnStart.setBounds(162, 36, 121, 60);
+		btnStart.setBounds(163, 36, 121, 60);
 		frmPokeserverV.getContentPane().add(btnStart);
 		
 		JScrollPane scrollPane = new JScrollPane(consoleTextArea);
@@ -90,6 +86,10 @@ public class PKServerWindow extends Thread{
 		background.setBounds(0, 0, 454, 471);
 		frmPokeserverV.getContentPane().add(background);
 		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+		
+		
+		
+		
 	}
 	
 	public static void appendTextToConsole(String text) {
