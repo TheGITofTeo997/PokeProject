@@ -60,7 +60,7 @@ public class IpFrame extends JFrame {
 				pkClient.start();
 				pkClient.setIP(textField.getText());
 				if(pkClient.connectToServer()) {
-					chooserWindow = new PokeChooserFrame();
+					chooserWindow = new PokeChooserFrame(pkClient);
 					chooserWindow.setVisible(true);
 					setVisible(false);
 				}

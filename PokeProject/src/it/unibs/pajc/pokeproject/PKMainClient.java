@@ -1,10 +1,12 @@
 package it.unibs.pajc.pokeproject;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.*;
 import java.util.*;
 
-public class PKMainClient extends Thread{
+public class PKMainClient extends Thread implements ActionListener{
 	
 	private static final String DATABASE_LOCATION = "pkDatabase.dat";
 	private static final String ACQUA = "Acqua";
@@ -18,6 +20,7 @@ public class PKMainClient extends Thread{
 	private static final String MSG_OPPONENT_POKEMON = "msg_opponent_pokemon";
 	private static final String MSG_START_BATTLE = "msg_start_battle";
 	private static final String MSG_WAITING = "msg_waiting";
+	private static final String MSG_WAKEUP = "msg_wakeup";
 	private static final int SERVER_PORT = 50000;
 	private String SERVER_IP;
 	private Socket socket;
@@ -28,6 +31,8 @@ public class PKMainClient extends Thread{
 	private IdentifiedQueue<PKMessage> toSend = new IdentifiedQueue<>(10);
 	private IdentifiedQueue<PKMessage> toReceive = new IdentifiedQueue<>(10);
 	private PKMessage test = new PKMessage("msg_test" , 0);
+	private static WaitingFrame wf = new WaitingFrame();
+	private static BattleFrame bf = new BattleFrame();
 	
 	
 	//vecchio main
@@ -96,10 +101,16 @@ public class PKMainClient extends Thread{
 	public void executeCommand(PKMessage msg) {
 		switch(msg.getCommandBody()) {
 		case MSG_WAITING:
+			waiting();
+			break;
+		case MSG_WAKEUP:
+			wakeup();
 			break;
 		case MSG_START_BATTLE:
+			startBattle();
 			break;
 		case MSG_OPPONENT_POKEMON:
+			
 			break;
 		case MSG_OPPONENT_MOVE:
 			break;
@@ -127,6 +138,25 @@ public class PKMainClient extends Thread{
 		loadedPkmn.add(chikorita);
 		loadedPkmn.add(cyndaquil);
 		loadedPkmn.add(totodile);
+	}
+	
+	
+	//commands
+	private static void waiting() {
+		wf.setVisible(true);
+	}
+	
+	private static void wakeup() {
+		wf.setVisible(false);
+	}
+	
+	private static void startBattle() {
+		bf.setVisible(true);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		//start battle
 	}
 
 }

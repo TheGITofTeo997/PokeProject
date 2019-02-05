@@ -7,6 +7,8 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -24,11 +26,11 @@ public class PokeChooserFrame extends JFrame {
 
 	private static final int RES = 96;
 	private JPanel contentPane;	
-	
+	private PKMainClient pkClient;
 	/**
 	 * Create the frame.
 	 */
-	public PokeChooserFrame() {
+	public PokeChooserFrame(PKMainClient pkClient) {
 		setTitle("Choose a Pokemon!");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -40,14 +42,65 @@ public class PokeChooserFrame extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		this.pkClient = pkClient;
+		
+		JRadioButton rdbtnChooseMe1 = new JRadioButton("Choose Me!");
+		rdbtnChooseMe1.setBounds(57, 172, 109, 23);
+		rdbtnChooseMe1.setOpaque(false);
+		rdbtnChooseMe1.setBorderPainted(false);
+		rdbtnChooseMe1.setContentAreaFilled(false);
+		contentPane.add(rdbtnChooseMe1);
+		
+		JRadioButton rdbtnChooseMe2 = new JRadioButton("Choose Me!");
+		rdbtnChooseMe2.setOpaque(false);
+		rdbtnChooseMe2.setContentAreaFilled(false);
+		rdbtnChooseMe2.setBorderPainted(false);
+		rdbtnChooseMe2.setBounds(278, 172, 109, 23);
+		contentPane.add(rdbtnChooseMe2);
+		
+		JRadioButton rdbtnChooseMe3 = new JRadioButton("Choose Me!");
+		rdbtnChooseMe3.setOpaque(false);
+		rdbtnChooseMe3.setContentAreaFilled(false);
+		rdbtnChooseMe3.setBorderPainted(false);
+		rdbtnChooseMe3.setBounds(493, 172, 109, 23);
+		contentPane.add(rdbtnChooseMe3);
+		
+		JRadioButton rdbtnChooseMe4 = new JRadioButton("Choose Me!");
+		rdbtnChooseMe4.setOpaque(false);
+		rdbtnChooseMe4.setContentAreaFilled(false);
+		rdbtnChooseMe4.setBorderPainted(false);
+		rdbtnChooseMe4.setBounds(57, 354, 109, 23);
+		contentPane.add(rdbtnChooseMe4);
+		
+		JRadioButton rdbtnChooseMe5 = new JRadioButton("Choose Me!");
+		rdbtnChooseMe5.setOpaque(false);
+		rdbtnChooseMe5.setContentAreaFilled(false);
+		rdbtnChooseMe5.setBorderPainted(false);
+		rdbtnChooseMe5.setBounds(278, 353, 109, 23);
+		contentPane.add(rdbtnChooseMe5);
+		
+		JRadioButton rdbtnChooseMe6 = new JRadioButton("Choose Me!");
+		rdbtnChooseMe6.setOpaque(false);
+		rdbtnChooseMe6.setContentAreaFilled(false);
+		rdbtnChooseMe6.setBorderPainted(false);
+		rdbtnChooseMe6.setBounds(493, 352, 109, 23);
+		contentPane.add(rdbtnChooseMe6);
+		
+		
+		ButtonGroup group = new ButtonGroup();
+		group.add(rdbtnChooseMe1);
+		group.add(rdbtnChooseMe2);
+		group.add(rdbtnChooseMe3);
+		group.add(rdbtnChooseMe4);
+		group.add(rdbtnChooseMe5);
+		group.add(rdbtnChooseMe6);
+		
+		
+		
 		JLabel bulbasaur = new JLabel("");
 		bulbasaur.setIcon(new ImageIcon(new ImageIcon(PokeChooserFrame.class.getResource("/img/bulbasaur.gif")).getImage().getScaledInstance(RES, RES, Image.SCALE_DEFAULT))); //gif scale
 		bulbasaur.setBounds(57, 59, 96, 96);
 		contentPane.add(bulbasaur);
-		
-		JRadioButton rdbtnChooseMe = new JRadioButton("Choose Me!");
-		rdbtnChooseMe.setBounds(57, 172, 109, 23);
-		contentPane.add(rdbtnChooseMe);
 		
 		
 		JLabel charmander = new JLabel("");
@@ -76,11 +129,17 @@ public class PokeChooserFrame extends JFrame {
 		totodile.setBounds(493, 249, 96, 96);
 		contentPane.add(totodile);
 		
+		JButton btnStartButton = new JButton("Start Battle ->");
+		btnStartButton.setBounds(267, 383, 109, 41);
+		contentPane.add(btnStartButton);
+		
 		JLabel background = new JLabel("");
 		background.setIcon(new ImageIcon(PokeChooserFrame.class.getResource("/img/chooser_back.jpg")));
 		background.setBounds(0, 0, 644, 431);
 		contentPane.add(background);
 		
 		
+		
+		btnStartButton.addActionListener(pkClient);
 	}
 }

@@ -1,6 +1,7 @@
 package it.unibs.pajc.pokeproject;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.io.*;
 import java.net.*;
 
@@ -20,12 +21,15 @@ public class PKMainServer extends Thread{
 	private static final String MSG_REMATCH_YES = "msg_rematch_yes";
 	private static final String MSG_SELECTED_MOVE = "msg_selected_move";
 	private static final String MSG_SELECTED_POKEMON = "msg_selected_pokemon";
+	private static final String MSG_START_BATTLE = "msg_start_battle";
+	private static final String MSG_WAITING = "msg_waiting";
+	private static final String MSG_WAKEUP = "msg_wakeup";
 	private static final String SUCCESFULLY_ADDED_MESSAGE_TO_SENDING_QUEUE = "\nSuccesfully added the message to the sending queue :)";
 	
 	private static TreeMap<Integer, Pokemon> pkDatabase = new TreeMap<>();
 	private static ArrayList<Pokemon> loadedPkmn = new ArrayList<>();
-	//private static Pokemon trainerPoke0;
-	//private static Pokemon trainerPoke1;
+	private Pokemon trainerPoke0;
+	private Pokemon trainerPoke1;
 	private ArrayList<IdentifiedQueue<PKMessage>> fromQueues = new ArrayList<>(); 
 	// coda da cui il server prenderà i messaggi che i client hanno mandato
 	private ArrayList<IdentifiedQueue<PKMessage>> toQueues = new ArrayList<>(); 
@@ -130,6 +134,7 @@ public class PKMainServer extends Thread{
 	public void executeCommand(PKMessage msg) {
 		switch(msg.getCommandBody()) {
 		case MSG_SELECTED_POKEMON:
+			selectedPokemon(msg);
 			break;
 		case MSG_SELECTED_MOVE:
 			break;
@@ -188,5 +193,38 @@ public class PKMainServer extends Thread{
 	*/
 	//Il server riceverà in ingresso i due pkmn e ad ognuno assegnerà l'ID, in base al quale
 	//attaccheranno e verranno identificati all'interno dei metodi.
+	
+	
+	private void selectedPokemon(PKMessage msg) {
+		if(trainerPoke0.equals(null))
+		trainerPoke0 = pkDatabase.get(msg.getDataToCarry());
+		else
+		trainerPoke1 = pkDatabase.get(msg.getDataToCarry());
+		if(!trainerPoke0.equals(null) && !trainerPoke1.equals(null)) {
+			PKMessage startBattle = new PKMessage(MSG_START_BATTLE);
+			PKMessage wakeup = new PKMessage(MSG_WAKEUP);
+			toQueues.get(FIRST_QUEUE).add(wakeup);
+			toQueues.get(SECOND_QUEUE).add(wakeup);		
+			toQueues.get(FIRST_QUEUE).add(startBattle);
+			toQueues.get(SECOND_QUEUE).add(startBattle);		
+		}
+		else {
+			PKMessage wait = new PKMessage(MSG_WAITING);
+			toQueues.get(msg.getClientID()).add(wait);
+		}
+	}
+	
+	private void calcDamage(Pokemon attacker, Pokemon defender, int moveID) {
+		double N = ThreadLocalRandom.current().nextDouble(0.85, 1);
+		double stab = (attacker.getType().compareToIgnoreCase(attacker.getMove(moveID).getType())==0) ? 1.5 : 1;
+		double damage = ((((2*attacker.getLevel()+10)*attacker.getAttack()*attacker.getMove(moveID).getPwr()) / 
+				(250*defender.getDefense()) ) + 2) * stab * calcEffectiveness(attacker.getMove(moveID).getType(), defender.getType())
+				* N;
+		
+	}
+	
+	private double calcEffectiveness(String moveType, String DefenderType) {
+		//still needs implementation
+	}
 	
 }

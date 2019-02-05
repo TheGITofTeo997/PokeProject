@@ -66,6 +66,14 @@ public class Pokemon implements Serializable {
 		return stats.get(HP);
 	}
 	
+	public PKMove getMove(int moveID) {
+		return moves[moveID];
+	}
+	
+	public String getType() {
+		return this.type;
+	}
+	
 	/*
 	 * TODO LIST
 	 * fix percorso file, fix nome file, controlli file
@@ -94,18 +102,18 @@ public class Pokemon implements Serializable {
 	}	
 	
 	private void fillMoves() {
-		moves[MOVE_1] = new PKMove("Azione", 40);
-		moves[MOVE_2] = new PKMove("Forza", 80);
-		moves[MOVE_3] = new PKMove("Ruggito", 0);
+		moves[MOVE_1] = new PKMove("Azione", 40, "Normale");
+		moves[MOVE_2] = new PKMove("Forza", 80, "Normale");
+		moves[MOVE_3] = new PKMove("Ruggito", 0, "Normale");
 		switch(type) {
 		case GRASS:
-			moves[MOVE_4] = new PKMove("Foglielama", 90);
+			moves[MOVE_4] = new PKMove("Foglielama", 90, "Erba");
 			break;
 		case FIRE:
-			moves[MOVE_4] = new PKMove("Lanciafiamme", 90);
+			moves[MOVE_4] = new PKMove("Lanciafiamme", 90, "Fuoco");
 			break;
 		case WATER:
-			moves[MOVE_4] = new PKMove("Idropulsar", 60);
+			moves[MOVE_4] = new PKMove("Idropulsar", 60, "Acqua");
 			break;
 		}
 	}
@@ -114,5 +122,6 @@ public class Pokemon implements Serializable {
 	private void getDamage(int damage) {
 		stats.put(HP, stats.get(HP) - damage);
 	}
+	
 	
 }
