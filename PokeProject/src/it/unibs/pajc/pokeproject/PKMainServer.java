@@ -225,6 +225,8 @@ public class PKMainServer extends Thread{
 	
 	private double calcEffectiveness(String moveType, String DefenderType) {
 		//still needs implementation
+		double effectiveness = 0;
+		return effectiveness;
 	}
 	
 }
