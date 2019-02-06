@@ -1,15 +1,11 @@
 package it.unibs.pajc.pokeproject;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JButton;
-import java.awt.Font;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 
 public class PKClientWindow {
-
+	private static final String TITLE = "PokeBattle Client v0.1";
 	private JFrame frmPokebattleClientV;
 	private IpFrame ipWindow;
 	
@@ -41,7 +37,7 @@ public class PKClientWindow {
 	 */
 	private void initialize() {
 		frmPokebattleClientV = new JFrame();
-		frmPokebattleClientV.setTitle("PokeBattle Client v0.1");
+		frmPokebattleClientV.setTitle(TITLE);
 		frmPokebattleClientV.setResizable(false);
 		frmPokebattleClientV.setBounds(100, 100, 600, 450);
 		frmPokebattleClientV.setLocationRelativeTo(null);

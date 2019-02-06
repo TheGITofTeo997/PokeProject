@@ -1,14 +1,12 @@
 package it.unibs.pajc.pokeproject;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import java.awt.*;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 public class BattleFrame extends JFrame {
-
+	
+	private static final String TITLE = "PokeBattle";
 	private JPanel contentPane;
 
 	/**
@@ -32,7 +30,7 @@ public class BattleFrame extends JFrame {
 	 */
 	public BattleFrame() {
 		setResizable(false);
-		setTitle("PokeBattle");
+		setTitle(TITLE);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 624, 429);
 		contentPane = new JPanel();

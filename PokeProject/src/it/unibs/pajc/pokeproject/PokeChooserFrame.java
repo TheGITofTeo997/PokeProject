@@ -23,7 +23,9 @@ import javax.swing.SwingConstants;
 import javax.swing.JRadioButton;
 
 public class PokeChooserFrame extends JFrame {
-
+	
+	private static final String CHOOSE_ME = "Choose Me!";
+	private static final String BTN_STARTBATTLE_TEXT = "Start Battle ->";
 	private static final int RES = 96;
 	private JPanel contentPane;	
 	private PKMainClient pkClient;
@@ -44,42 +46,42 @@ public class PokeChooserFrame extends JFrame {
 		contentPane.setLayout(null);
 		this.pkClient = pkClient;
 		
-		JRadioButton rdbtnChooseMe1 = new JRadioButton("Choose Me!");
+		JRadioButton rdbtnChooseMe1 = new JRadioButton(CHOOSE_ME);
 		rdbtnChooseMe1.setBounds(57, 172, 109, 23);
 		rdbtnChooseMe1.setOpaque(false);
 		rdbtnChooseMe1.setBorderPainted(false);
 		rdbtnChooseMe1.setContentAreaFilled(false);
 		contentPane.add(rdbtnChooseMe1);
 		
-		JRadioButton rdbtnChooseMe2 = new JRadioButton("Choose Me!");
+		JRadioButton rdbtnChooseMe2 = new JRadioButton(CHOOSE_ME);
 		rdbtnChooseMe2.setOpaque(false);
 		rdbtnChooseMe2.setContentAreaFilled(false);
 		rdbtnChooseMe2.setBorderPainted(false);
 		rdbtnChooseMe2.setBounds(278, 172, 109, 23);
 		contentPane.add(rdbtnChooseMe2);
 		
-		JRadioButton rdbtnChooseMe3 = new JRadioButton("Choose Me!");
+		JRadioButton rdbtnChooseMe3 = new JRadioButton(CHOOSE_ME);
 		rdbtnChooseMe3.setOpaque(false);
 		rdbtnChooseMe3.setContentAreaFilled(false);
 		rdbtnChooseMe3.setBorderPainted(false);
 		rdbtnChooseMe3.setBounds(493, 172, 109, 23);
 		contentPane.add(rdbtnChooseMe3);
 		
-		JRadioButton rdbtnChooseMe4 = new JRadioButton("Choose Me!");
+		JRadioButton rdbtnChooseMe4 = new JRadioButton(CHOOSE_ME);
 		rdbtnChooseMe4.setOpaque(false);
 		rdbtnChooseMe4.setContentAreaFilled(false);
 		rdbtnChooseMe4.setBorderPainted(false);
 		rdbtnChooseMe4.setBounds(57, 354, 109, 23);
 		contentPane.add(rdbtnChooseMe4);
 		
-		JRadioButton rdbtnChooseMe5 = new JRadioButton("Choose Me!");
+		JRadioButton rdbtnChooseMe5 = new JRadioButton(CHOOSE_ME);
 		rdbtnChooseMe5.setOpaque(false);
 		rdbtnChooseMe5.setContentAreaFilled(false);
 		rdbtnChooseMe5.setBorderPainted(false);
 		rdbtnChooseMe5.setBounds(278, 353, 109, 23);
 		contentPane.add(rdbtnChooseMe5);
 		
-		JRadioButton rdbtnChooseMe6 = new JRadioButton("Choose Me!");
+		JRadioButton rdbtnChooseMe6 = new JRadioButton(CHOOSE_ME);
 		rdbtnChooseMe6.setOpaque(false);
 		rdbtnChooseMe6.setContentAreaFilled(false);
 		rdbtnChooseMe6.setBorderPainted(false);
@@ -129,7 +131,7 @@ public class PokeChooserFrame extends JFrame {
 		totodile.setBounds(493, 249, 96, 96);
 		contentPane.add(totodile);
 		
-		JButton btnStartButton = new JButton("Start Battle ->");
+		JButton btnStartButton = new JButton(BTN_STARTBATTLE_TEXT);
 		btnStartButton.setBounds(267, 383, 109, 41);
 		contentPane.add(btnStartButton);
 		

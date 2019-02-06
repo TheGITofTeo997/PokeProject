@@ -1,21 +1,19 @@
 package it.unibs.pajc.pokeproject;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
-import java.awt.Image;
+import java.awt.*;
 import java.io.*;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
-import javax.swing.ImageIcon;
-import java.awt.Font;
-import java.awt.FontFormatException;
-import java.awt.GraphicsEnvironment;
+import java.awt.*;
+
 
 public class WaitingFrame extends JFrame {
 
+	private static final String PKM_FONT = "PKMN_RBYGSC.ttf";
+	private static final String TITLE = "Waiting...";
+	private static final String WAITING_OTHER_PLAYER = "Waiting for other Player...";
+	
 	private JPanel contentPane;
 
 	/**
@@ -44,12 +42,12 @@ public class WaitingFrame extends JFrame {
 		try {
 		     GraphicsEnvironment ge = 
 		         GraphicsEnvironment.getLocalGraphicsEnvironment();
-		     ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("PKMN_RBYGSC.ttf")));
+		     ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File(PKM_FONT)));
 		} catch (IOException|FontFormatException e) {
 		     //Handle exception
 		}
 		setVisible(false);
-		setTitle("Waiting...");
+		setTitle(TITLE);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 361, 233);
@@ -64,7 +62,7 @@ public class WaitingFrame extends JFrame {
 		lblGIFLabel.setBounds(25, 83, 310, 100);
 		contentPane.add(lblGIFLabel);
 		
-		JLabel lblNewLabel = new JLabel("Waiting for other Player...");
+		JLabel lblNewLabel = new JLabel(WAITING_OTHER_PLAYER);
 		lblNewLabel.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 16));
 		lblNewLabel.setBounds(25, 26, 310, 21);
 		contentPane.add(lblNewLabel);

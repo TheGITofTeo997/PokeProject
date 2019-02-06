@@ -12,6 +12,7 @@ import java.util.*;
  * e lo mette sulla coda di invio per client2. In realtà ora le operazioni di poll e add vengono fatte da 2 thread separati.
  */
 public class PKServerProtocol extends Thread{
+	private static final String SERVING_CLIENT_STRING = "\nServing client with address ";
 	private Socket socketPlayer;
 	private ObjectInputStream fromClient; // inputStream su cui si ricevono i messaggi
 	private ObjectOutputStream toClient; // outputStream su cui si scrivono i messaggi
@@ -32,7 +33,7 @@ public class PKServerProtocol extends Thread{
 	}
 	
 	public void run() {
-		PKServerWindow.appendTextToConsole("\nServing client with address "+ socketPlayer.getInetAddress());
+		PKServerWindow.appendTextToConsole(SERVING_CLIENT_STRING + socketPlayer.getInetAddress());
 		clientList.put(socketPlayer.getPort(), socketPlayer);//aggiunta del client all'hashmap
 		try {		
 			toClient = new ObjectOutputStream(socketPlayer.getOutputStream());

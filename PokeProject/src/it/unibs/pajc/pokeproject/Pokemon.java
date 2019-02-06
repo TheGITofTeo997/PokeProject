@@ -8,17 +8,28 @@ public class Pokemon implements Serializable {
 	private static final int MOVE_2 = 1;
 	private static final int MOVE_3 = 2;
 	private static final int MOVE_4 = 3;
-	
 	private static final String ATTACK = "Attack";
 	private static final String DEFENSE = "Defense";
 	private static final String SPEED = "Speed";
 	private static final String HP = "HP";
 	private static final String LEVEL = "Level";
-	private static final String ID = "ID";
-	
+	private static final String ID = "ID";	
 	private static final String GRASS = "Erba";
 	private static final String WATER = "Acqua";
 	private static final String FIRE = "Fuoco";
+	private static final String NORMAL = "Normale";
+	private static final String AZIONE = "Azione";
+	private static final String RUGGITO = "Ruggito";
+	private static final String FORZA = "Forza";
+	private static final String FOGLIELAMA = "Foglielama";
+	private static final String IDROPULSAR = "Idropulsar";
+	private static final String LANCIAFIAMME = "Lanciafiamme";
+	private static final int AZIONE_PWR = 40;
+	private static final int FORZA_PWR = 80;
+	private static final int RUGGITO_PWR = 0;
+	private static final int FOGLIELAMA_PWR = 90;
+	private static final int LANCIAFIAMME_PWR = 90;
+	private static final int IDROPULSAR_PWR = 60;
 	
 	
 	
@@ -102,18 +113,18 @@ public class Pokemon implements Serializable {
 	}	
 	
 	private void fillMoves() {
-		moves[MOVE_1] = new PKMove("Azione", 40, "Normale");
-		moves[MOVE_2] = new PKMove("Forza", 80, "Normale");
-		moves[MOVE_3] = new PKMove("Ruggito", 0, "Normale");
+		moves[MOVE_1] = new PKMove(AZIONE, AZIONE_PWR, NORMAL);
+		moves[MOVE_2] = new PKMove(FORZA, FORZA_PWR, NORMAL);
+		moves[MOVE_3] = new PKMove(RUGGITO, RUGGITO_PWR, NORMAL);
 		switch(type) {
 		case GRASS:
-			moves[MOVE_4] = new PKMove("Foglielama", 90, "Erba");
+			moves[MOVE_4] = new PKMove(FOGLIELAMA, FOGLIELAMA_PWR, GRASS);
 			break;
 		case FIRE:
-			moves[MOVE_4] = new PKMove("Lanciafiamme", 90, "Fuoco");
+			moves[MOVE_4] = new PKMove(LANCIAFIAMME, LANCIAFIAMME_PWR, FIRE);
 			break;
 		case WATER:
-			moves[MOVE_4] = new PKMove("Idropulsar", 60, "Acqua");
+			moves[MOVE_4] = new PKMove(IDROPULSAR, IDROPULSAR_PWR, WATER);
 			break;
 		}
 	}

@@ -14,6 +14,12 @@ public class PKMainServer extends Thread{
 	private static final String SERVER_STARTED_SUCCESFULLY = "\nServer started on port 50000...";
 	private static final String LOADED_PK_TREEMAP_SUCCESFULLY = "\nLoaded PK treemap...";
 	private static final String DATABASE_LOCATION = "pkDatabase.dat";
+	private static final String BULBASAUR = "Bulbasaur";
+	private static final String CHARMANDER = "Charmander";
+	private static final String SQUIRTLE = "Squirtle";
+	private static final String CHIKORITA = "Chikorita";
+	private static final String CYNDAQUIL = "Cyndaquil";
+	private static final String TOTODILE = "Totodile";
 	private static final String ACQUA = "Acqua";
 	private static final String FUOCO = "Fuoco";
 	private static final String ERBA = "Erba";
@@ -117,12 +123,12 @@ public class PKMainServer extends Thread{
 	}
 	
 	public void loadPkmn() {
-		Pokemon bulbasaur = new Pokemon("Bulbasaur", ERBA);
-		Pokemon charmander = new Pokemon("Charmander", FUOCO);		
-		Pokemon squirtle = new Pokemon ("Squirtle", ACQUA);
-		Pokemon chikorita = new Pokemon("Chikorita", ERBA);
-		Pokemon cyndaquil = new Pokemon("Cyndaquil", FUOCO);
-		Pokemon totodile = new Pokemon("Totodile", ACQUA);
+		Pokemon bulbasaur = new Pokemon(BULBASAUR, ERBA);
+		Pokemon charmander = new Pokemon(CHARMANDER, FUOCO);		
+		Pokemon squirtle = new Pokemon (SQUIRTLE, ACQUA);
+		Pokemon chikorita = new Pokemon(CHIKORITA, ERBA);
+		Pokemon cyndaquil = new Pokemon(CYNDAQUIL, FUOCO);
+		Pokemon totodile = new Pokemon(TOTODILE, ACQUA);
 		loadedPkmn.add(bulbasaur);
 		loadedPkmn.add(charmander);
 		loadedPkmn.add(squirtle);
