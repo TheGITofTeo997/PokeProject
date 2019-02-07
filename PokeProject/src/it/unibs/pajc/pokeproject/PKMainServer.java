@@ -52,6 +52,7 @@ public class PKMainServer extends Thread{
 	    openConnection();
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void checkForFileExistance() {
 		File pkDbaseFile = new File(DATABASE_LOCATION);
 		if(pkDbaseFile.exists()) { // dobbiamo leggere il file solo se esiste

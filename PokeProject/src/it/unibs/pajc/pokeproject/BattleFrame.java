@@ -5,7 +5,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 public class BattleFrame extends JFrame {
-	
+	private static final long serialVersionUID = -9090665586698145181L;
 	private static final String TITLE = "PokeBattle";
 	private JPanel contentPane;
 

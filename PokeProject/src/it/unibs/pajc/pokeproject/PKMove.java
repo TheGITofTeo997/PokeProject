@@ -3,6 +3,7 @@ package it.unibs.pajc.pokeproject;
 import java.io.*;
 
 public class PKMove implements Serializable{
+	private static final long serialVersionUID = -503011830200575067L;
 	private String name;
 	private int pwr;
 	private String type;

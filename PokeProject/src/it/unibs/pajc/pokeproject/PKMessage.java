@@ -3,6 +3,7 @@ package it.unibs.pajc.pokeproject;
 import java.io.*;
 
 public class PKMessage implements Serializable {
+	private static final long serialVersionUID = 5755675874453942785L;
 	private String commandBody;
 	private int clientID;
 	private int dataToCarry;

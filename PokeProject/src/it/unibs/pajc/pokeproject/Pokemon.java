@@ -3,6 +3,7 @@ import java.io.*;
 import java.util.*;
 
 public class Pokemon implements Serializable {
+	private static final long serialVersionUID = 9044885598484847739L;
 	private static final int NUMBER_OF_MOVES = 4;
 	private static final int MOVE_1 = 0;
 	private static final int MOVE_2 = 1;

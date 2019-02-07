@@ -7,6 +7,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.event.*;
 
 public class IpFrame extends JFrame {
+	private static final long serialVersionUID = -5554319631552427590L;
 	private static final String INSERT_SERVER_IP = "Insert Server IP:";
 	private static final String BTN_CONNECT_TEXT = "Connect ->";
 	private JPanel contentPane;

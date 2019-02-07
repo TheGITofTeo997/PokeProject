@@ -5,6 +5,8 @@ import javax.swing.JFrame;
 import javax.swing.JTextArea;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.Image;
+
 import javax.swing.JButton;
 import javax.swing.text.DefaultCaret;
 
@@ -50,7 +52,7 @@ public class PKServerWindow extends Thread{
 	private void initialize() {
 		frmPokeserverV = new JFrame();
 		frmPokeserverV.setResizable(false);
-		frmPokeserverV.setTitle("PokeServer v0.1b");
+		frmPokeserverV.setTitle("PokeServer v0.1c");
 		frmPokeserverV.setBounds(100, 100, 460, 500);
 		frmPokeserverV.setLocationRelativeTo(null);
 		frmPokeserverV.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -62,12 +64,6 @@ public class PKServerWindow extends Thread{
 		frmPokeserverV.getContentPane().add(lblConsole);
 		
 		JButton btnStart = new JButton("Start Server ->");
-		btnStart.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				pkServer.start();
-				btnStart.setEnabled(false);
-			}
-		});
 		btnStart.setBounds(163, 36, 121, 60);
 		frmPokeserverV.getContentPane().add(btnStart);
 		
@@ -81,15 +77,19 @@ public class PKServerWindow extends Thread{
 		scrollPane.setViewportView(consoleTextArea);
 		consoleTextArea.setEditable(false);
 		
-		JLabel background = new JLabel("");
-		background.setIcon(new ImageIcon(PKServerWindow.class.getResource("/img/server_back.jpg")));
+		JLabel background = new JLabel();
+		background.setIcon(new ImageIcon(new ImageIcon(PokeChooserFrame.class.getResource("/img/server_back.jpg")).getImage().getScaledInstance(frmPokeserverV.getWidth(), frmPokeserverV.getHeight(), Image.SCALE_DEFAULT))); //back scale
 		background.setBounds(0, 0, 454, 471);
 		frmPokeserverV.getContentPane().add(background);
 		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 		
 		
-		
-		
+		btnStart.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				pkServer.start();
+				btnStart.setEnabled(false);
+			}
+		});
 	}
 	
 	public static void appendTextToConsole(String text) {
