@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class PKClientWindow {
-	private static final String TITLE = "PokeBattle Client v0.1";
+	private static final String TITLE = "PokeBattle Client v0.1a";
 	private JFrame frmPokebattleClientV;
 	private IpFrame ipWindow;
 	

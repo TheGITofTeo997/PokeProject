@@ -37,6 +37,8 @@ public class BattleFrame extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		setLocationRelativeTo(null);
+		setVisible(false);
 		
 		JProgressBar trainerHPbar = new JProgressBar();
 		trainerHPbar.setValue(100);
@@ -84,7 +86,5 @@ public class BattleFrame extends JFrame {
 		background.setIcon(new ImageIcon(new ImageIcon(BattleFrame.class.getResource("/img/inbattle/battlebgField.png")).getImage().getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_DEFAULT))); //back scale
 		background.setBounds(0, 0, 618, 400);
 		contentPane.add(background);
-		setLocationRelativeTo(null);
-		setVisible(false);
 	}
 }
