@@ -1,11 +1,9 @@
 package it.unibs.pajc.pokeproject;
 
-import java.awt.BorderLayout;
 import java.awt.*;
 import java.io.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import java.awt.*;
 
 
 public class WaitingFrame extends JFrame {
@@ -56,16 +54,16 @@ public class WaitingFrame extends JFrame {
 		setLocationRelativeTo(null);
 		contentPane.setLayout(null);
 		
-		JLabel lblGIFLabel = new JLabel("");
+		JLabel lblGIFLabel = new JLabel();
 		lblGIFLabel.setIcon(new ImageIcon(WaitingFrame.class.getResource("/img/wait.gif")));
 		lblGIFLabel.setBounds(25, 83, 310, 100);
 		contentPane.add(lblGIFLabel);
 		
-		JLabel lblNewLabel = new JLabel(WAITING_OTHER_PLAYER);
-		lblNewLabel.setEnabled(false);
-		lblNewLabel.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 16));
-		lblNewLabel.setBounds(25, 26, 310, 21);
-		contentPane.add(lblNewLabel);
+		JLabel lblWaitLabel = new JLabel(WAITING_OTHER_PLAYER);
+		lblWaitLabel.setEnabled(false);
+		lblWaitLabel.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 16));
+		lblWaitLabel.setBounds(25, 26, 310, 21);
+		contentPane.add(lblWaitLabel);
 		
 		lblGIFLabel.setIcon(new ImageIcon(new ImageIcon(PokeChooserFrame.class.getResource("/img/wait.gif")).getImage().getScaledInstance(310, 100, Image.SCALE_DEFAULT))); //gif scale
 	}

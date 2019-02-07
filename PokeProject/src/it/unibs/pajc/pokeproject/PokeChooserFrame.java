@@ -1,25 +1,14 @@
 package it.unibs.pajc.pokeproject;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.Timer;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 import java.awt.Color;
 import javax.swing.JButton;
-import javax.swing.SwingConstants;
 import javax.swing.JRadioButton;
 
 public class PokeChooserFrame extends JFrame {
@@ -37,7 +26,7 @@ public class PokeChooserFrame extends JFrame {
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(false);
-		setBounds(100, 100, 650, 460);
+		setBounds(100, 100, 650, 482);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
@@ -132,12 +121,12 @@ public class PokeChooserFrame extends JFrame {
 		contentPane.add(totodile);
 		
 		JButton btnStartButton = new JButton(BTN_STARTBATTLE_TEXT);
-		btnStartButton.setBounds(267, 383, 109, 41);
+		btnStartButton.setBounds(267, 390, 109, 41);
 		contentPane.add(btnStartButton);
 		
 		JLabel background = new JLabel();
 		background.setIcon(new ImageIcon(new ImageIcon(PokeChooserFrame.class.getResource("/img/chooser_back.jpg")).getImage().getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_DEFAULT))); //back scale
-		background.setBounds(0, 0, 644, 431);
+		background.setBounds(0, 0, 644, 453);
 		contentPane.add(background);
 		
 		

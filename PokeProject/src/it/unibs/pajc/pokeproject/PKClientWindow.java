@@ -54,6 +54,11 @@ public class PKClientWindow {
 		btnMultiPlayer.setBounds(325, 164, 152, 58);
 		frmPokebattleClientV.getContentPane().add(btnMultiPlayer);
 		
+		JLabel background = new JLabel();
+		background.setBounds(0, 0, 594, 421);
+		background.setIcon(new ImageIcon(new ImageIcon(BattleFrame.class.getResource("/img/client_back.jpg")).getImage().getScaledInstance(frmPokebattleClientV.getWidth(), frmPokebattleClientV.getHeight(), Image.SCALE_DEFAULT))); //back scale
+		frmPokebattleClientV.getContentPane().add(background);
+		
 		
 		btnMultiPlayer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
