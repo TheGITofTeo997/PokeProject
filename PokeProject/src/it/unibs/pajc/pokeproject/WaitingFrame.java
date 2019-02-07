@@ -34,6 +34,7 @@ public class WaitingFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public WaitingFrame() {
+		setEnabled(false);
 		setAlwaysOnTop(true);
 		
 		try {
