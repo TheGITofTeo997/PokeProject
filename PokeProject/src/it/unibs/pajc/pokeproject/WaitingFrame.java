@@ -9,7 +9,7 @@ import java.awt.*;
 
 
 public class WaitingFrame extends JFrame {
-
+	private static final long serialVersionUID = 3669221117391479061L;
 	private static final String PKM_FONT = "PKMN_RBYGSC.ttf";
 	private static final String TITLE = "Waiting...";
 	private static final String WAITING_OTHER_PLAYER = "Waiting for other Player...";
@@ -36,7 +36,6 @@ public class WaitingFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public WaitingFrame() {
-		setEnabled(false);
 		setAlwaysOnTop(true);
 		
 		try {
@@ -63,6 +62,7 @@ public class WaitingFrame extends JFrame {
 		contentPane.add(lblGIFLabel);
 		
 		JLabel lblNewLabel = new JLabel(WAITING_OTHER_PLAYER);
+		lblNewLabel.setEnabled(false);
 		lblNewLabel.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 16));
 		lblNewLabel.setBounds(25, 26, 310, 21);
 		contentPane.add(lblNewLabel);
