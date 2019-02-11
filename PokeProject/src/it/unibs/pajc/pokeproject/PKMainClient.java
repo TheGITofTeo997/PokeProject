@@ -159,13 +159,14 @@ public class PKMainClient extends Thread implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		//start battle
-		for(int i=0; i<loadedPkmn.size(); i++) {
-			if(loadedPkmn.get(i).getName() == (e.getActionCommand())) {
-				selectedID = loadedPkmn.get(i).getID();
+		for(Map.Entry<Integer, Pokemon> entry : pkDatabase.entrySet()) {
+			if(e.getActionCommand().equals(entry.getValue().getName())) {
+				selectedID = entry.getKey();
 				System.out.println(selectedID);
 			}
 		}
 		
-	}
+		}
+		
 
 }
