@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.util.Map.Entry;
 
 public class PKMainClient extends Thread implements ActionListener{
 	
@@ -31,6 +32,7 @@ public class PKMainClient extends Thread implements ActionListener{
 	private IdentifiedQueue<PKMessage> toSend = new IdentifiedQueue<>(10);
 	private IdentifiedQueue<PKMessage> toReceive = new IdentifiedQueue<>(10);
 	private PKMessage test = new PKMessage("msg_test" , 0);
+	private int selectedID;
 	private static WaitingFrame wf = new WaitingFrame();
 	private static BattleFrame bf = new BattleFrame();
 	
@@ -157,6 +159,13 @@ public class PKMainClient extends Thread implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		//start battle
+		for(int i=0; i<loadedPkmn.size(); i++) {
+			if(loadedPkmn.get(i).getName() == (e.getActionCommand())) {
+				selectedID = loadedPkmn.get(i).getID();
+				System.out.println(selectedID);
+			}
+		}
+		
 	}
 
 }
