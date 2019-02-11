@@ -22,6 +22,7 @@ public class PKMainClient extends Thread implements ActionListener{
 	private static final String MSG_START_BATTLE = "msg_start_battle";
 	private static final String MSG_WAITING = "msg_waiting";
 	private static final String MSG_WAKEUP = "msg_wakeup";
+	private static final String MSG_SELECTED_POKEMON = "msg_selected_pokemon";
 	private static final int SERVER_PORT = 50000;
 	private String SERVER_IP;
 	private Socket socket;
@@ -31,7 +32,6 @@ public class PKMainClient extends Thread implements ActionListener{
 	private TreeMap<Integer, Pokemon> pkDatabase = new TreeMap<>();
 	private IdentifiedQueue<PKMessage> toSend = new IdentifiedQueue<>(10);
 	private IdentifiedQueue<PKMessage> toReceive = new IdentifiedQueue<>(10);
-	private PKMessage test = new PKMessage("msg_test" , 0);
 	private int selectedID;
 	private static WaitingFrame wf = new WaitingFrame();
 	private static BattleFrame bf = new BattleFrame();
@@ -40,12 +40,16 @@ public class PKMainClient extends Thread implements ActionListener{
 	//vecchio main
 	public void run() {
 		checkForFileExistance();
+		
 	}
 	
 	public void setIP(String IP) {
 		this.SERVER_IP = IP;
 	}
 	
+	//need to check for file type existance
+	
+	@SuppressWarnings("unchecked")
 	private void checkForFileExistance() {
 		File pkDbase = new File(DATABASE_LOCATION);
 		if(pkDbase.exists()) {
@@ -128,7 +132,7 @@ public class PKMainClient extends Thread implements ActionListener{
 	}
 		
 	private void loadPkmn() {
-		Pokemon bulbasaur = new Pokemon("Bulbasaur", ERBA);
+		Pokemon bulbasaur = new Pokemon("Bulbasaur", new PKType(ERBA));
 		Pokemon charmander = new Pokemon("Charmander", FUOCO);			
 		Pokemon squirtle = new Pokemon ("Squirtle", ACQUA);
 		Pokemon chikorita = new Pokemon("Chikorita", ERBA);
@@ -153,7 +157,9 @@ public class PKMainClient extends Thread implements ActionListener{
 	}
 	
 	private static void startBattle() {
+		
 		bf.setVisible(true);
+		
 	}
 
 	@Override
@@ -162,11 +168,11 @@ public class PKMainClient extends Thread implements ActionListener{
 		for(Map.Entry<Integer, Pokemon> entry : pkDatabase.entrySet()) {
 			if(e.getActionCommand().equals(entry.getValue().getName())) {
 				selectedID = entry.getKey();
-				System.out.println(selectedID);
 			}
 		}
-		
-		}
+		PKMessage msgChosenID = new PKMessage(MSG_SELECTED_POKEMON, selectedID);
+		toSend.add(msgChosenID);
+	}
 		
 
 }

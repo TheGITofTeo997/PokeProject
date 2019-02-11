@@ -1,6 +1,7 @@
 package it.unibs.pajc.pokeproject;
 
 import java.io.*;
+import java.net.URL;
 import java.util.*;
 
 public class Pokemon implements Serializable {
@@ -34,17 +35,28 @@ public class Pokemon implements Serializable {
 	private static final int IDROPULSAR_PWR = 60;
 	
 	
-	
 	private String name;
-	private String type;
+	private PKType type;
+	private URL frontSprite;
+	private URL backSprite;
 	private PKMove[] moves = new PKMove[NUMBER_OF_MOVES];
 	private HashMap<String, Integer> stats = new HashMap<>();
 	
-	public Pokemon(String name,  String type) {
+	public Pokemon(String name,  PKType type) {
 		this.name = name;
 		this.type = type;
 		fillStats(name);
 		fillMoves();
+		frontSprite = Pokemon.class.getResource("/img/"+name+"_F");
+		backSprite = Pokemon.class.getResource("/img/"+name+"_B");
+	}
+	
+	public URL getFrontSprite() {
+		return frontSprite;
+	}
+	
+	public URL getBackSprite() {
+		return backSprite;
 	}
 	
 	public int getID() {
@@ -83,7 +95,7 @@ public class Pokemon implements Serializable {
 		return moves[moveID];
 	}
 	
-	public String getType() {
+	public PKType getType() {
 		return this.type;
 	}
 	
@@ -118,7 +130,7 @@ public class Pokemon implements Serializable {
 		moves[MOVE_1] = new PKMove(AZIONE, AZIONE_PWR, NORMAL);
 		moves[MOVE_2] = new PKMove(FORZA, FORZA_PWR, NORMAL);
 		moves[MOVE_3] = new PKMove(RUGGITO, RUGGITO_PWR, NORMAL);
-		switch(type) {
+		switch(type.getTypeName()) {
 		case GRASS:
 			moves[MOVE_4] = new PKMove(FOGLIELAMA, FOGLIELAMA_PWR, GRASS);
 			break;

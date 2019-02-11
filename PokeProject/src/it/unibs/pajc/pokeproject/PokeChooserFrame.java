@@ -108,34 +108,34 @@ public class PokeChooserFrame extends JFrame implements ActionListener{
 	
 		
 		JLabel bulbasaur = new JLabel();
-		bulbasaur.setIcon(new ImageIcon(new ImageIcon(PokeChooserFrame.class.getResource("/img/bulbasaur.gif")).getImage().getScaledInstance(RES, RES, Image.SCALE_DEFAULT))); //gif scale
+		bulbasaur.setIcon(new ImageIcon(new ImageIcon(PokeChooserFrame.class.getResource("/img/Bulbasaur_F.gif")).getImage().getScaledInstance(RES, RES, Image.SCALE_DEFAULT))); //gif scale
 		bulbasaur.setBounds(57, 59, 96, 96);
 		contentPane.add(bulbasaur);
 		
 		
 		JLabel charmander = new JLabel();
-		charmander.setIcon(new ImageIcon(new ImageIcon(PokeChooserFrame.class.getResource("/img/Charmander.gif")).getImage().getScaledInstance(RES, RES, Image.SCALE_DEFAULT))); //gif scale
+		charmander.setIcon(new ImageIcon(new ImageIcon(PokeChooserFrame.class.getResource("/img/Charmander_F.gif")).getImage().getScaledInstance(RES, RES, Image.SCALE_DEFAULT))); //gif scale
 		charmander.setBounds(267, 59, 96, 96);
 		contentPane.add(charmander);
 		
 		JLabel squirtle = new JLabel();
-		squirtle.setIcon(new ImageIcon(new ImageIcon(PokeChooserFrame.class.getResource("/img/Squirtle.gif")).getImage().getScaledInstance(RES, RES, Image.SCALE_DEFAULT))); //gif scale
+		squirtle.setIcon(new ImageIcon(new ImageIcon(PokeChooserFrame.class.getResource("/img/Squirtle_F.gif")).getImage().getScaledInstance(RES, RES, Image.SCALE_DEFAULT))); //gif scale
 		squirtle.setBounds(493, 59, 96, 96);
 		contentPane.add(squirtle);
 		
 	
 		JLabel chikorita = new JLabel();
-		chikorita.setIcon(new ImageIcon(new ImageIcon(PokeChooserFrame.class.getResource("/img/Chikorita.gif")).getImage().getScaledInstance(RES, RES, Image.SCALE_DEFAULT))); //gif scale
+		chikorita.setIcon(new ImageIcon(new ImageIcon(PokeChooserFrame.class.getResource("/img/Chikorita_F.gif")).getImage().getScaledInstance(RES, RES, Image.SCALE_DEFAULT))); //gif scale
 		chikorita.setBounds(57, 249, 96, 96);
 		contentPane.add(chikorita);
 		
 		JLabel cyndaquil = new JLabel();
-		cyndaquil.setIcon(new ImageIcon(new ImageIcon(PokeChooserFrame.class.getResource("/img/Cyndaquil.gif")).getImage().getScaledInstance(RES, RES, Image.SCALE_DEFAULT))); //gif scale
+		cyndaquil.setIcon(new ImageIcon(new ImageIcon(PokeChooserFrame.class.getResource("/img/Cyndaquil_F.gif")).getImage().getScaledInstance(RES, RES, Image.SCALE_DEFAULT))); //gif scale
 		cyndaquil.setBounds(267, 249, 96, 96);
 		contentPane.add(cyndaquil);
 		
 		JLabel totodile = new JLabel();
-		totodile.setIcon(new ImageIcon(new ImageIcon(PokeChooserFrame.class.getResource("/img/Totodile.gif")).getImage().getScaledInstance(RES, RES, Image.SCALE_DEFAULT))); //gif scale
+		totodile.setIcon(new ImageIcon(new ImageIcon(PokeChooserFrame.class.getResource("/img/Totodile_F.gif")).getImage().getScaledInstance(RES, RES, Image.SCALE_DEFAULT))); //gif scale
 		totodile.setBounds(493, 249, 96, 96);
 		contentPane.add(totodile);
 		

@@ -27,23 +27,30 @@ public class PKMainServer extends Thread{
 	private static final String MSG_REMATCH_YES = "msg_rematch_yes";
 	private static final String MSG_SELECTED_MOVE = "msg_selected_move";
 	private static final String MSG_SELECTED_POKEMON = "msg_selected_pokemon";
+	private static final String MSG_OPPONENT_POKEMON = "msg_opponent_pokemon";
 	private static final String MSG_START_BATTLE = "msg_start_battle";
 	private static final String MSG_WAITING = "msg_waiting";
 	private static final String MSG_WAKEUP = "msg_wakeup";
-	private static final String SUCCESFULLY_ADDED_MESSAGE_TO_SENDING_QUEUE = "\nSuccesfully added the message to the sending queue :)";
 	
 	private static TreeMap<Integer, Pokemon> pkDatabase = new TreeMap<>();
 	private static ArrayList<Pokemon> loadedPkmn = new ArrayList<>();
 	private Pokemon trainerPoke0;
 	private Pokemon trainerPoke1;
 	private ArrayList<IdentifiedQueue<PKMessage>> fromQueues = new ArrayList<>(); 
-	// coda da cui il server prenderà i messaggi che i client hanno mandato
+	// array di code da cui il server prenderà i messaggi che i client hanno mandato
 	private ArrayList<IdentifiedQueue<PKMessage>> toQueues = new ArrayList<>(); 
-	// coda in cui il server metterà i messaggi da inviare ai client
+	// array di code in cui il server metterà i messaggi da inviare ai client
 	
 	//Questo era il vecchio main, ora non è più entrypoint poichè viene fatto dalla window
 	public void run(){
 		initialize();
+		while(true) {
+			if(!fromQueues.get(FIRST_QUEUE).isEmpty())
+				executeCommand(fromQueues.get(FIRST_QUEUE).poll());
+			if(!fromQueues.get(SECOND_QUEUE).isEmpty())
+				executeCommand(fromQueues.get(SECOND_QUEUE).poll());
+		}
+		
 	}
 	
 	public void initialize() {
@@ -51,6 +58,8 @@ public class PKMainServer extends Thread{
 		setupQueues();
 	    openConnection();
 	}
+	
+	//need to check for file type existance
 	
 	@SuppressWarnings("unchecked")
 	private void checkForFileExistance() {
@@ -88,34 +97,33 @@ public class PKMainServer extends Thread{
 		ServerSocket server;
 		try {
 			int i=0;
+			int connectedClients=0;
 			server = new ServerSocket(SERVER_PORT);
 			PKServerWindow.appendTextToConsole(SERVER_STARTED_SUCCESFULLY);
-			while(true) {  
-		    Socket client = server.accept();
-		    PKServerProtocol protocol = new PKServerProtocol(client);
+			while(connectedClients<2) {  
+				Socket client = server.accept();
+				connectedClients++;
+				PKServerProtocol protocol = new PKServerProtocol(client);
 		    
-		    //assegnamento code ai serverprotocol con assegnamento id
-		    if(fromQueues.get(i).getId() == DEFALT_QUEUE_ID) { //cerco la coda con id di default
-		    	protocol.setInputBuffer(fromQueues.get(i)); //la assegno al ServerProtocol
-		   		fromQueues.get(i).setId(protocol.getIdCounter()); //e poi le assegno l'id del ServerProtocol
-		   	}
-		   	else { // i client che si connettono sono 2, quindi se una è già assegnata l'altra sarà libera
-		   		protocol.setInputBuffer(fromQueues.get(++i));
-	    		fromQueues.get(i).setId(protocol.getIdCounter());
-	    	}
-		    i=0;
-		   	if(toQueues.get(i).getId() == DEFALT_QUEUE_ID) { //stessa cosa di prima
-		   		protocol.setOutputBuffer(toQueues.get(i));
-		   		toQueues.get(i).setId(protocol.getIdCounter());
-		   	}
-	    	else {
-	    		protocol.setOutputBuffer(toQueues.get(++i));		
-	    		toQueues.get(i).setId(protocol.getIdCounter());
-		    }   	
-		   	//solo quando vengono assegnate le seconde code posso fare il test
-		   	//e ciò avviene quando i 2 client sono connessi
-		    if(toQueues.get(SECOND_QUEUE).getId()!=DEFALT_QUEUE_ID) 
-				test();
+				//assegnamento code ai serverprotocol con assegnamento id
+				if(fromQueues.get(i).getId() == DEFALT_QUEUE_ID) { //cerco la coda con id di default
+					protocol.setInputBuffer(fromQueues.get(i)); //la assegno al ServerProtocol
+					fromQueues.get(i).setId(protocol.getIdCounter()); //e poi le assegno l'id del ServerProtocol
+				}
+				else { // i client che si connettono sono 2, quindi se una è già assegnata l'altra sarà libera
+					protocol.setInputBuffer(fromQueues.get(++i));
+					fromQueues.get(i).setId(protocol.getIdCounter());
+				}
+				i=0;
+				if(toQueues.get(i).getId() == DEFALT_QUEUE_ID) { //stessa cosa di prima
+					protocol.setOutputBuffer(toQueues.get(i));
+					toQueues.get(i).setId(protocol.getIdCounter());
+				}
+				else {
+					protocol.setOutputBuffer(toQueues.get(++i));		
+					toQueues.get(i).setId(protocol.getIdCounter());
+				}   	
+				
 			}
 		} 
 		catch (IOException e) {
@@ -124,7 +132,7 @@ public class PKMainServer extends Thread{
 	}
 	
 	public void loadPkmn() {
-		Pokemon bulbasaur = new Pokemon(BULBASAUR, ERBA);
+		Pokemon bulbasaur = new Pokemon(BULBASAUR, ERBA); //type will be an anonymous class
 		Pokemon charmander = new Pokemon(CHARMANDER, FUOCO);		
 		Pokemon squirtle = new Pokemon (SQUIRTLE, ACQUA);
 		Pokemon chikorita = new Pokemon(CHIKORITA, ERBA);
@@ -152,35 +160,6 @@ public class PKMainServer extends Thread{
 		}
 	}
 	
-	private void test() {
-		/*
-		 * Prendo il messaggio che il primo client ha inviato, che si trova nella prima coda di ricezione, e lo metto
-		 * sulla seconda di invio, quella per mandare al secondo client.
-		 */
-		if(toQueues.get(SECOND_QUEUE).add((fromQueues.get(FIRST_QUEUE).poll()))) 
-			PKServerWindow.appendTextToConsole(SUCCESFULLY_ADDED_MESSAGE_TO_SENDING_QUEUE);
-		
-		//questo è un workaround temporaneo perché forse c'è un problema di concorrenza
-		if(fromQueues.get(SECOND_QUEUE).poll() == null) {
-			/*
-			 * La teoria dietro a questo è che il MainServer debba aspettare che il serverReceiver metta
-			 * il messaggio nella coda. Quindi si addormenta per un secondo, il serverReceiver mette il messaggio,
-			 * il mainServer lo prende e fa quello che deve fare
-			 */
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			toQueues.get(FIRST_QUEUE).add((fromQueues.get(SECOND_QUEUE).poll()));
-			PKServerWindow.appendTextToConsole(SUCCESFULLY_ADDED_MESSAGE_TO_SENDING_QUEUE);
-		}
-		else
-		{
-			toQueues.get(FIRST_QUEUE).add((fromQueues.get(SECOND_QUEUE).poll()));
-			PKServerWindow.appendTextToConsole(SUCCESFULLY_ADDED_MESSAGE_TO_SENDING_QUEUE);
-		}
-	}
 	
 	/*
 	public int setPriorityBattle(Pokemon p0, Pokemon p1) {
@@ -210,10 +189,15 @@ public class PKMainServer extends Thread{
 		if(!trainerPoke0.equals(null) && !trainerPoke1.equals(null)) {
 			PKMessage startBattle = new PKMessage(MSG_START_BATTLE);
 			PKMessage wakeup = new PKMessage(MSG_WAKEUP);
+			PKMessage opponentFor0 = new PKMessage(MSG_OPPONENT_POKEMON, trainerPoke1.getID());
+			PKMessage opponentFor1 = new PKMessage(MSG_OPPONENT_POKEMON, trainerPoke0.getID());
 			toQueues.get(FIRST_QUEUE).add(wakeup);
 			toQueues.get(SECOND_QUEUE).add(wakeup);		
+			toQueues.get(FIRST_QUEUE).add(opponentFor0);
+			toQueues.get(SECOND_QUEUE).add(opponentFor1);
 			toQueues.get(FIRST_QUEUE).add(startBattle);
 			toQueues.get(SECOND_QUEUE).add(startBattle);		
+			
 		}
 		else {
 			PKMessage wait = new PKMessage(MSG_WAITING);

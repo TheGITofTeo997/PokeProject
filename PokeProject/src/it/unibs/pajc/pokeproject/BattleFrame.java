@@ -72,6 +72,14 @@ public class BattleFrame extends JFrame {
 		lblTextBoxLabel.setIcon(new ImageIcon(new ImageIcon(BattleFrame.class.getResource("/img/inbattle/utils/battleCommand.png")).getImage().getScaledInstance(lblTextBoxLabel.getWidth(), lblTextBoxLabel.getHeight(), Image.SCALE_DEFAULT))); //box scale
 		contentPane.add(lblTextBoxLabel);
 		
+		JLabel lblTrainerPokeLabel = new JLabel();
+		lblTrainerPokeLabel.setBounds(60, 207, 137, 84);
+		contentPane.add(lblTrainerPokeLabel);
+		
+		JLabel lblEnemyPokeLabel = new JLabel();
+		lblEnemyPokeLabel.setBounds(428, 72, 137, 84);
+		contentPane.add(lblEnemyPokeLabel);
+		
 		JLabel lblTrainerBaseLabel = new JLabel();
 		lblTrainerBaseLabel.setBounds(-28, 217, 319, 155);
 		lblTrainerBaseLabel.setIcon(new ImageIcon(new ImageIcon(BattleFrame.class.getResource("/img/inbattle/enemybaseFieldGrass.png")).getImage().getScaledInstance(lblTrainerBaseLabel.getWidth(), lblTrainerBaseLabel.getHeight(), Image.SCALE_DEFAULT))); //base scale
