@@ -132,12 +132,12 @@ public class PKMainServer extends Thread{
 	}
 	
 	public void loadPkmn() {
-		Pokemon bulbasaur = new Pokemon(BULBASAUR, ERBA); //type will be an anonymous class
-		Pokemon charmander = new Pokemon(CHARMANDER, FUOCO);		
-		Pokemon squirtle = new Pokemon (SQUIRTLE, ACQUA);
-		Pokemon chikorita = new Pokemon(CHIKORITA, ERBA);
-		Pokemon cyndaquil = new Pokemon(CYNDAQUIL, FUOCO);
-		Pokemon totodile = new Pokemon(TOTODILE, ACQUA);
+		Pokemon bulbasaur = new Pokemon("Bulbasaur", new PKType(ERBA));
+		Pokemon charmander = new Pokemon("Charmander", new PKType(FUOCO));			
+		Pokemon squirtle = new Pokemon ("Squirtle", new PKType(ACQUA));
+		Pokemon chikorita = new Pokemon("Chikorita", new PKType(ERBA));
+		Pokemon cyndaquil = new Pokemon("Cyndaquil", new PKType(FUOCO));
+		Pokemon totodile = new Pokemon("Totodile", new PKType(ACQUA));
 		loadedPkmn.add(bulbasaur);
 		loadedPkmn.add(charmander);
 		loadedPkmn.add(squirtle);
@@ -207,9 +207,9 @@ public class PKMainServer extends Thread{
 	
 	private void calcDamage(Pokemon attacker, Pokemon defender, int moveID) {
 		double N = ThreadLocalRandom.current().nextDouble(0.85, 1);
-		double stab = (attacker.getType().compareToIgnoreCase(attacker.getMove(moveID).getType())==0) ? 1.5 : 1;
+		double stab = (attacker.getType().getTypeName().compareToIgnoreCase(attacker.getMove(moveID).getType())==0) ? 1.5 : 1;
 		double damage = ((((2*attacker.getLevel()+10)*attacker.getAttack()*attacker.getMove(moveID).getPwr()) / 
-				(250*defender.getDefense()) ) + 2) * stab * calcEffectiveness(attacker.getMove(moveID).getType(), defender.getType())
+				(250*defender.getDefense()) ) + 2) * stab * calcEffectiveness(attacker.getMove(moveID).getType(), defender.getType().getTypeName())
 				* N;
 		
 	}

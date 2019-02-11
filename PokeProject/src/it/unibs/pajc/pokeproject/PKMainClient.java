@@ -133,11 +133,11 @@ public class PKMainClient extends Thread implements ActionListener{
 		
 	private void loadPkmn() {
 		Pokemon bulbasaur = new Pokemon("Bulbasaur", new PKType(ERBA));
-		Pokemon charmander = new Pokemon("Charmander", FUOCO);			
-		Pokemon squirtle = new Pokemon ("Squirtle", ACQUA);
-		Pokemon chikorita = new Pokemon("Chikorita", ERBA);
-		Pokemon cyndaquil = new Pokemon("Cyndaquil", FUOCO);
-		Pokemon totodile = new Pokemon("Totodile", ACQUA);
+		Pokemon charmander = new Pokemon("Charmander", new PKType(FUOCO));			
+		Pokemon squirtle = new Pokemon ("Squirtle", new PKType(ACQUA));
+		Pokemon chikorita = new Pokemon("Chikorita", new PKType(ERBA));
+		Pokemon cyndaquil = new Pokemon("Cyndaquil", new PKType(FUOCO));
+		Pokemon totodile = new Pokemon("Totodile", new PKType(ACQUA));
 		loadedPkmn.add(bulbasaur);
 		loadedPkmn.add(charmander);
 		loadedPkmn.add(squirtle);
