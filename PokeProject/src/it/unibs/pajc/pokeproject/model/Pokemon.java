@@ -1,8 +1,8 @@
-package it.unibs.pajc.pokeproject;
+package it.unibs.pajc.pokeproject.model;
 
 import java.io.*;
-import java.net.URL;
 import java.util.*;
+import java.net.URL;
 
 public class Pokemon implements Serializable {
 	private static final long serialVersionUID = 9044885598484847739L;

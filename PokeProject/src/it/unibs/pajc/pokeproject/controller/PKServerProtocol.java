@@ -1,8 +1,11 @@
-package it.unibs.pajc.pokeproject;
+package it.unibs.pajc.pokeproject.controller;
 
 import java.io.*;
 import java.net.*;
 import java.util.*;
+
+import it.unibs.pajc.pokeproject.util.*;
+import it.unibs.pajc.pokeproject.view.PKServerWindow;
 
 /*
  * Il serverprotocol utilizza un hashmap e un arraylist per gestire i 2 client che si

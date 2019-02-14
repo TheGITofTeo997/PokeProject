@@ -1,4 +1,4 @@
-package it.unibs.pajc.pokeproject;
+package it.unibs.pajc.pokeproject.view;
 
 import java.awt.Image;
 import javax.swing.ButtonGroup;
@@ -7,6 +7,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import it.unibs.pajc.pokeproject.controller.PKMainClient;
+
 import java.awt.Color;
 import javax.swing.JButton;
 import javax.swing.JRadioButton;

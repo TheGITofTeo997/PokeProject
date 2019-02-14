@@ -1,6 +1,9 @@
-package it.unibs.pajc.pokeproject;
+package it.unibs.pajc.pokeproject.controller;
 
 import java.io.*;
+
+import it.unibs.pajc.pokeproject.util.IdentifiedQueue;
+import it.unibs.pajc.pokeproject.util.PKMessage;
 
 public class PKClientSender extends Thread {
 

@@ -1,4 +1,4 @@
-package it.unibs.pajc.pokeproject;
+package it.unibs.pajc.pokeproject.view;
 
 import java.awt.*;
 import java.io.*;

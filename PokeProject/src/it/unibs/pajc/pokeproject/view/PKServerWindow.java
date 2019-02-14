@@ -1,4 +1,4 @@
-package it.unibs.pajc.pokeproject;
+package it.unibs.pajc.pokeproject.view;
 
 import java.awt.EventQueue;
 import javax.swing.JFrame;
@@ -6,16 +6,15 @@ import javax.swing.JTextArea;
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.Image;
-
 import javax.swing.JButton;
 import javax.swing.text.DefaultCaret;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
-
 import javax.swing.ScrollPaneConstants;
 import javax.swing.ImageIcon;
+
+import it.unibs.pajc.pokeproject.controller.*;
 
 public class PKServerWindow extends Thread{
 

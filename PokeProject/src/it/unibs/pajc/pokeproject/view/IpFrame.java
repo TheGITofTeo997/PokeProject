@@ -1,12 +1,14 @@
-package it.unibs.pajc.pokeproject;
+package it.unibs.pajc.pokeproject.view;
 
 import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-import java.awt.event.*;
-import java.io.File;
-import java.io.IOException;
+import it.unibs.pajc.pokeproject.controller.PKMainClient;
+
+
 
 public class IpFrame extends JFrame {
 	private static final long serialVersionUID = -5554319631552427590L;

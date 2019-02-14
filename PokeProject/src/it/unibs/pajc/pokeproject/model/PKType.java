@@ -1,13 +1,11 @@
-package it.unibs.pajc.pokeproject;
+package it.unibs.pajc.pokeproject.model;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 
-public class PKType {
+public class PKType implements Serializable{
+	private static final long serialVersionUID = -1261663080265777425L;
 	// hashmap contenente le associazioni tra il tipo considerato e l'efficacia sugli altri tipi
 	private HashMap<String, Double> typeDatabase = new HashMap<>();
 	private String type;

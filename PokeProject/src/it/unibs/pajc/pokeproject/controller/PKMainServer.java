@@ -1,9 +1,14 @@
-package it.unibs.pajc.pokeproject;
+package it.unibs.pajc.pokeproject.controller;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.io.*;
 import java.net.*;
+
+import it.unibs.pajc.pokeproject.model.*;
+import it.unibs.pajc.pokeproject.util.*;
+import it.unibs.pajc.pokeproject.util.IdentifiedQueue;
+import it.unibs.pajc.pokeproject.view.*;
 
 public class PKMainServer extends Thread{
 	private static final int FIRST_QUEUE = 0;

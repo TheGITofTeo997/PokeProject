@@ -1,11 +1,13 @@
-package it.unibs.pajc.pokeproject;
+package it.unibs.pajc.pokeproject.controller;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
-import java.util.Map.Entry;
+
+import it.unibs.pajc.pokeproject.model.*;
+import it.unibs.pajc.pokeproject.util.*;
+import it.unibs.pajc.pokeproject.view.*;
 
 public class PKMainClient extends Thread implements ActionListener{
 	

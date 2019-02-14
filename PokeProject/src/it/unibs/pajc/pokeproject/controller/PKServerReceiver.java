@@ -1,6 +1,10 @@
-package it.unibs.pajc.pokeproject;
+package it.unibs.pajc.pokeproject.controller;
 
 import java.io.*;
+
+import it.unibs.pajc.pokeproject.util.IdentifiedQueue;
+import it.unibs.pajc.pokeproject.util.PKMessage;
+import it.unibs.pajc.pokeproject.view.PKServerWindow;
 
 public class PKServerReceiver extends Thread {
 	private static final String MSG_ADDED_CORRECTLY = "\nMessage added to the queue correctly :)";
