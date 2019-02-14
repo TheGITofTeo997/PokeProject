@@ -239,72 +239,42 @@ public class PKMainServer extends Thread{
 			double damageFirstAttacker;
 			double damageSecondAttacker;
 			if(firstAttackerID == trainerPoke0.getBattleID() && firstAttackerID == msg.getClientID()) {
-				damageFirstAttacker = calcDamage(trainerPoke0, trainerPoke1, selected);
-				damageSecondAttacker = calcDamage(trainerPoke1, trainerPoke0, firstMoveSelectedID);
-				PKMessage damageDoneByFirst = new PKMessage(MSG_DONE_DAMAGE, (int)damageFirstAttacker);
-				PKMessage opponentMove = new PKMessage(MSG_OPPONENT_MOVE, firstMoveSelectedID);
-				PKMessage damageDoneBySecond = new PKMessage(MSG_RECEIVED_DAMAGE, (int)damageSecondAttacker);
-				toQueues.get(FIRST_QUEUE).add(damageDoneByFirst);
-				toQueues.get(FIRST_QUEUE).add(opponentMove);
-				toQueues.get(FIRST_QUEUE).add(damageDoneBySecond);
-				PKMessage trainerMove = new PKMessage(MSG_OPPONENT_MOVE, selected);
-				PKMessage damageFirst = new PKMessage(MSG_RECEIVED_DAMAGE, (int)damageFirstAttacker);
-				PKMessage damageSecond = new PKMessage(MSG_DONE_DAMAGE, (int)damageSecondAttacker);
-				toQueues.get(SECOND_QUEUE).add(trainerMove);
-				toQueues.get(SECOND_QUEUE).add(damageFirst);
-				toQueues.get(SECOND_QUEUE).add(damageSecond);
+				sendSelectedMoveMessage(trainerPoke0, trainerPoke1, firstAttackerID, selected, firstMoveSelectedID);
 			}
 			else if(firstAttackerID == trainerPoke1.getBattleID() && firstAttackerID == msg.getClientID()) {
-				damageFirstAttacker = calcDamage(trainerPoke1, trainerPoke0, selected);
-				damageSecondAttacker = calcDamage(trainerPoke0, trainerPoke1, firstMoveSelectedID);
-				PKMessage damageDoneByFirst = new PKMessage(MSG_DONE_DAMAGE, (int)damageFirstAttacker);
-				PKMessage opponentMove = new PKMessage(MSG_OPPONENT_MOVE, firstMoveSelectedID);
-				PKMessage damageDoneBySecond = new PKMessage(MSG_RECEIVED_DAMAGE, (int)damageSecondAttacker);
-				toQueues.get(SECOND_QUEUE).add(damageDoneByFirst);
-				toQueues.get(SECOND_QUEUE).add(opponentMove);
-				toQueues.get(SECOND_QUEUE).add(damageDoneBySecond);
-				PKMessage trainerMove = new PKMessage(MSG_OPPONENT_MOVE, selected);
-				PKMessage damageFirst = new PKMessage(MSG_RECEIVED_DAMAGE, (int)damageFirstAttacker);
-				PKMessage damageSecond = new PKMessage(MSG_DONE_DAMAGE, (int)damageSecondAttacker);
-				toQueues.get(FIRST_QUEUE).add(trainerMove);
-				toQueues.get(FIRST_QUEUE).add(damageFirst);
-				toQueues.get(FIRST_QUEUE).add(damageSecond);
+				sendSelectedMoveMessage(trainerPoke1, trainerPoke0, firstAttackerID, selected, firstMoveSelectedID);
 			}
 			else if(firstAttackerID == trainerPoke0.getBattleID() && firstAttackerID != msg.getClientID()) {
-				damageFirstAttacker = calcDamage(trainerPoke0, trainerPoke1, firstMoveSelectedID);
-				damageSecondAttacker = calcDamage(trainerPoke1, trainerPoke0, selected);
-				PKMessage damageDoneByFirst = new PKMessage(MSG_DONE_DAMAGE, (int)damageFirstAttacker);
-				PKMessage opponentMove = new PKMessage(MSG_OPPONENT_MOVE, selected);
-				PKMessage damageDoneBySecond = new PKMessage(MSG_RECEIVED_DAMAGE, (int)damageSecondAttacker);
-				toQueues.get(FIRST_QUEUE).add(damageDoneByFirst);
-				toQueues.get(FIRST_QUEUE).add(opponentMove);
-				toQueues.get(FIRST_QUEUE).add(damageDoneBySecond);
-				PKMessage trainerMove = new PKMessage(MSG_OPPONENT_MOVE, firstMoveSelectedID);
-				PKMessage damageFirst = new PKMessage(MSG_RECEIVED_DAMAGE, (int)damageFirstAttacker);
-				PKMessage damageSecond = new PKMessage(MSG_DONE_DAMAGE, (int)damageSecondAttacker);
-				toQueues.get(SECOND_QUEUE).add(trainerMove);
-				toQueues.get(SECOND_QUEUE).add(damageFirst);
-				toQueues.get(SECOND_QUEUE).add(damageSecond);
+				sendSelectedMoveMessage(trainerPoke0, trainerPoke1, firstAttackerID, firstMoveSelectedID, selected);
 			}
 			else {
-				damageFirstAttacker = calcDamage(trainerPoke1, trainerPoke0, firstMoveSelectedID);
-				damageSecondAttacker = calcDamage(trainerPoke0, trainerPoke1, selected);
-				PKMessage damageDoneByFirst = new PKMessage(MSG_DONE_DAMAGE, (int)damageFirstAttacker);
-				PKMessage opponentMove = new PKMessage(MSG_OPPONENT_MOVE, selected);
-				PKMessage damageDoneBySecond = new PKMessage(MSG_RECEIVED_DAMAGE, (int)damageSecondAttacker);
-				toQueues.get(SECOND_QUEUE).add(damageDoneByFirst);
-				toQueues.get(SECOND_QUEUE).add(opponentMove);
-				toQueues.get(SECOND_QUEUE).add(damageDoneBySecond);
-				PKMessage trainerMove = new PKMessage(MSG_OPPONENT_MOVE, firstMoveSelectedID);
-				PKMessage damageFirst = new PKMessage(MSG_RECEIVED_DAMAGE, (int)damageFirstAttacker);
-				PKMessage damageSecond = new PKMessage(MSG_DONE_DAMAGE, (int)damageSecondAttacker);
-				toQueues.get(FIRST_QUEUE).add(trainerMove);
-				toQueues.get(FIRST_QUEUE).add(damageFirst);
-				toQueues.get(FIRST_QUEUE).add(damageSecond);
+				sendSelectedMoveMessage(trainerPoke1, trainerPoke0, firstAttackerID, firstMoveSelectedID, selected);
 			}
-			
 		}
-		
-		
+	}
+	
+	private void sendSelectedMoveMessage(Pokemon firstAttacker, Pokemon secondAttacker, int firstAttackerID, int firstMove, int secondMove) {
+		int damageFirstAttacker = (int)calcDamage(firstAttacker, secondAttacker, firstMove);
+		int damageSecondAttacker = (int)calcDamage(secondAttacker, firstAttacker, secondMove);
+		PKMessage damageDoneByFirst = new PKMessage(MSG_DONE_DAMAGE, (int)damageFirstAttacker);
+		PKMessage opponentMove = new PKMessage(MSG_OPPONENT_MOVE, secondMove);
+		PKMessage damageDoneBySecond = new PKMessage(MSG_RECEIVED_DAMAGE, (int)damageSecondAttacker);
+		for(int i=0; i<toQueues.size(); i++) {
+			if (toQueues.get(i).getId() == firstAttackerID) {
+				toQueues.get(i).add(damageDoneByFirst);
+				toQueues.get(i).add(opponentMove);
+				toQueues.get(i).add(damageDoneBySecond);
+			}
+		}
+		PKMessage trainerMove = new PKMessage(MSG_OPPONENT_MOVE, firstMove);
+		PKMessage damageFirst = new PKMessage(MSG_RECEIVED_DAMAGE, (int)damageFirstAttacker);
+		PKMessage damageSecond = new PKMessage(MSG_DONE_DAMAGE, (int)damageSecondAttacker);
+		for(int i=0; i<toQueues.size(); i++) {
+			if (toQueues.get(i).getId() != firstAttackerID) {
+				toQueues.get(i).add(trainerMove);
+				toQueues.get(i).add(damageFirst);
+				toQueues.get(i).add(damageSecond);
+			}
+		}
 	}
 }
