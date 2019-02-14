@@ -14,9 +14,11 @@ public class PKType {
 	
 	public PKType(String type) {
 		this.type = type;
+		fillTypeMap(type);
+		
 	}
 	
-	public double getEffectiveness(PKType type) {
+	public double getEffectiveness(String type) {
 		return typeDatabase.get(type);
 	}
 	

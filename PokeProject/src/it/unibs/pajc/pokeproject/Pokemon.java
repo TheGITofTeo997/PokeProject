@@ -17,10 +17,10 @@ public class Pokemon implements Serializable {
 	private static final String HP = "HP";
 	private static final String LEVEL = "Level";
 	private static final String ID = "ID";	
-	private static final String GRASS = "Erba";
-	private static final String WATER = "Acqua";
-	private static final String FIRE = "Fuoco";
-	private static final String NORMAL = "Normale";
+	private static final String GRASS = "Grass";
+	private static final String WATER = "Water";
+	private static final String FIRE = "Fire";
+	private static final String NORMAL = "Normal";
 	private static final String AZIONE = "Azione";
 	private static final String RUGGITO = "Ruggito";
 	private static final String FORZA = "Forza";
@@ -39,6 +39,7 @@ public class Pokemon implements Serializable {
 	private PKType type;
 	private URL frontSprite;
 	private URL backSprite;
+	private int battleID;
 	private PKMove[] moves = new PKMove[NUMBER_OF_MOVES];
 	private HashMap<String, Integer> stats = new HashMap<>();
 	
@@ -99,6 +100,14 @@ public class Pokemon implements Serializable {
 		return this.type;
 	}
 	
+	public int getBattleID() {
+		return battleID;
+	}
+
+	public void setBattleID(int battleID) {
+		this.battleID = battleID;
+	}
+	
 	/*
 	 * TODO LIST
 	 * fix percorso file, fix nome file, controlli file
@@ -127,18 +136,18 @@ public class Pokemon implements Serializable {
 	}	
 	
 	private void fillMoves() {
-		moves[MOVE_1] = new PKMove(AZIONE, AZIONE_PWR, NORMAL);
-		moves[MOVE_2] = new PKMove(FORZA, FORZA_PWR, NORMAL);
-		moves[MOVE_3] = new PKMove(RUGGITO, RUGGITO_PWR, NORMAL);
+		moves[MOVE_1] = new PKMove(AZIONE, AZIONE_PWR, new PKType(NORMAL));
+		moves[MOVE_2] = new PKMove(FORZA, FORZA_PWR, new PKType(NORMAL));
+		moves[MOVE_3] = new PKMove(RUGGITO, RUGGITO_PWR, new PKType(NORMAL));
 		switch(type.getTypeName()) {
 		case GRASS:
-			moves[MOVE_4] = new PKMove(FOGLIELAMA, FOGLIELAMA_PWR, GRASS);
+			moves[MOVE_4] = new PKMove(FOGLIELAMA, FOGLIELAMA_PWR, new PKType(GRASS));
 			break;
 		case FIRE:
-			moves[MOVE_4] = new PKMove(LANCIAFIAMME, LANCIAFIAMME_PWR, FIRE);
+			moves[MOVE_4] = new PKMove(LANCIAFIAMME, LANCIAFIAMME_PWR, new PKType(FIRE));
 			break;
 		case WATER:
-			moves[MOVE_4] = new PKMove(IDROPULSAR, IDROPULSAR_PWR, WATER);
+			moves[MOVE_4] = new PKMove(IDROPULSAR, IDROPULSAR_PWR, new PKType(WATER));
 			break;
 		}
 	}

@@ -6,9 +6,9 @@ public class PKMove implements Serializable{
 	private static final long serialVersionUID = -503011830200575067L;
 	private String name;
 	private int pwr;
-	private String type;
+	private PKType type;
 	
-	public PKMove(String name, int pwr, String type) {
+	public PKMove(String name, int pwr, PKType type) {
 		this.name = name;
 		this.pwr = pwr;
 		this.type = type;
@@ -30,10 +30,13 @@ public class PKMove implements Serializable{
 		this.pwr = pwr;
 	}
 	
-	public String getType() {
-		return this.type;
+	public String getTypeName() {
+		return this.type.getTypeName();
 	}
 	
+	public PKType getType() {
+		return this.type;
+	}
 	
 
 }
