@@ -12,6 +12,11 @@ public class PKType implements Serializable{
 	
 	public PKType(String type) {
 		this.type = type;
+		try {
+			checkForFileTypeExistance();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 		fillTypeMap(type);
 		
 	}
@@ -22,6 +27,17 @@ public class PKType implements Serializable{
 	
 	public String getTypeName() {
 		return this.type;
+	}
+	
+	/**
+	 * Checks if the file of the type specified in the constructor exists, if not throws an exception
+	 * @return
+	 */
+	
+	private void checkForFileTypeExistance() throws FileNotFoundException{
+		File typeFile = new File(type + "tp");
+		if(!typeFile.exists())
+			throw new FileNotFoundException();
 	}
 	
 	private void fillTypeMap(String type) {
