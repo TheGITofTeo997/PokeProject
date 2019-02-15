@@ -14,7 +14,7 @@ import it.unibs.pajc.pokeproject.view.PKServerWindow;
  * Quando si deve inviare un messaggio da client1 a client2 il server prende il messaggio dalla coda di ricezione di client1
  * e lo mette sulla coda di invio per client2. In realtà ora le operazioni di poll e add vengono fatte da 2 thread separati.
  */
-public class PKServerProtocol extends Thread{
+public class PKServerProtocol extends Thread {
 	private static final String SERVING_CLIENT_STRING = "\nServing client with address ";
 	private Socket socketPlayer;
 	private ObjectInputStream fromClient; // inputStream su cui si ricevono i messaggi
@@ -26,17 +26,18 @@ public class PKServerProtocol extends Thread{
 	private static ArrayList<Integer> clientPorts = new ArrayList<>(); //arraylist contenente porte dei client
 	private static int idGen=0;
 
+	private PKServerWindow view;
 	
-	
-	public PKServerProtocol(Socket socket) {
+	public PKServerProtocol(Socket socket, PKServerWindow view) {
 		this.socketPlayer = socket;
 		this.start();
+		this.view = view;
 		idCounter = idGen;
 		idGen++;
 	}
 	
 	public void run() {
-		PKServerWindow.appendTextToConsole(SERVING_CLIENT_STRING + socketPlayer.getInetAddress());
+		view.appendTextToConsole(SERVING_CLIENT_STRING + socketPlayer.getInetAddress());
 		clientList.put(socketPlayer.getPort(), socketPlayer);//aggiunta del client all'hashmap
 		try {		
 			toClient = new ObjectOutputStream(socketPlayer.getOutputStream());
@@ -46,15 +47,15 @@ public class PKServerProtocol extends Thread{
 			for(Iterator<Integer> iter = clientList.keySet().iterator(); iter.hasNext(); )
 			{
 				key = iter.next();		
-				PKServerWindow.appendTextToConsole("\n" + clientList.get(key).toString());
+				view.appendTextToConsole("\n" + clientList.get(key).toString());
 			}
 			clientPorts.add(key);	
 			//stampa arraylist
 			for(int j=0;j<clientPorts.size();j++) 
-				PKServerWindow.appendTextToConsole("\n" + clientPorts.get(j).toString());		
+				view.appendTextToConsole("\n" + clientPorts.get(j).toString());		
 			PKServerSender sender = new PKServerSender(toClient, outputBuffer); // Creazione thread per invio messaggi
 			sender.start(); 
-			PKServerReceiver receiver = new PKServerReceiver(fromClient, inputBuffer, idGen); // Creazione thread ricezione messaggi
+			PKServerReceiver receiver = new PKServerReceiver(fromClient, inputBuffer, idGen, view); // Creazione thread ricezione messaggi
 			receiver.start();
 		}
 		catch(Exception e)

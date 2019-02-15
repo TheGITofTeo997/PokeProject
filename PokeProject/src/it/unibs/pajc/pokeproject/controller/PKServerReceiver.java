@@ -12,10 +12,13 @@ public class PKServerReceiver extends Thread {
 	private IdentifiedQueue<PKMessage> toReceive;
 	private int clientID;
 	
-	public PKServerReceiver (ObjectInputStream fromClient, IdentifiedQueue<PKMessage> toReceive, int clientID) {
+	private PKServerWindow view;
+	
+	public PKServerReceiver (ObjectInputStream fromClient, IdentifiedQueue<PKMessage> toReceive, int clientID, PKServerWindow view) {
 		this.fromClient = fromClient;
 		this.toReceive = toReceive;
 		this.clientID = clientID;
+		this.view = view;
 	}
 	
 	public void run() {
@@ -24,9 +27,9 @@ public class PKServerReceiver extends Thread {
 				if(toReceive.isEmpty())
 				{
 					PKMessage receivedMsg = (PKMessage)fromClient.readObject();
-					PKServerWindow.appendTextToConsole("\nServer received " + receivedMsg.getCommandBody() + "from " + clientID);
+					view.appendTextToConsole("\nServer received " + receivedMsg.getCommandBody() + "from " + clientID);
 					receivedMsg.setClientID(clientID);
-					if(toReceive.add(receivedMsg)) PKServerWindow.appendTextToConsole(MSG_ADDED_CORRECTLY);
+					if(toReceive.add(receivedMsg)) view.appendTextToConsole(MSG_ADDED_CORRECTLY);
 				}
 			}
 		}

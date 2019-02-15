@@ -16,21 +16,20 @@ import javax.swing.ImageIcon;
 
 import it.unibs.pajc.pokeproject.controller.*;
 
-public class PKServerWindow extends Thread{
+public class PKServerWindow {
 
 	private JFrame frmPokeserverV;
-	private PKMainServer pkServer = new PKMainServer();
-	private static JTextArea consoleTextArea;
+	private JTextArea consoleTextArea;
+	private JButton btnStart;
 
 	/**
-	 * Launch the application.
+	 * Create the application.
 	 */
-	public static void main(String[] args) {
+	public PKServerWindow() {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					PKServerWindow window = new PKServerWindow();
-					window.frmPokeserverV.setVisible(true);
+					initialize(); // senza questo non so perché ma non carica il background
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -39,32 +38,25 @@ public class PKServerWindow extends Thread{
 	}
 
 	/**
-	 * Create the application.
-	 */
-	public PKServerWindow() {
-		initialize();	
-	}
-
-	/**
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frmPokeserverV = new JFrame();
+		frmPokeserverV = new JFrame("PokeServer v0.2.2");
 		frmPokeserverV.setResizable(false);
-		frmPokeserverV.setTitle("PokeServer v0.1c");
 		frmPokeserverV.setBounds(100, 100, 460, 500);
 		frmPokeserverV.setLocationRelativeTo(null);
 		frmPokeserverV.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmPokeserverV.getContentPane().setLayout(null);
+		frmPokeserverV.setVisible(true);
+		
+		btnStart = new JButton("Start Server ->");
+		btnStart.setBounds(163, 36, 121, 60);
+		frmPokeserverV.getContentPane().add(btnStart);
 		
 		JLabel lblConsole = new JLabel("Console");
 		lblConsole.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblConsole.setBounds(10, 317, 66, 14);
 		frmPokeserverV.getContentPane().add(lblConsole);
-		
-		JButton btnStart = new JButton("Start Server ->");
-		btnStart.setBounds(163, 36, 121, 60);
-		frmPokeserverV.getContentPane().add(btnStart);
 		
 		JScrollPane scrollPane = new JScrollPane(consoleTextArea);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -77,21 +69,21 @@ public class PKServerWindow extends Thread{
 		consoleTextArea.setEditable(false);
 		
 		JLabel background = new JLabel();
-		background.setIcon(new ImageIcon(new ImageIcon(PokeChooserFrame.class.getResource("/img/server_back.jpg")).getImage().getScaledInstance(frmPokeserverV.getWidth(), frmPokeserverV.getHeight(), Image.SCALE_DEFAULT))); //back scale
+		background.setIcon(new ImageIcon(new ImageIcon(PKServerWindow.class.getResource("/img/server_back.jpg")).getImage().getScaledInstance(frmPokeserverV.getWidth(), frmPokeserverV.getHeight(), Image.SCALE_DEFAULT))); //back scale
 		background.setBounds(0, 0, 454, 471);
 		frmPokeserverV.getContentPane().add(background);
 		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-		
-		
-		btnStart.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				pkServer.start();
-				btnStart.setEnabled(false);
-			}
-		});
 	}
 	
-	public static void appendTextToConsole(String text) {
+	public void appendTextToConsole(String text) {
 		consoleTextArea.append(text);
+	}
+	
+	public void setController(PKServerController controller) {
+		btnStart.addActionListener(controller);
+	}
+	
+	public void disableServerButton() {
+		btnStart.setEnabled(false);
 	}
 }

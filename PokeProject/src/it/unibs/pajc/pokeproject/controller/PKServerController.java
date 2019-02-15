@@ -2,15 +2,16 @@ package it.unibs.pajc.pokeproject.controller;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.*;
 
 import it.unibs.pajc.pokeproject.model.*;
 import it.unibs.pajc.pokeproject.util.*;
-import it.unibs.pajc.pokeproject.util.IdentifiedQueue;
 import it.unibs.pajc.pokeproject.view.*;
 
-public class PKMainServer extends Thread{
+public class PKServerController extends Thread implements ActionListener {
 	private static final int FIRST_QUEUE = 0;
 	private static final int SECOND_QUEUE = 1;
 	private static final int DEFALT_QUEUE_ID = -1;
@@ -42,8 +43,10 @@ public class PKMainServer extends Thread{
 	
 	private static TreeMap<Integer, Pokemon> pkDatabase = new TreeMap<>();
 	private static ArrayList<Pokemon> loadedPkmn = new ArrayList<>();
+	
 	private Pokemon trainerPoke0;
 	private Pokemon trainerPoke1;
+	
 	private ArrayList<IdentifiedQueue<PKMessage>> fromQueues = new ArrayList<>(); 
 	// array di code da cui il server prenderà i messaggi che i client hanno mandato
 	private ArrayList<IdentifiedQueue<PKMessage>> toQueues = new ArrayList<>(); 
@@ -51,22 +54,28 @@ public class PKMainServer extends Thread{
 	
 	private int firstMoveSelectedID = -1;
 	
-	//Questo era il vecchio main, ora non è più entrypoint poichè viene fatto dalla window
+	private PKServerWindow view;
+	
+	//Cerco di ripristinare l'entrypoint
+
+	public PKServerController() {
+		
+	}
+	
 	public void run(){
-		initialize();
-		while(true) {
+		setupServerUtils();
+		openConnection();
+		/*while(true) {
 			if(!fromQueues.get(FIRST_QUEUE).isEmpty())
 				executeCommand(fromQueues.get(FIRST_QUEUE).poll());
 			if(!fromQueues.get(SECOND_QUEUE).isEmpty())
 				executeCommand(fromQueues.get(SECOND_QUEUE).poll());
-		}
-		
+		}*/
 	}
 	
-	public void initialize() {
+	public void setupServerUtils() {
 		checkForFileExistance();
 		setupQueues();
-	    openConnection();
 	}
 	
 	//need to check for file type existance
@@ -77,7 +86,7 @@ public class PKMainServer extends Thread{
 		if(pkDbaseFile.exists()) { // dobbiamo leggere il file solo se esiste
 			try(ObjectInputStream databaseReader = new ObjectInputStream(new FileInputStream(pkDbaseFile))){
 				pkDatabase = (TreeMap<Integer, Pokemon>)databaseReader.readObject(); // lettura treemap da file
-				PKServerWindow.appendTextToConsole(LOADED_PK_TREEMAP_SUCCESFULLY);
+				view.appendTextToConsole(LOADED_PK_TREEMAP_SUCCESFULLY);
 			}
 			catch(Exception e) {
 				e.printStackTrace();
@@ -109,11 +118,11 @@ public class PKMainServer extends Thread{
 			int i=0;
 			int connectedClients=0;
 			server = new ServerSocket(SERVER_PORT);
-			PKServerWindow.appendTextToConsole(SERVER_STARTED_SUCCESFULLY);
+			view.appendTextToConsole(SERVER_STARTED_SUCCESFULLY);
 			while(connectedClients<2) {  
 				Socket client = server.accept();
 				connectedClients++;
-				PKServerProtocol protocol = new PKServerProtocol(client);
+				PKServerProtocol protocol = new PKServerProtocol(client, view);
 		    
 				//assegnamento code ai serverprotocol con assegnamento id
 				if(fromQueues.get(i).getId() == DEFALT_QUEUE_ID) { //cerco la coda con id di default
@@ -142,12 +151,12 @@ public class PKMainServer extends Thread{
 	}
 	
 	public void loadPkmn() {
-		Pokemon bulbasaur = new Pokemon("Bulbasaur", new PKType(ERBA));
-		Pokemon charmander = new Pokemon("Charmander", new PKType(FUOCO));			
-		Pokemon squirtle = new Pokemon ("Squirtle", new PKType(ACQUA));
-		Pokemon chikorita = new Pokemon("Chikorita", new PKType(ERBA));
-		Pokemon cyndaquil = new Pokemon("Cyndaquil", new PKType(FUOCO));
-		Pokemon totodile = new Pokemon("Totodile", new PKType(ACQUA));
+		Pokemon bulbasaur = new Pokemon(BULBASAUR, new PKType(ERBA));
+		Pokemon charmander = new Pokemon(CHARMANDER, new PKType(FUOCO));			
+		Pokemon squirtle = new Pokemon (SQUIRTLE, new PKType(ACQUA));
+		Pokemon chikorita = new Pokemon(CHIKORITA, new PKType(ERBA));
+		Pokemon cyndaquil = new Pokemon(CYNDAQUIL, new PKType(FUOCO));
+		Pokemon totodile = new Pokemon(TOTODILE, new PKType(ACQUA));
 		loadedPkmn.add(bulbasaur);
 		loadedPkmn.add(charmander);
 		loadedPkmn.add(squirtle);
@@ -210,13 +219,13 @@ public class PKMainServer extends Thread{
 		}
 	}
 	
-	private double calcDamage(Pokemon attacker, Pokemon defender, int moveID) {
+	private int calcDamage(Pokemon attacker, Pokemon defender, int moveID) {
 		double N = ThreadLocalRandom.current().nextDouble(0.85, 1);
 		double stab = (attacker.getType().getTypeName().compareToIgnoreCase(attacker.getMove(moveID).getTypeName())==0) ? 1.5 : 1;
 		double damage = ((((2*attacker.getLevel()+10)*attacker.getAttack()*attacker.getMove(moveID).getPwr()) / 
 				(250*defender.getDefense()) ) + 2) * stab * attacker.getMove(moveID).getType().getEffectiveness(defender.getType().getTypeName())
 				* N;
-		return damage;
+		return (int)damage;
 	}
 	
 	private void selectedMove(PKMessage msg) {
@@ -235,9 +244,9 @@ public class PKMainServer extends Thread{
 				if (toQueues.get(i).getId() != msg.getClientID())
 					toQueues.get(i).add(wakeup);
 			}
+			
 			int firstAttackerID = setPriorityBattle(trainerPoke0, trainerPoke1);
-			double damageFirstAttacker;
-			double damageSecondAttacker;
+			
 			if(firstAttackerID == trainerPoke0.getBattleID() && firstAttackerID == msg.getClientID()) {
 				sendSelectedMoveMessage(trainerPoke0, trainerPoke1, firstAttackerID, selected, firstMoveSelectedID);
 			}
@@ -254,11 +263,11 @@ public class PKMainServer extends Thread{
 	}
 	
 	private void sendSelectedMoveMessage(Pokemon firstAttacker, Pokemon secondAttacker, int firstAttackerID, int firstMove, int secondMove) {
-		int damageFirstAttacker = (int)calcDamage(firstAttacker, secondAttacker, firstMove);
-		int damageSecondAttacker = (int)calcDamage(secondAttacker, firstAttacker, secondMove);
-		PKMessage damageDoneByFirst = new PKMessage(MSG_DONE_DAMAGE, (int)damageFirstAttacker);
+		int damageFirstAttacker = calcDamage(firstAttacker, secondAttacker, firstMove);
+		int damageSecondAttacker = calcDamage(secondAttacker, firstAttacker, secondMove);
+		PKMessage damageDoneByFirst = new PKMessage(MSG_DONE_DAMAGE, damageFirstAttacker);
 		PKMessage opponentMove = new PKMessage(MSG_OPPONENT_MOVE, secondMove);
-		PKMessage damageDoneBySecond = new PKMessage(MSG_RECEIVED_DAMAGE, (int)damageSecondAttacker);
+		PKMessage damageDoneBySecond = new PKMessage(MSG_RECEIVED_DAMAGE, damageSecondAttacker);
 		for(int i=0; i<toQueues.size(); i++) {
 			if (toQueues.get(i).getId() == firstAttackerID) {
 				toQueues.get(i).add(damageDoneByFirst);
@@ -267,8 +276,8 @@ public class PKMainServer extends Thread{
 			}
 		}
 		PKMessage trainerMove = new PKMessage(MSG_OPPONENT_MOVE, firstMove);
-		PKMessage damageFirst = new PKMessage(MSG_RECEIVED_DAMAGE, (int)damageFirstAttacker);
-		PKMessage damageSecond = new PKMessage(MSG_DONE_DAMAGE, (int)damageSecondAttacker);
+		PKMessage damageFirst = new PKMessage(MSG_RECEIVED_DAMAGE, damageFirstAttacker);
+		PKMessage damageSecond = new PKMessage(MSG_DONE_DAMAGE, damageSecondAttacker);
 		for(int i=0; i<toQueues.size(); i++) {
 			if (toQueues.get(i).getId() != firstAttackerID) {
 				toQueues.get(i).add(trainerMove);
@@ -277,4 +286,15 @@ public class PKMainServer extends Thread{
 			}
 		}
 	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		view.disableServerButton();
+		this.start();
+	}
+	
+	public void setView(PKServerWindow view) {
+		this.view = view;
+	}
+	
 }
