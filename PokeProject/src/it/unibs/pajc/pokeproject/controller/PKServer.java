@@ -15,9 +15,9 @@ public class PKServer {
 			e.printStackTrace();
 		}
 		//devo aspettare che la view si crei o qualcosa del genere
-		//senza questo try tutto va a puttane
-		PKServerController controller = new PKServerController();
-		controller.setView(view);
+		//in sostanza senza questo try tutto va a puttane
+		PKServerController controller = new PKServerController(view);
+		//controller.setView(view);
 		
 		//controller.setModel(model);
 		

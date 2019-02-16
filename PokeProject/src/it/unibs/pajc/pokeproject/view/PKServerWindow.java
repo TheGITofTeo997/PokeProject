@@ -41,7 +41,7 @@ public class PKServerWindow {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frmPokeserverV = new JFrame("PokeServer v0.2.2");
+		frmPokeserverV = new JFrame("PokeServer v0.3");
 		frmPokeserverV.setResizable(false);
 		frmPokeserverV.setBounds(100, 100, 460, 500);
 		frmPokeserverV.setLocationRelativeTo(null);

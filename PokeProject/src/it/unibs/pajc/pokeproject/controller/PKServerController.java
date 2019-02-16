@@ -18,17 +18,6 @@ public class PKServerController extends Thread implements ActionListener {
 	private static final int SERVER_PORT = 50000;
 	private static final int QUEUE_SIZE = 5;
 	private static final String SERVER_STARTED_SUCCESFULLY = "\nServer started on port 50000...";
-	private static final String LOADED_PK_TREEMAP_SUCCESFULLY = "\nLoaded PK treemap...";
-	private static final String DATABASE_LOCATION = "pkDatabase.dat";
-	private static final String BULBASAUR = "Bulbasaur";
-	private static final String CHARMANDER = "Charmander";
-	private static final String SQUIRTLE = "Squirtle";
-	private static final String CHIKORITA = "Chikorita";
-	private static final String CYNDAQUIL = "Cyndaquil";
-	private static final String TOTODILE = "Totodile";
-	private static final String ACQUA = "Acqua";
-	private static final String FUOCO = "Fuoco";
-	private static final String ERBA = "Erba";
 	private static final String MSG_REMATCH_NO = "msg_rematch_no";
 	private static final String MSG_REMATCH_YES = "msg_rematch_yes";
 	private static final String MSG_SELECTED_MOVE = "msg_selected_move";
@@ -41,9 +30,10 @@ public class PKServerController extends Thread implements ActionListener {
 	private static final String MSG_OPPONENT_MOVE = "msg_opponent_move";
 	private static final String MSG_RECEIVED_DAMAGE = "msg_received_damage";
 	
-	private static TreeMap<Integer, Pokemon> pkDatabase = new TreeMap<>();
-	private static ArrayList<Pokemon> loadedPkmn = new ArrayList<>();
+	private TreeMap<Integer, Pokemon> pkDatabase;
+	private ArrayList<PKType> typeDatabase;
 	
+	private PKLoader loader;
 	private Pokemon trainerPoke0;
 	private Pokemon trainerPoke1;
 	
@@ -58,8 +48,11 @@ public class PKServerController extends Thread implements ActionListener {
 	
 	//Cerco di ripristinare l'entrypoint
 
-	public PKServerController() {
-		
+	public PKServerController(PKServerWindow view) {
+		this.view = view;
+		loader = new PKLoader();
+		pkDatabase = new TreeMap<>();
+		typeDatabase = new ArrayList<>();
 	}
 	
 	public void run(){
@@ -74,35 +67,9 @@ public class PKServerController extends Thread implements ActionListener {
 	}
 	
 	public void setupServerUtils() {
-		checkForFileExistance();
+		view.appendTextToConsole(loader.loadTypes(typeDatabase));
+		view.appendTextToConsole(loader.loadPokemon(pkDatabase));
 		setupQueues();
-	}
-	
-	//need to check for file type existance
-	
-	@SuppressWarnings("unchecked")
-	private void checkForFileExistance() {
-		File pkDbaseFile = new File(DATABASE_LOCATION);
-		if(pkDbaseFile.exists()) { // dobbiamo leggere il file solo se esiste
-			try(ObjectInputStream databaseReader = new ObjectInputStream(new FileInputStream(pkDbaseFile))){
-				pkDatabase = (TreeMap<Integer, Pokemon>)databaseReader.readObject(); // lettura treemap da file
-				view.appendTextToConsole(LOADED_PK_TREEMAP_SUCCESFULLY);
-			}
-			catch(Exception e) {
-				e.printStackTrace();
-			}
-		}
-		else { // altrimenti lo creiamo noi
-			loadPkmn();
-			for(int i=0; i<loadedPkmn.size(); i++)
-				pkDatabase.put(loadedPkmn.get(i).getID(), loadedPkmn.get(i));
-			try(ObjectOutputStream databaseWriter = new ObjectOutputStream(new FileOutputStream(pkDbaseFile))){
-				databaseWriter.writeObject(pkDatabase); // scrittura treemap su file
-			}
-			catch(Exception e) {
-				e.printStackTrace();
-			}
-		}
 	}
 	
 	private void setupQueues() { // le code vengono create qui e vengono messe negli arraylist
@@ -148,21 +115,6 @@ public class PKServerController extends Thread implements ActionListener {
 		catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	public void loadPkmn() {
-		Pokemon bulbasaur = new Pokemon(BULBASAUR, new PKType(ERBA));
-		Pokemon charmander = new Pokemon(CHARMANDER, new PKType(FUOCO));			
-		Pokemon squirtle = new Pokemon (SQUIRTLE, new PKType(ACQUA));
-		Pokemon chikorita = new Pokemon(CHIKORITA, new PKType(ERBA));
-		Pokemon cyndaquil = new Pokemon(CYNDAQUIL, new PKType(FUOCO));
-		Pokemon totodile = new Pokemon(TOTODILE, new PKType(ACQUA));
-		loadedPkmn.add(bulbasaur);
-		loadedPkmn.add(charmander);
-		loadedPkmn.add(squirtle);
-		loadedPkmn.add(chikorita);
-		loadedPkmn.add(cyndaquil);
-		loadedPkmn.add(totodile);
 	}
 	
 	public void executeCommand(PKMessage msg) {
