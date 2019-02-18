@@ -8,7 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import it.unibs.pajc.pokeproject.controller.PKMainClient;
+import it.unibs.pajc.pokeproject.controller.PKClientController;
 
 import java.awt.Color;
 import javax.swing.JButton;
@@ -25,12 +25,12 @@ public class PokeChooserFrame extends JFrame implements ActionListener{
 	private static final String BTN_STARTBATTLE_TEXT = "Start Battle ->";
 	private static final int RES = 96;
 	private JPanel contentPane;	
-	private PKMainClient pkClient;
+	private PKClientController pkClient;
 	private JButton btnStartButton;
 	/**
 	 * Create the frame.
 	 */
-	public PokeChooserFrame(PKMainClient pkClient) {
+	public PokeChooserFrame(PKClientController pkClient) {
 		setTitle("Choose a Pokemon!");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

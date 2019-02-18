@@ -6,7 +6,7 @@ import java.io.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-import it.unibs.pajc.pokeproject.controller.PKMainClient;
+import it.unibs.pajc.pokeproject.controller.PKClientController;
 
 
 
@@ -18,7 +18,7 @@ public class IpFrame extends JFrame {
 	private JPanel contentPane;
 	private JTextField textField;
 	private PokeChooserFrame chooserWindow;
-	private PKMainClient pkClient = new PKMainClient();
+	private PKClientController pkClient = new PKClientController();
 
 	
 	/**

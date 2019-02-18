@@ -9,7 +9,7 @@ import it.unibs.pajc.pokeproject.model.*;
 import it.unibs.pajc.pokeproject.util.*;
 import it.unibs.pajc.pokeproject.view.*;
 
-public class PKMainClient extends Thread implements ActionListener{
+public class PKClientController extends Thread implements ActionListener{
 	
 	private static final String DATABASE_LOCATION = "pkDatabase.dat";
 	private static final String ACQUA = "Acqua";

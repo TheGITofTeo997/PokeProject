@@ -10,26 +10,18 @@ public class PKClientWindow {
 	private IpFrame ipWindow;
 	
 	/**
-	 * Launch the application.
+	 * Create the application.
 	 */
-	public static void main(String[] args) {
+	public PKClientWindow() {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					PKClientWindow window = new PKClientWindow();
-					window.frmPokebattleClientV.setVisible(true);
+					initialize();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
-	}
-
-	/**
-	 * Create the application.
-	 */
-	public PKClientWindow() {
-		initialize();
 	}
 
 	/**
@@ -43,6 +35,7 @@ public class PKClientWindow {
 		frmPokebattleClientV.setLocationRelativeTo(null);
 		frmPokebattleClientV.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmPokebattleClientV.getContentPane().setLayout(null);	
+		frmPokebattleClientV.setVisible(true);
 		
 		JButton btnSinglePlayer = new JButton("Single Player");
 		btnSinglePlayer.setFont(new Font("Tahoma", Font.PLAIN, 16));
