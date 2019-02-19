@@ -18,17 +18,6 @@ public class PKServerController extends Thread implements ActionListener {
 	private static final int SERVER_PORT = 50000;
 	private static final int QUEUE_SIZE = 5;
 	private static final String SERVER_STARTED_SUCCESFULLY = "\nServer started on port 50000...";
-	private static final String MSG_REMATCH_NO = "msg_rematch_no";
-	private static final String MSG_REMATCH_YES = "msg_rematch_yes";
-	private static final String MSG_SELECTED_MOVE = "msg_selected_move";
-	private static final String MSG_SELECTED_POKEMON = "msg_selected_pokemon";
-	private static final String MSG_OPPONENT_POKEMON = "msg_opponent_pokemon";
-	private static final String MSG_START_BATTLE = "msg_start_battle";
-	private static final String MSG_WAITING = "msg_waiting";
-	private static final String MSG_WAKEUP = "msg_wakeup";
-	private static final String MSG_DONE_DAMAGE = "msg_done_damage";
-	private static final String MSG_OPPONENT_MOVE = "msg_opponent_move";
-	private static final String MSG_RECEIVED_DAMAGE = "msg_received_damage";
 	
 	private TreeMap<Integer, Pokemon> pkDatabase;
 	private ArrayList<PKType> typeDatabase;
@@ -129,6 +118,8 @@ public class PKServerController extends Thread implements ActionListener {
 			break;
 		case MSG_REMATCH_NO:
 			break;	
+		default:
+			break;
 		}
 	}
 	
@@ -153,10 +144,10 @@ public class PKServerController extends Thread implements ActionListener {
 		trainerPoke1.setBattleID(msg.getClientID());
 		}
 		if(!trainerPoke0.equals(null) && !trainerPoke1.equals(null)) {
-			PKMessage startBattle = new PKMessage(MSG_START_BATTLE);
-			PKMessage wakeup = new PKMessage(MSG_WAKEUP);
-			PKMessage opponentFor0 = new PKMessage(MSG_OPPONENT_POKEMON, trainerPoke1.getID());
-			PKMessage opponentFor1 = new PKMessage(MSG_OPPONENT_POKEMON, trainerPoke0.getID());
+			PKMessage startBattle = new PKMessage(Commands.MSG_START_BATTLE);
+			PKMessage wakeup = new PKMessage(Commands.MSG_WAKEUP);
+			PKMessage opponentFor0 = new PKMessage(Commands.MSG_OPPONENT_POKEMON, trainerPoke1.getID());
+			PKMessage opponentFor1 = new PKMessage(Commands.MSG_OPPONENT_POKEMON, trainerPoke0.getID());
 			toQueues.get(FIRST_QUEUE).add(wakeup);
 			toQueues.get(SECOND_QUEUE).add(wakeup);		
 			toQueues.get(FIRST_QUEUE).add(opponentFor0);
@@ -166,7 +157,7 @@ public class PKServerController extends Thread implements ActionListener {
 			
 		}
 		else {
-			PKMessage wait = new PKMessage(MSG_WAITING);
+			PKMessage wait = new PKMessage(Commands.MSG_WAITING);
 			toQueues.get(msg.getClientID()).add(wait);
 		}
 	}
@@ -184,14 +175,14 @@ public class PKServerController extends Thread implements ActionListener {
 		int selected = msg.getDataToCarry();
 		if(firstMoveSelectedID == -1) {
 			firstMoveSelectedID = selected;
-			PKMessage wait = new PKMessage(MSG_WAITING);
+			PKMessage wait = new PKMessage(Commands.MSG_WAITING);
 			for(int i=0; i<toQueues.size(); i++) {
 				if (toQueues.get(i).getId() == msg.getClientID())
 					toQueues.get(i).add(wait);
 			}
 		}
 		else {
-			PKMessage wakeup = new PKMessage(MSG_WAKEUP);
+			PKMessage wakeup = new PKMessage(Commands.MSG_WAKEUP);
 			for(int i=0; i<toQueues.size(); i++) {
 				if (toQueues.get(i).getId() != msg.getClientID())
 					toQueues.get(i).add(wakeup);
@@ -217,9 +208,9 @@ public class PKServerController extends Thread implements ActionListener {
 	private void sendSelectedMoveMessage(Pokemon firstAttacker, Pokemon secondAttacker, int firstAttackerID, int firstMove, int secondMove) {
 		int damageFirstAttacker = calcDamage(firstAttacker, secondAttacker, firstMove);
 		int damageSecondAttacker = calcDamage(secondAttacker, firstAttacker, secondMove);
-		PKMessage damageDoneByFirst = new PKMessage(MSG_DONE_DAMAGE, damageFirstAttacker);
-		PKMessage opponentMove = new PKMessage(MSG_OPPONENT_MOVE, secondMove);
-		PKMessage damageDoneBySecond = new PKMessage(MSG_RECEIVED_DAMAGE, damageSecondAttacker);
+		PKMessage damageDoneByFirst = new PKMessage(Commands.MSG_DONE_DAMAGE, damageFirstAttacker);
+		PKMessage opponentMove = new PKMessage(Commands.MSG_OPPONENT_MOVE, secondMove);
+		PKMessage damageDoneBySecond = new PKMessage(Commands.MSG_RECEIVED_DAMAGE, damageSecondAttacker);
 		for(int i=0; i<toQueues.size(); i++) {
 			if (toQueues.get(i).getId() == firstAttackerID) {
 				toQueues.get(i).add(damageDoneByFirst);
@@ -227,9 +218,9 @@ public class PKServerController extends Thread implements ActionListener {
 				toQueues.get(i).add(damageDoneBySecond);
 			}
 		}
-		PKMessage trainerMove = new PKMessage(MSG_OPPONENT_MOVE, firstMove);
-		PKMessage damageFirst = new PKMessage(MSG_RECEIVED_DAMAGE, damageFirstAttacker);
-		PKMessage damageSecond = new PKMessage(MSG_DONE_DAMAGE, damageSecondAttacker);
+		PKMessage trainerMove = new PKMessage(Commands.MSG_OPPONENT_MOVE, firstMove);
+		PKMessage damageFirst = new PKMessage(Commands.MSG_RECEIVED_DAMAGE, damageFirstAttacker);
+		PKMessage damageSecond = new PKMessage(Commands.MSG_DONE_DAMAGE, damageSecondAttacker);
 		for(int i=0; i<toQueues.size(); i++) {
 			if (toQueues.get(i).getId() != firstAttackerID) {
 				toQueues.get(i).add(trainerMove);

@@ -15,16 +15,6 @@ public class PKClientController extends Thread implements ActionListener{
 	private static final String ACQUA = "Acqua";
 	private static final String FUOCO = "Fuoco";
 	private static final String ERBA = "Erba";
-	private static final String MSG_OPPONENT_MOVE = "msg_opponent_move";
-	private static final String MSG_RECEIVED_DAMAGE = "msg_received_damage";
-	private static final String MSG_DONE_DAMAGE = "msg_done_damage";
-	private static final String MSG_BATTLE_OVER = "msg_battle_over";
-	private static final String MSG_REMATCH = "msg_rematch";
-	private static final String MSG_OPPONENT_POKEMON = "msg_opponent_pokemon";
-	private static final String MSG_START_BATTLE = "msg_start_battle";
-	private static final String MSG_WAITING = "msg_waiting";
-	private static final String MSG_WAKEUP = "msg_wakeup";
-	private static final String MSG_SELECTED_POKEMON = "msg_selected_pokemon";
 	private static final int SERVER_PORT = 50000;
 	private String SERVER_IP;
 	private Socket socket;
@@ -118,7 +108,6 @@ public class PKClientController extends Thread implements ActionListener{
 			startBattle();
 			break;
 		case MSG_OPPONENT_POKEMON:
-			
 			break;
 		case MSG_OPPONENT_MOVE:
 			break;
@@ -129,6 +118,8 @@ public class PKClientController extends Thread implements ActionListener{
 		case MSG_BATTLE_OVER:
 			break;
 		case MSG_REMATCH:
+			break;
+		default:
 			break;
 		}
 	}
@@ -172,7 +163,7 @@ public class PKClientController extends Thread implements ActionListener{
 				selectedID = entry.getKey();
 			}
 		}
-		PKMessage msgChosenID = new PKMessage(MSG_SELECTED_POKEMON, selectedID);
+		PKMessage msgChosenID = new PKMessage(Commands.MSG_SELECTED_POKEMON, selectedID);
 		toSend.add(msgChosenID);
 	}
 		
