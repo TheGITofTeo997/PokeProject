@@ -11,28 +11,32 @@ import it.unibs.pajc.pokeproject.view.*;
 
 public class PKClientController extends Thread implements ActionListener{
 	
-	private static final String DATABASE_LOCATION = "pkDatabase.dat";
-	private static final String ACQUA = "Acqua";
-	private static final String FUOCO = "Fuoco";
-	private static final String ERBA = "Erba";
 	private static final int SERVER_PORT = 50000;
 	private String SERVER_IP;
 	private Socket socket;
 	private ObjectInputStream fromServer;
 	private ObjectOutputStream toServer;
-	private ArrayList<Pokemon> loadedPkmn = new ArrayList<>();
-	private TreeMap<Integer, Pokemon> pkDatabase = new TreeMap<>();
+	private ArrayList<PKType> typeDatabase;
+	private TreeMap<Integer, Pokemon> pkDatabase;
 	private IdentifiedQueue<PKMessage> toSend = new IdentifiedQueue<>(10);
 	private IdentifiedQueue<PKMessage> toReceive = new IdentifiedQueue<>(10);
 	private int selectedID;
 	private static WaitingFrame wf = new WaitingFrame();
 	private static BattleFrame bf = new BattleFrame();
 	
+	private PKLoader loader;
+	private PKClientWindow view;
 	
 	//vecchio main
 	public void run() {
-		checkForFileExistance();
-		
+		setupClientUtils();
+	}
+	
+	public PKClientController(PKClientWindow view) {
+		this.view = view;
+		loader = new PKLoader();
+		pkDatabase = new TreeMap<>();
+		typeDatabase = new ArrayList<>();
 	}
 	
 	public void setIP(String IP) {
@@ -41,28 +45,9 @@ public class PKClientController extends Thread implements ActionListener{
 	
 	//need to check for file type existance
 	
-	@SuppressWarnings("unchecked")
-	private void checkForFileExistance() {
-		File pkDbase = new File(DATABASE_LOCATION);
-		if(pkDbase.exists()) {
-			try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(pkDbase))){
-				pkDatabase = (TreeMap<Integer, Pokemon>)ois.readObject();
-			}
-			catch(Exception e) {
-				e.printStackTrace();
-			}
-		}
-		else {
-			loadPkmn();
-			for(int i=0; i<loadedPkmn.size(); i++)
-				pkDatabase.put(loadedPkmn.get(i).getID(), loadedPkmn.get(i));
-			try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(pkDbase))){
-				oos.writeObject(pkDatabase);
-			}
-			catch(Exception e) {
-				e.printStackTrace();
-			}
-		}
+	public void setupClientUtils() {
+		loader.loadTypes(typeDatabase);
+		loader.loadPokemon(pkDatabase);
 	}
 	
 	public boolean connectToServer() {
@@ -123,22 +108,6 @@ public class PKClientController extends Thread implements ActionListener{
 			break;
 		}
 	}
-		
-	private void loadPkmn() {
-		Pokemon bulbasaur = new Pokemon("Bulbasaur", new PKType(ERBA));
-		Pokemon charmander = new Pokemon("Charmander", new PKType(FUOCO));			
-		Pokemon squirtle = new Pokemon ("Squirtle", new PKType(ACQUA));
-		Pokemon chikorita = new Pokemon("Chikorita", new PKType(ERBA));
-		Pokemon cyndaquil = new Pokemon("Cyndaquil", new PKType(FUOCO));
-		Pokemon totodile = new Pokemon("Totodile", new PKType(ACQUA));
-		loadedPkmn.add(bulbasaur);
-		loadedPkmn.add(charmander);
-		loadedPkmn.add(squirtle);
-		loadedPkmn.add(chikorita);
-		loadedPkmn.add(cyndaquil);
-		loadedPkmn.add(totodile);
-	}
-	
 	
 	//commands
 	private static void waiting() {
