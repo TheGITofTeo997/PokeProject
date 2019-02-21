@@ -37,8 +37,10 @@ public class PKClientWindow {
 		frmPokebattleClientV.setVisible(true);
 		
 		IpPanel ipPanel = new IpPanel();
-		ipPanel.setBounds(0, 0, 594, 421);
+		ipPanel.setBounds(0, 0, 663, 429);
 		ipPanel.setVisible(false);
+		
+		frmPokebattleClientV.getContentPane().add(ipPanel);
 		
 		JPanel mainPanel = new JPanel();
 		mainPanel.setBounds(0, 0, 594, 421);
@@ -46,12 +48,12 @@ public class PKClientWindow {
 		mainPanel.setLayout(null);
 		
 		JButton btnSinglePlayer = new JButton("Single Player");
-		btnSinglePlayer.setBounds(96, 161, 152, 58);
+		btnSinglePlayer.setBounds(96, 160, 152, 58);
 		mainPanel.add(btnSinglePlayer);
 		btnSinglePlayer.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		
 		JButton btnMultiPlayer = new JButton("Multi Player");
-		btnMultiPlayer.setBounds(358, 159, 152, 58);
+		btnMultiPlayer.setBounds(358, 160, 152, 58);
 		mainPanel.add(btnMultiPlayer);
 		btnMultiPlayer.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		
@@ -60,10 +62,9 @@ public class PKClientWindow {
 		mainPanel.add(background);
 		background.setIcon(new ImageIcon(new ImageIcon(BattleFrame.class.getResource("/img/client_back.jpg")).getImage().getScaledInstance(frmPokebattleClientV.getWidth(), frmPokebattleClientV.getHeight(), Image.SCALE_DEFAULT)));
 		
-		frmPokebattleClientV.getContentPane().add(ipPanel);
-		
 		btnMultiPlayer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				frmPokebattleClientV.setBounds(frmPokebattleClientV.getX(), frmPokebattleClientV.getY(), ipPanel.getWidth(), ipPanel.getHeight());
 				ipPanel.setVisible(true);
 				mainPanel.setVisible(false);
 			    
