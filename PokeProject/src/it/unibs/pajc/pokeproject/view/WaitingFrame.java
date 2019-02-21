@@ -6,6 +6,18 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 
+// Do we need to migrate this frame as a panel? In that case:
+
+
+/*
+ * 
+ * 			PLEASE MIGRATE TO PANEL AS SOON AS POSSIBLE /!\
+ * 		If we don't migrate to panel we cannot proceed fixing MVC,
+ * 			this class will be ghosting around while we'll
+ * 		  be migrating it and after that, it will be deleted.
+ * 
+ */
+
 public class WaitingFrame extends JFrame {
 	private static final long serialVersionUID = 3669221117391479061L;
 	private static final String PKM_FONT = "PKMN_RBYGSC.ttf";

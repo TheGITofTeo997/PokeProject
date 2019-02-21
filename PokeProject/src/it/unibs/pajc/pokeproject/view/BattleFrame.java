@@ -4,6 +4,20 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+
+
+
+/*
+ * 
+ * 			PLEASE MIGRATE TO PANEL AS SOON AS POSSIBLE /!\
+ * 		If we don't migrate to panel we cannot proceed fixing MVC,
+ * 			this class will be ghosting around while we'll
+ * 		  be migrating it and after that, it will be deleted.
+ * 
+ */
+
+
+
 public class BattleFrame extends JFrame {
 	private static final long serialVersionUID = -9090665586698145181L;
 	private static final String TITLE = "PokeBattle";

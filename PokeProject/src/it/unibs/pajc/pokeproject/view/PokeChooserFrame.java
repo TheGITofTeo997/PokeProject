@@ -19,6 +19,19 @@ import java.awt.event.ActionListener;
 
 import javax.swing.Action;
 
+
+
+/*
+ * 
+ * 			PLEASE MIGRATE TO PANEL AS SOON AS POSSIBLE /!\
+ * 		If we don't migrate to panel we cannot proceed fixing MVC,
+ * 			this class will be ghosting around while we'll
+ * 		  be migrating it and after that, it will be deleted.
+ * 
+ */
+
+
+
 public class PokeChooserFrame extends JFrame implements ActionListener{
 	private static final long serialVersionUID = -6147325708075015028L;
 	private static final String CHOOSE_ME = "Choose Me!";
