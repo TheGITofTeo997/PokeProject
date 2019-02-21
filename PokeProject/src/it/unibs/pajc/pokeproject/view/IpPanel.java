@@ -65,17 +65,28 @@ public class IpPanel extends JPanel {
 	}
 	
 
-	private boolean checkIPCorrectness() {
+	private boolean checkIPCorrectness() {    //still need to make this less verbose
 		String address = addressField.getText();
-		StringTokenizer st = new StringTokenizer(address, ".");
-		while(st.hasMoreElements()) {
-			if(st.nextToken().toString() == "" || st.nextToken().toString().length() > 3)
-				System.out.println(st.nextToken());
-				System.out.println("false");
-				return false;
+		StringTokenizer st = new StringTokenizer(address, ".", false);
+		int nTokens = st.countTokens();
+		if(st.hasMoreTokens()) { // we do this to avoid the null case
+			while(st.hasMoreTokens()) {	
+				String token = st.nextToken().toString();	
+				if(token.length() > 3 || token.matches(("[a-zA-Z]+")) ) {
+					System.out.println("false");
+					return false;
+				}			
+				if(nTokens<4 || nTokens>4) {
+					System.out.println("false");
+					return false;
+				}
+			}
 		}
-		System.out.println(st.nextToken());
+		else {
+			System.out.println("false");
+			return false;	
+		}
 		System.out.println("true");
-		return true;	
+		return true;
 	}
 }
