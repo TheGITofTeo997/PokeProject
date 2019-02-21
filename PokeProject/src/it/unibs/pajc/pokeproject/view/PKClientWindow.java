@@ -7,7 +7,6 @@ import java.awt.event.*;
 public class PKClientWindow {
 	private static final String TITLE = "PokeBattle Client v0.1a";
 	private JFrame frmPokebattleClientV;
-	private IpFrame ipWindow;
 	
 	/**
 	 * Create the application.
@@ -29,7 +28,7 @@ public class PKClientWindow {
 	 */
 	private void initialize() {
 		frmPokebattleClientV = new JFrame();
-		frmPokebattleClientV.setTitle(TITLE);
+		frmPokebattleClientV.setTitle("PokeBattle Client v0.1b");
 		frmPokebattleClientV.setResizable(false);
 		frmPokebattleClientV.setBounds(100, 100, 600, 450);
 		frmPokebattleClientV.setLocationRelativeTo(null);
@@ -37,29 +36,39 @@ public class PKClientWindow {
 		frmPokebattleClientV.getContentPane().setLayout(null);	
 		frmPokebattleClientV.setVisible(true);
 		
+		IpPanel ipPanel = new IpPanel();
+		ipPanel.setBounds(0, 0, 594, 421);
+		ipPanel.setVisible(false);
+		
+		JPanel mainPanel = new JPanel();
+		mainPanel.setBounds(0, 0, 594, 421);
+		frmPokebattleClientV.getContentPane().add(mainPanel);
+		mainPanel.setLayout(null);
+		
 		JButton btnSinglePlayer = new JButton("Single Player");
+		btnSinglePlayer.setBounds(96, 161, 152, 58);
+		mainPanel.add(btnSinglePlayer);
 		btnSinglePlayer.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		btnSinglePlayer.setBounds(119, 164, 152, 58);
-		frmPokebattleClientV.getContentPane().add(btnSinglePlayer);
 		
 		JButton btnMultiPlayer = new JButton("Multi Player");
+		btnMultiPlayer.setBounds(358, 159, 152, 58);
+		mainPanel.add(btnMultiPlayer);
 		btnMultiPlayer.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		btnMultiPlayer.setBounds(325, 164, 152, 58);
-		frmPokebattleClientV.getContentPane().add(btnMultiPlayer);
 		
 		JLabel background = new JLabel();
 		background.setBounds(0, 0, 594, 421);
-		background.setIcon(new ImageIcon(new ImageIcon(BattleFrame.class.getResource("/img/client_back.jpg")).getImage().getScaledInstance(frmPokebattleClientV.getWidth(), frmPokebattleClientV.getHeight(), Image.SCALE_DEFAULT))); //back scale
-		frmPokebattleClientV.getContentPane().add(background);
+		mainPanel.add(background);
+		background.setIcon(new ImageIcon(new ImageIcon(BattleFrame.class.getResource("/img/client_back.jpg")).getImage().getScaledInstance(frmPokebattleClientV.getWidth(), frmPokebattleClientV.getHeight(), Image.SCALE_DEFAULT)));
 		
+		frmPokebattleClientV.getContentPane().add(ipPanel);
 		
 		btnMultiPlayer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ipWindow = new IpFrame();
-				ipWindow.setVisible(true);
-			    frmPokebattleClientV.setVisible(false);
+				ipPanel.setVisible(true);
+				mainPanel.setVisible(false);
 			    
 			}
 		});
+		
 	}
 }

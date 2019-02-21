@@ -17,9 +17,14 @@ public class IpFrame extends JFrame {
 	private static final String PKM_FONT = "PKMN_RBYGSC.ttf";
 	private JPanel contentPane;
 	private JTextField textField;
-	private PokeChooserFrame chooserWindow;
-	private PKClientController pkClient = new PKClientController();
+	//private PKClientController pkClient = new PKClientController();
 
+	
+	
+	//This is just a Ghost class for now, it is not used anymore since it's been replaced by the new IpPanel. 
+	//We still keep this because we still need to copy all the components and we need to migrate to the new panel class.
+	
+	
 	
 	/**
 	 * Create the frame.
@@ -67,19 +72,6 @@ public class IpFrame extends JFrame {
 		background.setBounds(0, 0, 394, 171);
 		background.setIcon(new ImageIcon(new ImageIcon(BattleFrame.class.getResource("/img/ip_back.jpg")).getImage().getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_DEFAULT))); //back scale
 		contentPane.add(background);
-		
-		
-		btnConnect.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				pkClient.start();
-				pkClient.setIP(textField.getText());
-				if(pkClient.connectToServer()) {
-					chooserWindow = new PokeChooserFrame(pkClient);
-					chooserWindow.setVisible(true);
-					setVisible(false);
-				}
-			}
-		});
-		
+			
 	}
 }

@@ -6,11 +6,14 @@ import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.io.IOException;
+import java.util.StringTokenizer;
 
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class IpPanel extends JPanel {
 
@@ -19,7 +22,7 @@ public class IpPanel extends JPanel {
 	private static final String BTN_CONNECT_TEXT = "Connect";
 	private static final String BTN_BACK = "Back";
 	private static final String PKM_FONT = "PKMN_RBYGSC.ttf";
-	private JTextField textField;
+	private JTextField addressField;
 	/**
 	 * Create the panel.
 	 */
@@ -34,9 +37,9 @@ public class IpPanel extends JPanel {
 		
 		setLayout(null);
 		
-		textField = new JTextField();
-		textField.setBounds(175, 175, 300, 50);
-		add(textField);
+		addressField = new JTextField();
+		addressField.setBounds(175, 175, 300, 50);
+		add(addressField);
 		
 		JLabel lblNewLabel = new JLabel(INSERT_SERVER_IP);
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -44,14 +47,35 @@ public class IpPanel extends JPanel {
 		lblNewLabel.setBounds(175, 25, 300, 50);
 		add(lblNewLabel);
 		
-		JButton btnNewButton = new JButton(BTN_CONNECT_TEXT);
-		btnNewButton.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 20));
-		btnNewButton.setBounds(100, 325, 200, 50);
-		add(btnNewButton);
+		JButton btnConnectButton = new JButton(BTN_CONNECT_TEXT);
+		btnConnectButton.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 20));
+		btnConnectButton.setBounds(100, 325, 200, 50);
+		add(btnConnectButton);
 		
-		JButton button = new JButton(BTN_BACK);
-		button.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 20));
-		button.setBounds(350, 325, 200, 50);
-		add(button);
+		JButton btnBackButton = new JButton(BTN_BACK);
+		btnBackButton.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 20));
+		btnBackButton.setBounds(350, 325, 200, 50);
+		add(btnBackButton);
+		
+		btnConnectButton.addActionListener(new ActionListener() { //temporary action listener in order to test, this will need to be changed/moved
+			public void actionPerformed(ActionEvent arg0) {
+				checkIPCorrectness();			
+			}
+		});
+	}
+	
+
+	private boolean checkIPCorrectness() {
+		String address = addressField.getText();
+		StringTokenizer st = new StringTokenizer(address, ".");
+		while(st.hasMoreElements()) {
+			if(st.nextToken().toString() == "" || st.nextToken().toString().length() > 3)
+				System.out.println(st.nextToken());
+				System.out.println("false");
+				return false;
+		}
+		System.out.println(st.nextToken());
+		System.out.println("true");
+		return true;	
 	}
 }
