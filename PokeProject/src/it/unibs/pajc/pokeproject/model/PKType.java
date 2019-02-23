@@ -2,7 +2,6 @@ package it.unibs.pajc.pokeproject.model;
 
 import java.io.*;
 import java.util.HashMap;
-import java.util.StringTokenizer;
 
 public class PKType implements Serializable{
 	private static final long serialVersionUID = -1261663080265777425L;

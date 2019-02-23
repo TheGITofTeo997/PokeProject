@@ -56,8 +56,9 @@ public class PKClientWindow extends JFrame {
 		ipPanel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				controller.setIP(ipPanel.getIP());
-				if(controller.connectToServer()) {
+				if(controller.connectToServer()) {		
 					drawPokeChooserPanel();
+					setBounds(getX(), getY(), pokeChooserPanel.getWidth(), pokeChooserPanel.getHeight());
 					ipPanel.setVisible(false);
 					for(Map.Entry<Integer, Pokemon> entry : controller.getPkDatabase().entrySet()) {
 						pokeChooserPanel.drawPokemon(entry.getValue());
@@ -102,6 +103,7 @@ public class PKClientWindow extends JFrame {
 		btnSinglePlayer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				drawPokeChooserPanel();
+				setBounds(getX(), getY(), pokeChooserPanel.getWidth(), pokeChooserPanel.getHeight());
 				mainPanel.setVisible(false); 
 			}
 
@@ -111,7 +113,7 @@ public class PKClientWindow extends JFrame {
 	
 	private void drawPokeChooserPanel() {
 		pokeChooserPanel = new PokeChooserPanel();
-		pokeChooserPanel.setBounds(0, 0, 663, 429);
+		pokeChooserPanel.setBounds(0, 0, 650, 482);
 		pokeChooserPanel.setVisible(true);
 		getContentPane().add(pokeChooserPanel);
 	}
@@ -120,9 +122,10 @@ public class PKClientWindow extends JFrame {
 		this.controller = controller;
 	}
 	
+	@SuppressWarnings("static-access")
 	private void showErrorPopup() {
 		JOptionPane error = new JOptionPane();
 		error.setBounds(getBounds());
-		error.showMessageDialog(this, "Problema nella connessione al server", "ATTENZIONE", JOptionPane.ERROR_MESSAGE);
+		error.showMessageDialog(this, "Cannot connect to Server", "Warning", JOptionPane.ERROR_MESSAGE);
 	}
 }

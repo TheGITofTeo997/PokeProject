@@ -112,6 +112,7 @@ public class IpPanel extends JPanel {
 		return addressField.getText();
 	}
 	
+	@SuppressWarnings("static-access")
 	private void showErrorPopup() {
 		JOptionPane error = new JOptionPane();
 		error.setBounds(getBounds());
