@@ -1,6 +1,8 @@
 package it.unibs.pajc.pokeproject.util;
 
 import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
@@ -10,14 +12,7 @@ public class PKLoader {
 	
 	private static final String PK_DATABASE_LOCATION = "pkDatabase.dat";
 	private static final String TYPE_DATABASE_LOCATION = "typeDatabase.dat";
-	private static final String LOADED_PK_TREEMAP_SUCCESFULLY = "\nLoaded PK treemap...";
-	private static final String WRITTEN_PK_TREEMAP_SUCCESFULLY = "\nWritten PK treemap...";
-	private static final String PK_TREEMAP_LOADING_FAILURE = "\nFailure while loading PK treemap";
-	private static final String PK_TREEMAP_WRITING_FAILURE = "\nFailure while writing PK treemap";
-	private static final String LOADED_TYPE_ARRAYLIST_SUCCESFULLY = "\nLoaded PKType arraylist...";
-	private static final String WRITTEN_TYPE_ARRAYLIST_SUCCESFULLY = "\nWritten PKType arraylist...";
-	private static final String TYPE_ARRAYLIST_LOADING_FAILURE = "\nFailure while loading PKType arraylist";
-	private static final String TYPE_ARRAYLIST_WRITING_FAILURE = "\nFailure while writing PKType arraylist";
+	private static final String GIF_EXT = "gif";
 	private static final String PKMN_EXT = "pk";
 	private static final String TYPE_EXT = "tp";
 	private static final String KEY_NAME = "Name";
@@ -47,55 +42,52 @@ public class PKLoader {
 	private ArrayList<PKType> typeDatabase;
 	
 	@SuppressWarnings("unchecked")
-	public String loadPokemon(TreeMap<Integer, Pokemon> pkDatabase) {
+	public TreeMap<Integer, Pokemon> loadPokemon() {
 		File pkDbaseFile = new File(PK_DATABASE_LOCATION);
 		if(pkDbaseFile.exists()) { // dobbiamo leggere il file solo se esiste
 			try(ObjectInputStream databaseReader = new ObjectInputStream(new FileInputStream(pkDbaseFile))){
-				pkDatabase = (TreeMap<Integer, Pokemon>)databaseReader.readObject(); // lettura treemap da file
-				return LOADED_PK_TREEMAP_SUCCESFULLY;
+				return (TreeMap<Integer, Pokemon>)databaseReader.readObject(); // lettura treemap da file
 			}
 			catch(Exception e) {
 				e.printStackTrace();
-				return PK_TREEMAP_LOADING_FAILURE;
+				return null;
 			}
 		}
 		else { // altrimenti lo creiamo noi
-			readPokemons(pkDatabase);
+			TreeMap<Integer, Pokemon> pkDatabase = readPokemons();
 			try(ObjectOutputStream databaseWriter = new ObjectOutputStream(new FileOutputStream(pkDbaseFile))){
 				databaseWriter.writeObject(pkDatabase); // scrittura treemap su file
-				return WRITTEN_PK_TREEMAP_SUCCESFULLY;
+				return pkDatabase;
 			}
 			catch(Exception e) {
 				e.printStackTrace();
-				return PK_TREEMAP_WRITING_FAILURE;
+				return null;
 			}
 		}
 	}
 	
 	@SuppressWarnings("unchecked")
-	public String loadTypes(ArrayList<PKType> typeDatabase) {
+	public ArrayList<PKType> loadTypes() {
 		File typeDbaseFile = new File(TYPE_DATABASE_LOCATION);
 		if(typeDbaseFile.exists()) { // dobbiamo leggere il file solo se esiste
 			try(ObjectInputStream databaseReader = new ObjectInputStream(new FileInputStream(typeDbaseFile))){
 				typeDatabase = (ArrayList<PKType>)databaseReader.readObject(); // lettura arraylist da file
-				this.typeDatabase = typeDatabase;
-				return LOADED_TYPE_ARRAYLIST_SUCCESFULLY;
+				return typeDatabase;
 			}
 			catch(Exception e) {
 				e.printStackTrace();
-				return TYPE_ARRAYLIST_LOADING_FAILURE;
+				return null;
 			}
 		}
 		else { // altrimenti lo creiamo noi
 			readTypes(typeDatabase);
 			try(ObjectOutputStream databaseWriter = new ObjectOutputStream(new FileOutputStream(typeDbaseFile))){
 				databaseWriter.writeObject(typeDatabase); // scrittura arraylist su file
-				this.typeDatabase = typeDatabase;
-				return WRITTEN_TYPE_ARRAYLIST_SUCCESFULLY;
+				return typeDatabase;
 			}
 			catch(Exception e) {
 				e.printStackTrace();
-				return TYPE_ARRAYLIST_WRITING_FAILURE;
+				return null;
 			}
 		}
 	}
@@ -115,8 +107,9 @@ public class PKLoader {
 		return false;
 	}
 	
-	private void readPokemons(TreeMap<Integer, Pokemon> pkDatabase) {	
+	private TreeMap<Integer, Pokemon> readPokemons() {	
 		File pokemonDir = new File("data\\pokemon");
+		TreeMap<Integer, Pokemon> pkDatabase = new TreeMap<>();
 		if(pokemonDir.exists() && pokemonDir.isDirectory()) 
 		{
 			File[] theList = pokemonDir.listFiles();
@@ -142,7 +135,11 @@ public class PKLoader {
 								int value = Integer.parseInt(st.nextToken());
 								toPut.setStat(key, value);
 							}
-						}	
+						}
+						URL frontSprite = getFrontSpriteURL(name);
+						toPut.setFrontSprite(frontSprite);
+						URL backSprite = getBackSpriteURL(name);
+						toPut.setBackSprite(backSprite);
 					}
 					catch(IOException e) {
 						e.printStackTrace();
@@ -152,6 +149,7 @@ public class PKLoader {
 				if(toPut != null) pkDatabase.put(toPut.getID(), toPut);
 			}		
 		}
+		return pkDatabase;
 	}
 	
 	private void readTypes(ArrayList<PKType> typeDatabase) {
@@ -192,6 +190,52 @@ public class PKLoader {
 		for(int i = 0; i < typeDatabase.size(); i++)
 			if(typeName.compareToIgnoreCase(typeDatabase.get(i).getTypeName()) == 0)
 				return typeDatabase.get(i);
+		return null;
+	}
+	
+	private URL getFrontSpriteURL(String pokemonName) {
+		File typeDir = new File("data\\gif\\front");
+		if(typeDir.exists() && typeDir.isDirectory()) 
+		{
+			File[] theList = typeDir.listFiles();
+			for(int i = 0; i < theList.length; i++) {
+				if(checkExtension(theList[i], GIF_EXT)) {
+					String fileName = "";
+					String name = theList[i].getName();
+					int j = name.lastIndexOf('.');
+					fileName = name.substring(0, j);
+					if(fileName.compareToIgnoreCase(pokemonName) == 0)
+						try {
+							return theList[i].toURI().toURL();
+						} catch (MalformedURLException e) {
+							e.printStackTrace();
+						}
+				}
+			}
+		}
+		return null;
+	}
+	
+	private URL getBackSpriteURL(String pokemonName) {
+		File typeDir = new File("data\\gif\\back");
+		if(typeDir.exists() && typeDir.isDirectory()) 
+		{
+			File[] theList = typeDir.listFiles();
+			for(int i = 0; i < theList.length; i++) {
+				if(checkExtension(theList[i], GIF_EXT)) {
+					String fileName = "";
+					String name = theList[i].getName();
+					int j = name.lastIndexOf('.');
+					fileName = name.substring(0, j);
+					if(fileName.compareToIgnoreCase(pokemonName) == 0)
+						try {
+							return theList[i].toURI().toURL();
+						} catch (MalformedURLException e) {
+							e.printStackTrace();
+						}
+				}
+			}
+		}
 		return null;
 	}
 	
