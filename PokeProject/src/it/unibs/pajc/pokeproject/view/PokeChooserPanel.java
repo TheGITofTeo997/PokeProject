@@ -36,6 +36,7 @@ public class PokeChooserPanel extends JPanel {
 		add(background);
 	}
 	
+	// THIS IS THE PROBLEM.
 	public void drawPokemon(Pokemon toDraw) {
 		JRadioButton rdbtnChooseMe = new JRadioButton(toDraw.getName());
 		rdbtnChooseMe.setOpaque(false);
