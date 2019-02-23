@@ -40,8 +40,6 @@ public class PKServerController extends Thread implements ActionListener {
 	public PKServerController(PKServerWindow view) {
 		this.view = view;
 		loader = new PKLoader();
-		pkDatabase = new TreeMap<>();
-		typeDatabase = new ArrayList<>();
 	}
 	
 	public void run(){
@@ -56,8 +54,8 @@ public class PKServerController extends Thread implements ActionListener {
 	}
 	
 	public void setupServerUtils() {
-		view.appendTextToConsole(loader.loadTypes(typeDatabase));
-		view.appendTextToConsole(loader.loadPokemon(pkDatabase));
+		typeDatabase = loader.loadTypes();
+		pkDatabase = loader.loadPokemon();
 		setupQueues();
 	}
 	

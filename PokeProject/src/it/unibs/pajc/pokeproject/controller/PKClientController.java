@@ -1,6 +1,5 @@
 package it.unibs.pajc.pokeproject.controller;
 
-import java.awt.event.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -9,7 +8,7 @@ import it.unibs.pajc.pokeproject.model.*;
 import it.unibs.pajc.pokeproject.util.*;
 import it.unibs.pajc.pokeproject.view.*;
 
-public class PKClientController extends Thread implements ActionListener{
+public class PKClientController{
 	
 	private static final int SERVER_PORT = 50000;
 	private String SERVER_IP;
@@ -18,36 +17,32 @@ public class PKClientController extends Thread implements ActionListener{
 	private ObjectOutputStream toServer;
 	private ArrayList<PKType> typeDatabase;
 	private TreeMap<Integer, Pokemon> pkDatabase;
-	private IdentifiedQueue<PKMessage> toSend = new IdentifiedQueue<>(10);
-	private IdentifiedQueue<PKMessage> toReceive = new IdentifiedQueue<>(10);
-	private int selectedID;
-	private static WaitingFrame wf = new WaitingFrame();
-	private static BattleFrame bf = new BattleFrame();
+	private IdentifiedQueue<PKMessage> toSend = new IdentifiedQueue<>(5);
+	private IdentifiedQueue<PKMessage> toReceive = new IdentifiedQueue<>(5);
+	//private int selectedID;
+	//private static WaitingFrame wf = new WaitingFrame();
+	//private static BattleFrame bf = new BattleFrame();
 	
 	private PKLoader loader;
 	private PKClientWindow view;
 	
-	//vecchio main
-	public void run() {
-		setupClientUtils();
-	}
-	
-	public PKClientController(PKClientWindow view) {
-		this.view = view;
+	public PKClientController() {
 		loader = new PKLoader();
-		pkDatabase = new TreeMap<>();
-		typeDatabase = new ArrayList<>();
 	}
 	
 	public void setIP(String IP) {
 		this.SERVER_IP = IP;
 	}
-	
-	//need to check for file type existance
-	
+		
 	public void setupClientUtils() {
-		loader.loadTypes(typeDatabase);
-		loader.loadPokemon(pkDatabase);
+		typeDatabase = loader.loadTypes();
+		pkDatabase = loader.loadPokemon();
+	}
+	
+	public void drawGUI() {
+		view = new PKClientWindow();
+		view.setController(this);
+		view.drawMainPanel();
 	}
 	
 	public boolean connectToServer() {
@@ -55,25 +50,12 @@ public class PKClientController extends Thread implements ActionListener{
 			socket = new Socket(SERVER_IP, SERVER_PORT);
 			socket.setKeepAlive(true); // Potrebbe non servire
 			System.out.println("Successfully connected to server at" + socket.getInetAddress());
-			Thread.sleep(500);
 			toServer = new ObjectOutputStream(socket.getOutputStream());
 			PKClientSender sender = new PKClientSender(toServer, toSend);
 			sender.start();
 			fromServer = new ObjectInputStream(socket.getInputStream());
 			PKClientReceiver receiver = new PKClientReceiver(fromServer, toReceive);
 			receiver.start();
-			//test message
-			//toSend.add(new PKMessage("msg_waiting"));
-			//
-			
-			/*while(true) {
-				executeCommand(new PKMessage(MSG_WAITING));
-				if(!toReceive.isEmpty())
-				{
-					PKMessage receivedMsg = toReceive.poll();
-					System.out.println("Received " + receivedMsg.getCommandBody() + " from server(actually sent by client" + receivedMsg.getClientID() +")");			
-				}
-			}*/
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -84,13 +66,13 @@ public class PKClientController extends Thread implements ActionListener{
 	public void executeCommand(PKMessage msg) {
 		switch(msg.getCommandBody()) {
 		case MSG_WAITING:
-			waiting();
+			//waiting();
 			break;
 		case MSG_WAKEUP:
-			wakeup();
+			//wakeup();
 			break;
 		case MSG_START_BATTLE:
-			startBattle();
+			//startBattle();
 			break;
 		case MSG_OPPONENT_POKEMON:
 			break;
@@ -109,7 +91,11 @@ public class PKClientController extends Thread implements ActionListener{
 		}
 	}
 	
-	//commands
+	public TreeMap<Integer, Pokemon> getPkDatabase() {
+		return pkDatabase;
+	}
+	
+	/*
 	private static void waiting() {
 		wf.setVisible(true);
 	}
@@ -124,7 +110,7 @@ public class PKClientController extends Thread implements ActionListener{
 		
 	}
 
-	@Override
+	
 	public void actionPerformed(ActionEvent e) {
 		//start battle
 		for(Map.Entry<Integer, Pokemon> entry : pkDatabase.entrySet()) {
@@ -135,6 +121,6 @@ public class PKClientController extends Thread implements ActionListener{
 		PKMessage msgChosenID = new PKMessage(Commands.MSG_SELECTED_POKEMON, selectedID);
 		toSend.add(msgChosenID);
 	}
-		
+	*/
 
 }

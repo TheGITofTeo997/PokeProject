@@ -7,11 +7,13 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -25,6 +27,7 @@ public class IpPanel extends JPanel {
 	private static final String BTN_BACK = "Back";
 	private static final String PKM_FONT = "PKMN_RBYGSC.ttf";
 	private JTextField addressField;
+	private ArrayList<ActionListener> listenerList = new ArrayList<>();
 	/**
 	 * Create the panel.
 	 */
@@ -65,11 +68,16 @@ public class IpPanel extends JPanel {
 		add(background);
 		
 		btnConnectButton.addActionListener(new ActionListener() { //temporary action listener in order to test, this will need to be changed/moved
-			public void actionPerformed(ActionEvent arg0) {
-				checkIPCorrectness();			
+			public void actionPerformed(ActionEvent e) {
+				if(checkIPCorrectness()) {
+					fireActionPerformed(e);
+				}
+				else {
+					showErrorPopup();
+				}
+					
 			}
 		});
-		
 		
 		btnBackButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -84,13 +92,21 @@ public class IpPanel extends JPanel {
 		StringTokenizer st = new StringTokenizer(address, ".", false);
 		int nTokens = st.countTokens();
 		if(st.hasMoreTokens()) { // we do this to avoid the null case
+			if(nTokens != 4) {
+				System.out.println("false");
+				return false;
+			}
 			while(st.hasMoreTokens()) {	
-				String token = st.nextToken().toString();	
-				if(token.length() > 3 || token.matches(("[a-zA-Z]+")) ) {
+				String token = st.nextToken().toString();			
+		
+				if(token.length() > 3 || token.matches(("[a-zA-Z]+"))) {
 					System.out.println("false");
 					return false;
-				}			
-				if(nTokens<4 || nTokens>4) {
+				}
+				
+				int tokenValue = Integer.parseInt(token);
+				
+				if(tokenValue < 0 || tokenValue > 255) {
 					System.out.println("false");
 					return false;
 				}
@@ -102,5 +118,20 @@ public class IpPanel extends JPanel {
 		}
 		System.out.println("true");
 		return true;
+	}
+	
+	private void showErrorPopup() {
+		JOptionPane error = new JOptionPane();
+		error.setBounds(getBounds());
+		error.showMessageDialog(this, "Indirizzo IP inserito non valido", "ATTENZIONE", JOptionPane.ERROR_MESSAGE);
+	}
+	
+	public void addActionListener(ActionListener l) {
+		listenerList.add(l);
+	}
+	
+	protected void fireActionPerformed(ActionEvent e) {
+		for(ActionListener l : listenerList)
+			l.actionPerformed(e);
 	}
 }
