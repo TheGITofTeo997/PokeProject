@@ -18,6 +18,10 @@ public class PKServerController extends Thread implements ActionListener {
 	private static final int SERVER_PORT = 50000;
 	private static final int QUEUE_SIZE = 5;
 	private static final String SERVER_STARTED_SUCCESFULLY = "\nServer started on port 50000...";
+	private static final String LOADED_PK_TREEMAP_SUCCESFULLY = "\nLoaded PK treemap...";
+	private static final String PK_TREEMAP_LOADING_FAILURE = "\nFailure while loading PK treemap";
+	private static final String LOADED_TYPE_ARRAYLIST_SUCCESFULLY = "\nLoaded PKType arraylist...";
+	private static final String TYPE_ARRAYLIST_LOADING_FAILURE = "\nFailure while loading PKType arraylist";
 	
 	private TreeMap<Integer, Pokemon> pkDatabase;
 	private ArrayList<PKType> typeDatabase;
@@ -55,7 +59,15 @@ public class PKServerController extends Thread implements ActionListener {
 	
 	public void setupServerUtils() {
 		typeDatabase = loader.loadTypes();
+		if(typeDatabase != null) 
+			view.appendTextToConsole(LOADED_TYPE_ARRAYLIST_SUCCESFULLY);
+		else
+			view.appendTextToConsole(TYPE_ARRAYLIST_LOADING_FAILURE);
 		pkDatabase = loader.loadPokemon();
+		if(pkDatabase != null)
+			view.appendTextToConsole(LOADED_PK_TREEMAP_SUCCESFULLY);
+		else
+			view.appendTextToConsole(PK_TREEMAP_LOADING_FAILURE);
 		setupQueues();
 	}
 	
