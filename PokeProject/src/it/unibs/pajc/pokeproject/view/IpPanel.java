@@ -40,8 +40,7 @@ public class IpPanel extends JPanel {
 		     e.printStackTrace();
 		}
 		
-		setLayout(null);
-		
+		setLayout(null);	
 		addressField = new JTextField();
 		addressField.setBounds(189, 176, 300, 50);
 		add(addressField);
@@ -87,36 +86,25 @@ public class IpPanel extends JPanel {
 	}
 	
 
-	private boolean checkIPCorrectness() {    //still need to make this less verbose
+	private boolean checkIPCorrectness() {
 		String address = addressField.getText();
 		StringTokenizer st = new StringTokenizer(address, ".", false);
 		int nTokens = st.countTokens();
 		if(st.hasMoreTokens()) { // we do this to avoid the null case
 			if(nTokens != 4) {
-				System.out.println("false");
 				return false;
 			}
 			while(st.hasMoreTokens()) {	
-				String token = st.nextToken().toString();			
-		
-				if(token.length() > 3 || token.matches(("[a-zA-Z]+"))) {
-					System.out.println("false");
+				String token = st.nextToken().toString();				
+				if(token.length() > 3 || token.matches(("[a-zA-Z]+")))
+					return false;		
+				int tokenValue = Integer.parseInt(token);	
+				if(tokenValue < 0 || tokenValue > 255) 
 					return false;
-				}
-				
-				int tokenValue = Integer.parseInt(token);
-				
-				if(tokenValue < 0 || tokenValue > 255) {
-					System.out.println("false");
-					return false;
-				}
 			}
 		}
-		else {
-			System.out.println("false");
+		else 
 			return false;	
-		}
-		System.out.println("true");
 		return true;
 	}
 	
@@ -127,7 +115,7 @@ public class IpPanel extends JPanel {
 	private void showErrorPopup() {
 		JOptionPane error = new JOptionPane();
 		error.setBounds(getBounds());
-		error.showMessageDialog(this, "Indirizzo IP inserito non valido", "ATTENZIONE", JOptionPane.ERROR_MESSAGE);
+		error.showMessageDialog(this, "Invalid IP address, please enter a valid IP address", "Warning", JOptionPane.ERROR_MESSAGE);
 	}
 	
 	public void addActionListener(ActionListener l) {

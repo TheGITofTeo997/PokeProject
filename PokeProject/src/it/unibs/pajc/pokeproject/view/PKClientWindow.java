@@ -88,7 +88,7 @@ public class PKClientWindow extends JFrame {
 		JLabel background = new JLabel();
 		background.setBounds(0, 0, 594, 421);
 		mainPanel.add(background);
-		background.setIcon(new ImageIcon(new ImageIcon(BattleFrame.class.getResource("/img/client_back.jpg")).getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_DEFAULT)));
+		background.setIcon(new ImageIcon(new ImageIcon(PKClientWindow.class.getResource("/img/client_back.jpg")).getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_DEFAULT)));
 		
 		btnMultiPlayer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
