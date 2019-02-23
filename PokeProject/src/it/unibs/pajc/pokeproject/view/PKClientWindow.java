@@ -54,6 +54,7 @@ public class PKClientWindow extends JFrame {
 		getContentPane().add(ipPanel);
 		ipPanel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				controller.setIP(ipPanel.getIP());
 				if(controller.connectToServer()) {
 					drawPokeChooserPanel();
 					ipPanel.setVisible(false);

@@ -120,6 +120,10 @@ public class IpPanel extends JPanel {
 		return true;
 	}
 	
+	public String getIP() {
+		return addressField.getText();
+	}
+	
 	private void showErrorPopup() {
 		JOptionPane error = new JOptionPane();
 		error.setBounds(getBounds());
