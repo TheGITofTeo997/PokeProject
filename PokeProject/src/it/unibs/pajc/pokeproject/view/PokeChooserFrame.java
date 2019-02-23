@@ -159,7 +159,7 @@ public class PokeChooserFrame extends JFrame implements ActionListener{
 	    btnStartButton.setEnabled(false);
 		btnStartButton.setBounds(267, 390, 109, 41);
 		contentPane.add(btnStartButton);
-		btnStartButton.addActionListener(pkClient);	
+		//btnStartButton.addActionListener();	
 		
 		JLabel background = new JLabel();
 		background.setIcon(new ImageIcon(new ImageIcon(PokeChooserFrame.class.getResource("/img/chooser_back.jpg")).getImage().getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_DEFAULT))); //back scale
