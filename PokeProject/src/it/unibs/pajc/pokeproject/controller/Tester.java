@@ -2,6 +2,14 @@ package it.unibs.pajc.pokeproject.controller;
 
 import java.io.File;
 
+
+/*
+ * 
+ * 			Do we still need this? If not please purge
+ * 
+ * 
+ */
+
 public class Tester {
 
 	private static final String POKEMON_DIR = "data\\pokemon";

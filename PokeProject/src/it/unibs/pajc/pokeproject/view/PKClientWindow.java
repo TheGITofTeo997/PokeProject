@@ -12,7 +12,7 @@ import java.util.Map;
 public class PKClientWindow extends JFrame {
 	
 	private static final long serialVersionUID = -7852194625838135417L;
-	private static final String TITLE = "PokeBattle Client v0.3.1";
+	private static final String TITLE = "PokeBattle Client v0.3.2";
 	private JPanel mainPanel = null;
 	private IpPanel ipPanel = null;
 	private PokeChooserPanel pokeChooserPanel = null;

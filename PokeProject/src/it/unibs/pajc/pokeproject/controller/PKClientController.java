@@ -17,7 +17,7 @@ public class PKClientController{
 	private ObjectOutputStream toServer;
 	private ArrayList<PKType> typeDatabase;
 	private TreeMap<Integer, Pokemon> pkDatabase;
-	private IdentifiedQueue<PKMessage> toSend = new IdentifiedQueue<>(5);
+	private IdentifiedQueue<PKMessage> toSend = new IdentifiedQueue<>(5); //this dimension is still arbitrary btw
 	private IdentifiedQueue<PKMessage> toReceive = new IdentifiedQueue<>(5);
 	//private int selectedID;
 	//private static WaitingFrame wf = new WaitingFrame();
