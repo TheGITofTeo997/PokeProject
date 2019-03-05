@@ -1,4 +1,4 @@
-package it.unibs.pajc.pokeproject.util;
+package it.unibs.pajc.pokeproject.model;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -6,7 +6,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
-import it.unibs.pajc.pokeproject.model.*;
 
 public class PKLoader {
 	
@@ -40,54 +39,49 @@ public class PKLoader {
 	private static final int MOVE_4 = 3;
 
 	private ArrayList<PKType> typeDatabase;
+	private TreeMap<Integer, Pokemon> pkDatabase;
 	
 	@SuppressWarnings("unchecked")
-	public TreeMap<Integer, Pokemon> loadPokemon() {
+	public void loadPokemon() {
 		File pkDbaseFile = new File(PK_DATABASE_LOCATION);
 		if(pkDbaseFile.exists()) { // dobbiamo leggere il file solo se esiste
 			try(ObjectInputStream databaseReader = new ObjectInputStream(new FileInputStream(pkDbaseFile))){
-				return (TreeMap<Integer, Pokemon>)databaseReader.readObject(); // lettura treemap da file
+				pkDatabase = (TreeMap<Integer, Pokemon>)databaseReader.readObject(); // lettura treemap da file
 			}
 			catch(Exception e) {
 				e.printStackTrace();
-				return null;
+
 			}
 		}
 		else { // altrimenti lo creiamo noi
 			TreeMap<Integer, Pokemon> pkDatabase = readPokemons();
 			try(ObjectOutputStream databaseWriter = new ObjectOutputStream(new FileOutputStream(pkDbaseFile))){
 				databaseWriter.writeObject(pkDatabase); // scrittura treemap su file
-				return pkDatabase;
 			}
 			catch(Exception e) {
 				e.printStackTrace();
-				return null;
 			}
 		}
 	}
 	
 	@SuppressWarnings("unchecked")
-	public ArrayList<PKType> loadTypes() {
+	public void loadTypes() {
 		File typeDbaseFile = new File(TYPE_DATABASE_LOCATION);
 		if(typeDbaseFile.exists()) { // dobbiamo leggere il file solo se esiste
 			try(ObjectInputStream databaseReader = new ObjectInputStream(new FileInputStream(typeDbaseFile))){
 				typeDatabase = (ArrayList<PKType>)databaseReader.readObject(); // lettura arraylist da file
-				return typeDatabase;
 			}
 			catch(Exception e) {
 				e.printStackTrace();
-				return null;
 			}
 		}
 		else { // altrimenti lo creiamo noi
-			readTypes(typeDatabase);
+			typeDatabase = readTypes();
 			try(ObjectOutputStream databaseWriter = new ObjectOutputStream(new FileOutputStream(typeDbaseFile))){
 				databaseWriter.writeObject(typeDatabase); // scrittura arraylist su file
-				return typeDatabase;
 			}
 			catch(Exception e) {
 				e.printStackTrace();
-				return null;
 			}
 		}
 	}
@@ -152,8 +146,9 @@ public class PKLoader {
 		return pkDatabase;
 	}
 	
-	private void readTypes(ArrayList<PKType> typeDatabase) {
+	private ArrayList<PKType> readTypes() {
 		File typeDir = new File("data\\type");
+		ArrayList<PKType> typeDatabase = new ArrayList<>();
 		if(typeDir.exists() && typeDir.isDirectory()) 
 		{
 			File[] theList = typeDir.listFiles();
@@ -184,6 +179,7 @@ public class PKLoader {
 				if(toPut != null) typeDatabase.add(toPut);
 			}
 		}
+		return typeDatabase;
 	}
 	
 	private PKType getType(String typeName) {
@@ -255,5 +251,15 @@ public class PKLoader {
 				poke.setMove(MOVE_4, new PKMove(IDROPULSAR, IDROPULSAR_PWR, getType(WATER)));
 				break;
 		}
+	}
+	
+	public boolean typeDatabaseExist() {
+		return typeDatabase != null;
+		// need improvement
+	}
+	
+	public boolean pkDatabaseExist() {
+		return pkDatabase != null;
+		// need improvement
 	}
 }

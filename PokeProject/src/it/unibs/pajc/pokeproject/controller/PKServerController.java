@@ -58,13 +58,13 @@ public class PKServerController extends Thread implements ActionListener {
 	}
 	
 	public void setupServerUtils() {
-		typeDatabase = loader.loadTypes();
-		if(typeDatabase != null) 
+		loader.loadTypes();
+		if(loader.typeDatabaseExist()) 
 			view.appendTextToConsole(LOADED_TYPE_ARRAYLIST_SUCCESFULLY);
 		else
 			view.appendTextToConsole(TYPE_ARRAYLIST_LOADING_FAILURE);
-		pkDatabase = loader.loadPokemon();
-		if(pkDatabase != null)
+		loader.loadPokemon();
+		if(loader.pkDatabaseExist())
 			view.appendTextToConsole(LOADED_PK_TREEMAP_SUCCESFULLY);
 		else
 			view.appendTextToConsole(PK_TREEMAP_LOADING_FAILURE);

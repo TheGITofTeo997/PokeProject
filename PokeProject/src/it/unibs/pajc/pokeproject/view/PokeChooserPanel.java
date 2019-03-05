@@ -15,6 +15,7 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 
 public class PokeChooserPanel extends JPanel implements ActionListener{
@@ -23,6 +24,7 @@ public class PokeChooserPanel extends JPanel implements ActionListener{
 	private static final int RES = 96;
 	private static final String CHOOSE_ME = "Choose Me!";
 	private static final String BTN_STARTBATTLE_TEXT = "Start Battle";
+	private ArrayList<ActionListener> listenerList = new ArrayList<>();
 	private ButtonGroup group;
 	private JButton btnStartButton;
 	
@@ -39,7 +41,7 @@ public class PokeChooserPanel extends JPanel implements ActionListener{
 		rdbtnChooseMe1.setBorderPainted(false);
 		rdbtnChooseMe1.setContentAreaFilled(false);
 		rdbtnChooseMe1.setBounds(57, 172, 109, 23);
-		rdbtnChooseMe1.setActionCommand("Bulbasaur");
+		rdbtnChooseMe1.setActionCommand("1");
 		add(rdbtnChooseMe1);
 		
 		JRadioButton rdbtnChooseMe2 = new JRadioButton("Charmander");
@@ -47,7 +49,7 @@ public class PokeChooserPanel extends JPanel implements ActionListener{
 		rdbtnChooseMe2.setContentAreaFilled(false);
 		rdbtnChooseMe2.setBorderPainted(false);
 		rdbtnChooseMe2.setBounds(278, 172, 109, 23);
-		rdbtnChooseMe2.setActionCommand("Charmander");
+		rdbtnChooseMe2.setActionCommand("4");
 		add(rdbtnChooseMe2);
 		
 		JRadioButton rdbtnChooseMe3 = new JRadioButton("Squirtle");
@@ -55,7 +57,7 @@ public class PokeChooserPanel extends JPanel implements ActionListener{
 		rdbtnChooseMe3.setContentAreaFilled(false);
 		rdbtnChooseMe3.setBorderPainted(false);
 		rdbtnChooseMe3.setBounds(493, 172, 109, 23);
-		rdbtnChooseMe3.setActionCommand("Squirtle");
+		rdbtnChooseMe3.setActionCommand("7");
 		add(rdbtnChooseMe3);
 		
 		JRadioButton rdbtnChooseMe4 = new JRadioButton("Chikorita");
@@ -63,7 +65,7 @@ public class PokeChooserPanel extends JPanel implements ActionListener{
 		rdbtnChooseMe4.setContentAreaFilled(false);
 		rdbtnChooseMe4.setBorderPainted(false);
 		rdbtnChooseMe4.setBounds(57, 354, 109, 23);
-		rdbtnChooseMe4.setActionCommand("Chikorita");
+		rdbtnChooseMe4.setActionCommand("152");
 		add(rdbtnChooseMe4);
 		
 		JRadioButton rdbtnChooseMe5 = new JRadioButton("Cyndaquil");
@@ -71,7 +73,7 @@ public class PokeChooserPanel extends JPanel implements ActionListener{
 		rdbtnChooseMe5.setContentAreaFilled(false);
 		rdbtnChooseMe5.setBorderPainted(false);
 		rdbtnChooseMe5.setBounds(278, 353, 109, 23);
-		rdbtnChooseMe5.setActionCommand("Cyndaquil");
+		rdbtnChooseMe5.setActionCommand("155");
 		add(rdbtnChooseMe5);
 		
 		JRadioButton rdbtnChooseMe6 = new JRadioButton("Totodile");
@@ -79,7 +81,7 @@ public class PokeChooserPanel extends JPanel implements ActionListener{
 		rdbtnChooseMe6.setContentAreaFilled(false);
 		rdbtnChooseMe6.setBorderPainted(false);
 		rdbtnChooseMe6.setBounds(493, 352, 109, 23);
-		rdbtnChooseMe6.setActionCommand("Totodile");
+		rdbtnChooseMe6.setActionCommand("158");
 		add(rdbtnChooseMe6);
 		
 		
@@ -132,7 +134,12 @@ public class PokeChooserPanel extends JPanel implements ActionListener{
 	    btnStartButton.setEnabled(false);
 		btnStartButton.setBounds(267, 390, 109, 41);
 		add(btnStartButton);
-		//btnStartButton.addActionListener();	
+		btnStartButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ActionEvent arg = new ActionEvent(btnStartButton, ActionEvent.ACTION_PERFORMED, btnStartButton.getActionCommand());
+				fireActionPerformed(arg);
+			}
+		});	
 		
 		JLabel background = new JLabel();
 		background.setIcon(new ImageIcon(new ImageIcon(PokeChooserPanel.class.getResource("/img/chooser_back.jpg")).getImage().getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_DEFAULT))); //back scale
@@ -162,5 +169,14 @@ public class PokeChooserPanel extends JPanel implements ActionListener{
 		add(pokemon);
 		
 		group.add(rdbtnChooseMe);
+	}
+	
+	public void fireActionPerformed(ActionEvent e) {
+		for(ActionListener l : listenerList)
+			l.actionPerformed(e);
+	}
+	
+	public void addListener(ActionListener l) {
+		listenerList.add(l);
 	}
 }
