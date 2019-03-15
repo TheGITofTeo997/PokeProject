@@ -56,7 +56,7 @@ public class PKClientWindow extends JFrame {
 		getContentPane().add(ipPanel);
 		ipPanel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(controller.tryConnection(ipPanel.getIP())) {		
+				/*if(controller.tryConnection(ipPanel.getIP())) {		
 					drawPokeChooserPanel();
 					setBounds(getX(), getY(), pokeChooserPanel.getWidth(), pokeChooserPanel.getHeight());
 					ipPanel.setVisible(false);
@@ -64,7 +64,7 @@ public class PKClientWindow extends JFrame {
 				}
 				else {
 					showErrorPopup();
-				}
+				}*/
 			}
 		});
 	}
@@ -99,7 +99,6 @@ public class PKClientWindow extends JFrame {
 		getContentPane().add(pokeChooserPanel);
 		pokeChooserPanel.addListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int id = Integer.parseInt(e.getActionCommand());
 				//model.sendChoosenPokemon(id);
 				
 				drawBattlePanel();

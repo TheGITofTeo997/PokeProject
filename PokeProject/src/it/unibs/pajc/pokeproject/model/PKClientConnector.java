@@ -1,8 +1,10 @@
 package it.unibs.pajc.pokeproject.model;
 
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.*;
 
 import it.unibs.pajc.pokeproject.controller.PKClientReceiver;
 import it.unibs.pajc.pokeproject.controller.PKClientSender;
@@ -14,10 +16,15 @@ public class PKClientConnector {
 	private static final int SERVER_PORT = 50000;
 	private String serverIp;
 	private Socket socket;
+	private PKBattleEnvironment env;
 	private ObjectInputStream fromServer;
 	private ObjectOutputStream toServer;
-	private IdentifiedQueue<PKMessage> toSend = new IdentifiedQueue<>(5); //this dimension is still arbitrary btw
+	//private IdentifiedQueue<PKMessage> toSend = new IdentifiedQueue<>(5); //this dimension is still arbitrary btw
 	private IdentifiedQueue<PKMessage> toReceive = new IdentifiedQueue<>(5);
+	
+	public PKClientConnector(PKBattleEnvironment env) {
+		this.env = env;
+	}
 	
 	public boolean connectToServer(String ip) {
 		try {
@@ -26,8 +33,8 @@ public class PKClientConnector {
 			socket.setKeepAlive(true); // Potrebbe non servire
 			System.out.println("Successfully connected to server at" + socket.getInetAddress());
 			toServer = new ObjectOutputStream(socket.getOutputStream());
-			PKClientSender sender = new PKClientSender(toServer, toSend);
-			sender.start();
+			//PKClientSender sender = new PKClientSender(toServer, toSend);
+			//sender.start();
 			fromServer = new ObjectInputStream(socket.getInputStream());
 			PKClientReceiver receiver = new PKClientReceiver(fromServer, toReceive);
 			receiver.start();
@@ -35,8 +42,25 @@ public class PKClientConnector {
 		catch(Exception e) {
 			e.printStackTrace();
 		}
+		Timer t = new Timer();
+		t.schedule(
+				new TimerTask() {
+					public void run() {
+						if(toReceive.isEmpty() == false) {
+							readMessage();
+						}
+					}
+				}, 0, 1000);
 		return socket.isConnected();
 	}
 	
 	// need a better method to verify if the client is connected
+	
+	public void sendMessage(PKMessage msg) throws IOException {
+		toServer.writeObject(msg);
+	}
+	
+	public void readMessage() {
+		env.executeCommand(toReceive.poll());
+	}
 }

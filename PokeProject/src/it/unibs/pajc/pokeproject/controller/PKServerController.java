@@ -49,12 +49,12 @@ public class PKServerController extends Thread implements ActionListener {
 	public void run(){
 		setupServerUtils();
 		openConnection();
-		/*while(true) {
+		while(true) {
 			if(!fromQueues.get(FIRST_QUEUE).isEmpty())
 				executeCommand(fromQueues.get(FIRST_QUEUE).poll());
 			if(!fromQueues.get(SECOND_QUEUE).isEmpty())
 				executeCommand(fromQueues.get(SECOND_QUEUE).poll());
-		}*/
+		}
 	}
 	
 	public void setupServerUtils() {

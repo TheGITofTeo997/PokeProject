@@ -164,7 +164,7 @@ public class PokeChooserPanel extends JPanel implements ActionListener{
 		add(rdbtnChooseMe);
 		
 		JLabel pokemon = new JLabel();
-		pokemon.setIcon(new ImageIcon(new ImageIcon(toDraw.getBackSprite()).getImage().getScaledInstance(RES, RES, Image.SCALE_DEFAULT))); //gif scale
+		pokemon.setIcon(new ImageIcon(new ImageIcon(toDraw.getFrontSprite()).getImage().getScaledInstance(RES, RES, Image.SCALE_DEFAULT))); //gif scale
 		pokemon.setBounds(493, 59, 96, 96);
 		add(pokemon);
 		

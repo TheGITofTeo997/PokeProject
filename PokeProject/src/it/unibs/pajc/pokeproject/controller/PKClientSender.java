@@ -1,7 +1,15 @@
 package it.unibs.pajc.pokeproject.controller;
 
-import java.io.*;
 
+/*
+ * 
+ * 				This class will probably be purged. 
+ * 
+ * 
+ */
+
+
+import java.io.*;
 import it.unibs.pajc.pokeproject.util.IdentifiedQueue;
 import it.unibs.pajc.pokeproject.util.PKMessage;
 
