@@ -146,12 +146,13 @@ public class PKServerController extends Thread implements ActionListener {
 		
 	private void selectedPokemon(PKMessage msg) {
 		if(trainerPoke0.equals(null)) {
-		trainerPoke0 = pkDatabase.get(msg.getDataToCarry());
-		trainerPoke0.setBattleID(msg.getClientID());
+			view.appendTextToConsole("SAETTI");
+			trainerPoke0 = pkDatabase.get(msg.getDataToCarry());
+			trainerPoke0.setBattleID(msg.getClientID());
 		}
 		else {
-		trainerPoke1 = pkDatabase.get(msg.getDataToCarry());
-		trainerPoke1.setBattleID(msg.getClientID());
+			trainerPoke1 = pkDatabase.get(msg.getDataToCarry());
+			trainerPoke1.setBattleID(msg.getClientID());
 		}
 		if(!trainerPoke0.equals(null) && !trainerPoke1.equals(null)) {
 			PKMessage startBattle = new PKMessage(Commands.MSG_START_BATTLE);
@@ -163,7 +164,8 @@ public class PKServerController extends Thread implements ActionListener {
 			toQueues.get(FIRST_QUEUE).add(opponentFor0);
 			toQueues.get(SECOND_QUEUE).add(opponentFor1);
 			toQueues.get(FIRST_QUEUE).add(startBattle);
-			toQueues.get(SECOND_QUEUE).add(startBattle);		
+			toQueues.get(SECOND_QUEUE).add(startBattle);	
+			view.appendTextToConsole("SAETTI2");
 			
 		}
 		else {
