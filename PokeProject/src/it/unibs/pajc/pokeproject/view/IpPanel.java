@@ -30,8 +30,8 @@ public class IpPanel extends JPanel implements KeyListener {
 	private static final String PKM_FONT = "PKMN_RBYGSC.ttf";
 	private JTextField addressField;
 	private ArrayList<ActionListener> listenerList = new ArrayList<>();
-	JButton btnConnectButton;
-	JButton btnBackButton;
+	private JButton btnConnectButton;
+	private JButton btnBackButton;
 	/**
 	 * Create the panel.
 	 */
