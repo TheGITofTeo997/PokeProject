@@ -16,10 +16,12 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
 
-public class IpPanel extends JPanel {
+public class IpPanel extends JPanel implements KeyListener {
 
 	private static final long serialVersionUID = -1844742030413196713L;
 	private static final String INSERT_SERVER_IP = "Insert Server IP:";
@@ -28,6 +30,8 @@ public class IpPanel extends JPanel {
 	private static final String PKM_FONT = "PKMN_RBYGSC.ttf";
 	private JTextField addressField;
 	private ArrayList<ActionListener> listenerList = new ArrayList<>();
+	JButton btnConnectButton;
+	JButton btnBackButton;
 	/**
 	 * Create the panel.
 	 */
@@ -40,8 +44,11 @@ public class IpPanel extends JPanel {
 		     e.printStackTrace();
 		}
 		
+		setFocusable(true);
+		addKeyListener(this); //KeyListener sul Panel
 		setLayout(null);	
 		addressField = new JTextField();
+		addressField.addKeyListener(this); //KeyListener sul TextField
 		addressField.setBounds(189, 176, 300, 50);
 		add(addressField);
 		
@@ -51,12 +58,12 @@ public class IpPanel extends JPanel {
 		lblTitleLabel.setBounds(189, 23, 300, 50);
 		add(lblTitleLabel);
 		
-		JButton btnConnectButton = new JButton(BTN_CONNECT_TEXT);
+		btnConnectButton = new JButton(BTN_CONNECT_TEXT);
 		btnConnectButton.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 20));
 		btnConnectButton.setBounds(108, 325, 200, 50);
 		add(btnConnectButton);
 		
-		JButton btnBackButton = new JButton(BTN_BACK);
+		btnBackButton = new JButton(BTN_BACK);
 		btnBackButton.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 20));
 		btnBackButton.setBounds(370, 325, 200, 50);
 		add(btnBackButton);
@@ -126,5 +133,25 @@ public class IpPanel extends JPanel {
 	protected void fireActionPerformed(ActionEvent e) {
 		for(ActionListener l : listenerList)
 			l.actionPerformed(e);
+	}
+
+	//METODI KEYLISTENER
+
+	@Override
+	public void keyTyped(KeyEvent e) {		
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if(e.getExtendedKeyCode() == KeyEvent.VK_ENTER) {
+			btnConnectButton.doClick();
+		}
+		if(e.getExtendedKeyCode() == KeyEvent.VK_ESCAPE) {
+			btnBackButton.doClick();
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
 	}
 }
