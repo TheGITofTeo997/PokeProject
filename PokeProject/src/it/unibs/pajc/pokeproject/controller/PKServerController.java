@@ -13,6 +13,8 @@ import it.unibs.pajc.pokeproject.util.*;
 import it.unibs.pajc.pokeproject.view.*;
 
 public class PKServerController extends Thread implements ActionListener {
+	
+	//Local Components (some will probably be moved)
 	private static final int FIRST_QUEUE = 0;
 	private static final int SECOND_QUEUE = 1;
 	private static final int DEFALT_QUEUE_ID = -1;
@@ -24,17 +26,17 @@ public class PKServerController extends Thread implements ActionListener {
 	private static final String LOADED_TYPE_ARRAYLIST_SUCCESFULLY = "\nLoaded PKType arraylist...";
 	private static final String TYPE_ARRAYLIST_LOADING_FAILURE = "\nFailure while loading PKType arraylist";
 	
+	//Controller Components
 	private PKLoader loader;
 	private Pokemon trainerPoke0;
 	private Pokemon trainerPoke1;
-	
 	private ArrayList<IdentifiedQueue<PKMessage>> fromQueues = new ArrayList<>(); 
 	// array di code da cui il server prenderà i messaggi che i client hanno mandato
 	private ArrayList<IdentifiedQueue<PKMessage>> toQueues = new ArrayList<>(); 
 	// array di code in cui il server metterà i messaggi da inviare ai client
-	
 	private int firstMoveSelectedID = -1;
 	
+	//View Components
 	private PKServerWindow view;
 
 	public PKServerController() {
@@ -56,10 +58,6 @@ public class PKServerController extends Thread implements ActionListener {
 						}
 					}
 				}, 0, 1000);
-	}
-	
-	public void drawGUI() {
-		view = new PKServerWindow(this);
 	}
 	
 	public void setupServerUtils() {
@@ -137,7 +135,6 @@ public class PKServerController extends Thread implements ActionListener {
 			break;
 		}
 	}
-	
 	
 	public int setPriorityBattle(Pokemon p0, Pokemon p1) {
 		int speedP0 = p0.getSpeed();
@@ -242,6 +239,10 @@ public class PKServerController extends Thread implements ActionListener {
 				toQueues.get(i).add(damageSecond);
 			}
 		}
+	}
+	
+	public void drawGUI() {
+		view = new PKServerWindow(this);
 	}
 
 	@Override

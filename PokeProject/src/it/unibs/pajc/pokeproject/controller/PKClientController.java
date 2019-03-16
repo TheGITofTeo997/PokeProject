@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.*;
-import java.util.Map.Entry;
 
 import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
@@ -27,12 +26,14 @@ import it.unibs.pajc.pokeproject.util.Commands;
 
 public class PKClientController{
 	
+	//Controller Components
 	private PKLoader loader;
 	private PKClientConnector connector;
 	private PKBattleEnvironment battleEnvironment;
 	private JFrame view;
 	
-	private static final String TITLE = "PokeBattle Client v0.4";
+	//View Components
+	private static final String TITLE = "PokeBattle Client v0.4a";
 	private MainPanel mainPanel = null;
 	private IpPanel ipPanel = null;
 	private PokeChooserPanel pokeChooserPanel = null;
@@ -62,7 +63,6 @@ public class PKClientController{
 		});
 	}
 	
-
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -77,24 +77,6 @@ public class PKClientController{
 		drawMainPanel();
 	}
 	
-	public void drawIpPanel() {
-		ipPanel = new IpPanel();
-		ipPanel.setBounds(0, 0, 663, 429);
-		ipPanel.setVisible(true);
-		view.getContentPane().add(ipPanel);
-		ipPanel.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(connector.connectToServer(ipPanel.getIP())) {		
-					drawPokeChooserPanel();
-					view.setBounds(view.getX(), view.getY(), pokeChooserPanel.getWidth(), pokeChooserPanel.getHeight());
-					ipPanel.setVisible(false);
-				}
-				else {
-					showErrorPopup();
-				}
-			}
-		});
-	}
 	
 	public void drawMainPanel() {
 		mainPanel = new MainPanel();
@@ -115,6 +97,26 @@ public class PKClientController{
 				drawIpPanel();
 				view.setBounds(view.getX(), view.getY(), ipPanel.getWidth(), ipPanel.getHeight());
 				mainPanel.setVisible(false); 
+			}
+		});
+	}
+	
+	
+	public void drawIpPanel() {
+		ipPanel = new IpPanel();
+		ipPanel.setBounds(0, 0, 663, 429);
+		ipPanel.setVisible(true);
+		view.getContentPane().add(ipPanel);
+		ipPanel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(connector.connectToServer(ipPanel.getIP())) {		
+					drawPokeChooserPanel();
+					view.setBounds(view.getX(), view.getY(), pokeChooserPanel.getWidth(), pokeChooserPanel.getHeight());
+					ipPanel.setVisible(false);
+				}
+				else {
+					showErrorPopup();
+				}
 			}
 		});
 	}
@@ -177,9 +179,10 @@ public class PKClientController{
 		});
 	}
 	
+	
 	private void drawBattlePanel() {
 		battlePanel = new BattlePanel();
-		battlePanel.setBounds(0, 0, 650, 482);
+		battlePanel.setBounds(0, 0, 618, 400);
 		battlePanel.setVisible(true);
 		view.getContentPane().add(battlePanel);
 		pokeChooserPanel.setVisible(false);

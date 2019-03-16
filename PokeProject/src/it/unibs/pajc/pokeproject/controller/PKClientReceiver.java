@@ -6,7 +6,7 @@ import it.unibs.pajc.pokeproject.util.IdentifiedQueue;
 import it.unibs.pajc.pokeproject.util.PKMessage;
 
 public class PKClientReceiver extends Thread {
-	private static final String ADDED_MESSAGE_TO_THE_QUEUE = "Succesfully added received message to the queue :)";
+	private static final String ADDED_MESSAGE_TO_THE_QUEUE = "Succesfully added received message to the queue, proceeding...";
 	private ObjectInputStream fromServer;
 	private IdentifiedQueue<PKMessage> toReceive;
 	
@@ -14,6 +14,7 @@ public class PKClientReceiver extends Thread {
 		this.fromServer = fromServer;
 		this.toReceive = toReceive;
 	}
+	
 	
 	public void run() {
 		try {

@@ -15,6 +15,8 @@ import it.unibs.pajc.pokeproject.view.PKServerWindow;
  * e lo mette sulla coda di invio per client2. In realtà ora le operazioni di poll e add vengono fatte da 2 thread separati.
  */
 public class PKServerProtocol extends Thread {
+	
+	//Local Components
 	private static final String SERVING_CLIENT_STRING = "\nServing client with address ";
 	private Socket socketPlayer;
 	private ObjectInputStream fromClient; // inputStream su cui si ricevono i messaggi
@@ -26,6 +28,7 @@ public class PKServerProtocol extends Thread {
 	private static ArrayList<Integer> clientPorts = new ArrayList<>(); //arraylist contenente porte dei client
 	private static int idGen=0;
 
+	//View Components
 	private PKServerWindow view;
 	
 	public PKServerProtocol(Socket socket, PKServerWindow view) {

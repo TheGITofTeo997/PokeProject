@@ -7,11 +7,14 @@ import it.unibs.pajc.pokeproject.util.PKMessage;
 import it.unibs.pajc.pokeproject.view.PKServerWindow;
 
 public class PKServerReceiver extends Thread {
+	
+	//Local Components
 	private static final String MSG_ADDED_CORRECTLY = "\nMessage added to the queue correctly :)";
 	private ObjectInputStream fromClient;
 	private IdentifiedQueue<PKMessage> toReceive;
 	private int clientID;
 	
+	//View Components
 	private PKServerWindow view;
 	
 	public PKServerReceiver (ObjectInputStream fromClient, IdentifiedQueue<PKMessage> toReceive, int clientID, PKServerWindow view) {
