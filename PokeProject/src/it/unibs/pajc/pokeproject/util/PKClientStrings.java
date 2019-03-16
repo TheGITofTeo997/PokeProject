@@ -11,4 +11,7 @@ public class PKClientStrings {
 
 	//Misc strings
 	public static final String CONNECTION_ERROR = "Cannot connect to the Server, please check your connection.";
+	
+	//View strings
+	public static final String BTN_STARTBATTLE_TEXT = "Start Battle ->";
 }

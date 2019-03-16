@@ -2,7 +2,6 @@ package it.unibs.pajc.pokeproject.controller;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
@@ -211,6 +210,7 @@ public class PKServerController extends Thread implements ActionListener {
 		}
 	}
 	
+	//this method doesn't look actually very well
 	private void sendSelectedMoveMessage(Pokemon firstAttacker, Pokemon secondAttacker, int firstAttackerID, int firstMove, int secondMove) {
 		int damageFirstAttacker = calcDamage(firstAttacker, secondAttacker, firstMove);
 		int damageSecondAttacker = calcDamage(secondAttacker, firstAttacker, secondMove);

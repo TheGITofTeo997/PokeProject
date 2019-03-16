@@ -7,14 +7,17 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
-import it.unibs.pajc.pokeproject.model.Pokemon;
-
 import java.awt.Image;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.awt.event.ActionEvent;
+
+import it.unibs.pajc.pokeproject.model.Pokemon;
+import it.unibs.pajc.pokeproject.util.PKClientStrings;
+
+
 
 public class PokeChooserPanel extends JPanel implements ActionListener{
 
@@ -26,8 +29,6 @@ public class PokeChooserPanel extends JPanel implements ActionListener{
 	private static final int WIDTH_LIMIT = 468;
 	private static final int PANEL_WIDTH = 648;
 	private static final int PANEL_HEIGHT = 500;
-	private static final String CHOOSE_ME = "Choose Me!";
-	private static final String BTN_STARTBATTLE_TEXT = "Start Battle";
 	private ArrayList<ActionListener> listenerList = new ArrayList<>();
 	private ButtonGroup group;
 	private JButton btnStartButton;
@@ -42,7 +43,7 @@ public class PokeChooserPanel extends JPanel implements ActionListener{
 		setLayout(null);
 		setBounds(0, 0, PANEL_WIDTH, PANEL_HEIGHT);
 		
-		btnStartButton = new JButton(BTN_STARTBATTLE_TEXT);
+		btnStartButton = new JButton(PKClientStrings.BTN_STARTBATTLE_TEXT);
 	    btnStartButton.setEnabled(false);
 		btnStartButton.setBounds(PANEL_WIDTH/2-3*RES/4, PANEL_HEIGHT-RES, RES*3/2, 2*BUTTON_HEIGHT);
 		add(btnStartButton);
