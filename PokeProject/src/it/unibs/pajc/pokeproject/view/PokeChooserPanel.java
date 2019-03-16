@@ -3,136 +3,48 @@ package it.unibs.pajc.pokeproject.view;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.border.EmptyBorder;
 
 import it.unibs.pajc.pokeproject.model.Pokemon;
 
-import java.awt.Color;
-import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 import java.awt.event.ActionEvent;
 
 public class PokeChooserPanel extends JPanel implements ActionListener{
 
 	private static final long serialVersionUID = -251102778958545816L;
 	private static final int RES = 96;
+	private static final int BUTTON_HEIGHT = 16;
+	private static final int HORIZONTAL_SPACING = 90;
+	private static final int VERTICAL_SPACING = 30;
+	private static final int WIDTH_LIMIT = 468;
+	private static final int PANEL_WIDTH = 648;
+	private static final int PANEL_HEIGHT = 500;
 	private static final String CHOOSE_ME = "Choose Me!";
 	private static final String BTN_STARTBATTLE_TEXT = "Start Battle";
 	private ArrayList<ActionListener> listenerList = new ArrayList<>();
 	private ButtonGroup group;
 	private JButton btnStartButton;
+	private JLabel pokemon;
+	private JRadioButton rdbtnChooseMe;
 	
 	/**
 	 * Create the panel.
 	 */
-	public PokeChooserPanel() {
+	public PokeChooserPanel(TreeMap<Integer, Pokemon> db) {
 		setVisible(false);
 		setLayout(null);
-		setBounds(100, 100, 644, 453);
-				
-		JRadioButton rdbtnChooseMe1 = new JRadioButton("Bulbasaur");
-		rdbtnChooseMe1.setOpaque(false);
-		rdbtnChooseMe1.setBorderPainted(false);
-		rdbtnChooseMe1.setContentAreaFilled(false);
-		rdbtnChooseMe1.setBounds(57, 172, 109, 23);
-		rdbtnChooseMe1.setActionCommand("1");
-		add(rdbtnChooseMe1);
+		setBounds(0, 0, PANEL_WIDTH, PANEL_HEIGHT);
 		
-		JRadioButton rdbtnChooseMe2 = new JRadioButton("Charmander");
-		rdbtnChooseMe2.setOpaque(false);
-		rdbtnChooseMe2.setContentAreaFilled(false);
-		rdbtnChooseMe2.setBorderPainted(false);
-		rdbtnChooseMe2.setBounds(278, 172, 109, 23);
-		rdbtnChooseMe2.setActionCommand("4");
-		add(rdbtnChooseMe2);
-		
-		JRadioButton rdbtnChooseMe3 = new JRadioButton("Squirtle");
-		rdbtnChooseMe3.setOpaque(false);
-		rdbtnChooseMe3.setContentAreaFilled(false);
-		rdbtnChooseMe3.setBorderPainted(false);
-		rdbtnChooseMe3.setBounds(493, 172, 109, 23);
-		rdbtnChooseMe3.setActionCommand("7");
-		add(rdbtnChooseMe3);
-		
-		JRadioButton rdbtnChooseMe4 = new JRadioButton("Chikorita");
-		rdbtnChooseMe4.setOpaque(false);
-		rdbtnChooseMe4.setContentAreaFilled(false);
-		rdbtnChooseMe4.setBorderPainted(false);
-		rdbtnChooseMe4.setBounds(57, 354, 109, 23);
-		rdbtnChooseMe4.setActionCommand("152");
-		add(rdbtnChooseMe4);
-		
-		JRadioButton rdbtnChooseMe5 = new JRadioButton("Cyndaquil");
-		rdbtnChooseMe5.setOpaque(false);
-		rdbtnChooseMe5.setContentAreaFilled(false);
-		rdbtnChooseMe5.setBorderPainted(false);
-		rdbtnChooseMe5.setBounds(278, 353, 109, 23);
-		rdbtnChooseMe5.setActionCommand("155");
-		add(rdbtnChooseMe5);
-		
-		JRadioButton rdbtnChooseMe6 = new JRadioButton("Totodile");
-		rdbtnChooseMe6.setOpaque(false);
-		rdbtnChooseMe6.setContentAreaFilled(false);
-		rdbtnChooseMe6.setBorderPainted(false);
-		rdbtnChooseMe6.setBounds(493, 352, 109, 23);
-		rdbtnChooseMe6.setActionCommand("158");
-		add(rdbtnChooseMe6);
-		
-		
-		ButtonGroup group = new ButtonGroup();
-		group.add(rdbtnChooseMe1);
-		group.add(rdbtnChooseMe2);
-		group.add(rdbtnChooseMe3);
-		group.add(rdbtnChooseMe4);
-		group.add(rdbtnChooseMe5);
-		group.add(rdbtnChooseMe6);
-		
-		rdbtnChooseMe1.addActionListener(this);	
-		rdbtnChooseMe2.addActionListener(this);
-		rdbtnChooseMe3.addActionListener(this);
-		rdbtnChooseMe4.addActionListener(this);
-		rdbtnChooseMe5.addActionListener(this);
-		rdbtnChooseMe6.addActionListener(this);
-
-		JLabel bulbasaur = new JLabel();
-		bulbasaur.setIcon(new ImageIcon(new ImageIcon(PokeChooserPanel.class.getResource("/img/Bulbasaur_F.gif")).getImage().getScaledInstance(RES, RES, Image.SCALE_DEFAULT))); //gif scale
-		bulbasaur.setBounds(57, 59, 96, 96);
-		add(bulbasaur);
-		
-		JLabel charmander = new JLabel();
-		charmander.setIcon(new ImageIcon(new ImageIcon(PokeChooserPanel.class.getResource("/img/Charmander_F.gif")).getImage().getScaledInstance(RES, RES, Image.SCALE_DEFAULT))); //gif scale
-		charmander.setBounds(267, 59, 96, 96);
-		add(charmander);
-		
-		JLabel squirtle = new JLabel();
-		squirtle.setIcon(new ImageIcon(new ImageIcon(PokeChooserPanel.class.getResource("/img/Squirtle_F.gif")).getImage().getScaledInstance(RES, RES, Image.SCALE_DEFAULT))); //gif scale
-		squirtle.setBounds(493, 59, 96, 96);
-		add(squirtle);
-		
-		JLabel chikorita = new JLabel();
-		chikorita.setIcon(new ImageIcon(new ImageIcon(PokeChooserPanel.class.getResource("/img/Chikorita_F.gif")).getImage().getScaledInstance(RES, RES, Image.SCALE_DEFAULT))); //gif scale
-		chikorita.setBounds(57, 249, 96, 96);
-		add(chikorita);
-		
-		JLabel cyndaquil = new JLabel();
-		cyndaquil.setIcon(new ImageIcon(new ImageIcon(PokeChooserPanel.class.getResource("/img/Cyndaquil_F.gif")).getImage().getScaledInstance(RES, RES, Image.SCALE_DEFAULT))); //gif scale
-		cyndaquil.setBounds(267, 249, 96, 96);
-		add(cyndaquil);
-		
-		JLabel totodile = new JLabel();
-		totodile.setIcon(new ImageIcon(new ImageIcon(PokeChooserPanel.class.getResource("/img/Totodile_F.gif")).getImage().getScaledInstance(RES, RES, Image.SCALE_DEFAULT))); //gif scale
-		totodile.setBounds(493, 249, 96, 96);
-		add(totodile);
-		
-	    btnStartButton = new JButton(BTN_STARTBATTLE_TEXT);
+		btnStartButton = new JButton(BTN_STARTBATTLE_TEXT);
 	    btnStartButton.setEnabled(false);
-		btnStartButton.setBounds(267, 390, 109, 41);
+		btnStartButton.setBounds(PANEL_WIDTH/2-3*RES/4, PANEL_HEIGHT-RES, RES*3/2, 2*BUTTON_HEIGHT);
 		add(btnStartButton);
 		btnStartButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -141,9 +53,11 @@ public class PokeChooserPanel extends JPanel implements ActionListener{
 			}
 		});	
 		
+		drawPokemons(db);
+		
 		JLabel background = new JLabel();
 		background.setIcon(new ImageIcon(new ImageIcon(PokeChooserPanel.class.getResource("/img/chooser_back.jpg")).getImage().getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_DEFAULT))); //back scale
-		background.setBounds(0, 0, 644, 453);
+		background.setBounds(0, 0, PANEL_WIDTH, PANEL_HEIGHT);
 		add(background);
 	}
 	
@@ -153,22 +67,37 @@ public class PokeChooserPanel extends JPanel implements ActionListener{
 		btnStartButton.setActionCommand(e.getActionCommand());
 	}
 	
-	// THIS IS THE PROBLEM.
-	public void drawPokemon(Pokemon toDraw) {
-		JRadioButton rdbtnChooseMe = new JRadioButton(toDraw.getName());
-		rdbtnChooseMe.setOpaque(false);
-		rdbtnChooseMe.setBounds(57, 172, 109, 23);
-		rdbtnChooseMe.setBorderPainted(false);
-		rdbtnChooseMe.setContentAreaFilled(false);
-		rdbtnChooseMe.setActionCommand(String.valueOf(toDraw.getID()));
-		add(rdbtnChooseMe);
-		
-		JLabel pokemon = new JLabel();
-		pokemon.setIcon(new ImageIcon(new ImageIcon(toDraw.getFrontSprite()).getImage().getScaledInstance(RES, RES, Image.SCALE_DEFAULT))); //gif scale
-		pokemon.setBounds(493, 59, 96, 96);
-		add(pokemon);
-		
-		group.add(rdbtnChooseMe);
+	private void drawPokemons(TreeMap<Integer, Pokemon> db) {
+		group = new ButtonGroup();
+		int x = 90;
+		int y = 50;
+		for(Entry<Integer, Pokemon> entry : db.entrySet())
+		{
+			if(x > WIDTH_LIMIT) {
+				x = 90;
+				y = y + BUTTON_HEIGHT + 2*VERTICAL_SPACING + RES;
+			}
+			
+			Pokemon toDraw = entry.getValue();
+			
+			pokemon = new JLabel();
+			pokemon.setIcon(new ImageIcon(new ImageIcon(toDraw.getFrontSprite()).getImage().getScaledInstance(RES, RES, Image.SCALE_DEFAULT))); //gif scale
+			pokemon.setBounds(x, y, RES, RES);
+			add(pokemon);
+			
+			rdbtnChooseMe = new JRadioButton(toDraw.getName());
+			rdbtnChooseMe.setOpaque(false);
+			rdbtnChooseMe.setBounds(x, y + RES + VERTICAL_SPACING, RES, BUTTON_HEIGHT);
+			rdbtnChooseMe.setBorderPainted(false);
+			rdbtnChooseMe.setContentAreaFilled(false);
+			rdbtnChooseMe.setActionCommand(String.valueOf(entry.getKey()));
+			add(rdbtnChooseMe);
+			
+			rdbtnChooseMe.addActionListener(this);
+			group.add(rdbtnChooseMe);
+			
+			x = x + RES + HORIZONTAL_SPACING;
+		}
 	}
 	
 	public void fireActionPerformed(ActionEvent e) {

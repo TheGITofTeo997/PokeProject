@@ -8,8 +8,7 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.*;
-import java.net.*;
-import java.util.*;
+import java.util.Map.Entry;
 
 import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
@@ -89,7 +88,6 @@ public class PKClientController{
 					drawPokeChooserPanel();
 					view.setBounds(view.getX(), view.getY(), pokeChooserPanel.getWidth(), pokeChooserPanel.getHeight());
 					ipPanel.setVisible(false);
-					//ciclo for per mostrare i pokemon
 				}
 				else {
 					showErrorPopup();
@@ -121,11 +119,18 @@ public class PKClientController{
 		});
 	}
 	
+	
 	public void drawPokeChooserPanel() {
-		pokeChooserPanel = new PokeChooserPanel();
-		pokeChooserPanel.setBounds(0, 0, 650, 482);
-		pokeChooserPanel.setVisible(true);
+		pokeChooserPanel = new PokeChooserPanel(loader.getPkDatabase());
 		view.getContentPane().add(pokeChooserPanel);
+		pokeChooserPanel.setVisible(true);
+		
+		/*
+		 * @author Patrick
+		 * This is the part where we create the popup waiting window.
+		 * At the moment this is not done by using the WaitingFrame because, despite
+		 * various attempts i could not fit it in. 
+		 */
 		pokeChooserPanel.addListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				SwingWorker<Void, Void> mySwingWorker = new SwingWorker<Void, Void>(){

@@ -266,4 +266,8 @@ public class PKLoader {
 	public Pokemon getPokemonFromDB (int id) {
 		return pkDatabase.get(id);
 	}
+
+	public TreeMap<Integer, Pokemon> getPkDatabase() {
+		return pkDatabase;
+	}
 }
