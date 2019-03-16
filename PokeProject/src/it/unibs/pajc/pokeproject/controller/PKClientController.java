@@ -1,14 +1,25 @@
 package it.unibs.pajc.pokeproject.controller;
 
 import java.awt.EventQueue;
+import java.awt.Window;
+import java.awt.Dialog.ModalityType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.*;
 import java.net.*;
 import java.util.*;
 
+import javax.swing.AbstractButton;
+import javax.swing.ImageIcon;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 
 import it.unibs.pajc.pokeproject.model.*;
 import it.unibs.pajc.pokeproject.util.PKMessage;
@@ -117,15 +128,46 @@ public class PKClientController{
 		view.getContentPane().add(pokeChooserPanel);
 		pokeChooserPanel.addListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//model.sendChoosenPokemon(id);
-				PKMessage msg = new PKMessage(Commands.MSG_SELECTED_POKEMON, Integer.parseInt(e.getActionCommand()));
-				try {
-					connector.sendMessage(msg);
-				} catch (IOException ex) {
-					ex.printStackTrace();
-				}
+				SwingWorker<Void, Void> mySwingWorker = new SwingWorker<Void, Void>(){
+					@Override
+					protected Void doInBackground() throws Exception {
+						PKMessage msg = new PKMessage(Commands.MSG_SELECTED_POKEMON, Integer.parseInt(e.getActionCommand()));
+						try {
+							connector.sendMessage(msg);
+							Thread.sleep(5000); // this mimic the wait for server's response
+						} catch (IOException ex) {
+							ex.printStackTrace();
+						}
+						return null;
+					}
+				};
 				
-				drawBattlePanel();
+				Window win = SwingUtilities.getWindowAncestor((AbstractButton)e.getSource());
+				final JDialog dialog = new JDialog(win, "Dialog", ModalityType.APPLICATION_MODAL);
+				dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+				mySwingWorker.addPropertyChangeListener(new PropertyChangeListener() {
+					@Override
+					public void propertyChange(PropertyChangeEvent evt) {
+						if (evt.getPropertyName().equals("state")) {
+							if (evt.getNewValue() == SwingWorker.StateValue.DONE) {
+								dialog.dispose();
+								drawBattlePanel();
+				               }
+				            }
+				         }
+				      });
+			
+				mySwingWorker.execute();
+
+				JLabel lblGIFLabel = new JLabel();
+				lblGIFLabel.setIcon(new ImageIcon(PKClientController.class.getResource("/img/wait.gif")));
+				lblGIFLabel.setBounds(25, 83, 310, 100);
+				JPanel panel = new JPanel();
+				panel.add(lblGIFLabel);
+				dialog.add(panel);
+				dialog.pack();
+				dialog.setLocationRelativeTo(win);
+				dialog.setVisible(true);
 			}
 		});
 	}

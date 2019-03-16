@@ -10,7 +10,6 @@ public class PKBattleEnvironment {
 	public void executeCommand(PKMessage msg) {
 		switch(msg.getCommandBody()) {
 		case MSG_WAITING:
-			System.out.println("SERINA");
 			break;
 		case MSG_WAKEUP:
 			//wakeup();

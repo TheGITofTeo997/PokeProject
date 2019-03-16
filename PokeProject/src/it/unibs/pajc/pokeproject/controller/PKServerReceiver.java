@@ -27,7 +27,7 @@ public class PKServerReceiver extends Thread {
 				if(toReceive.isEmpty())
 				{
 					PKMessage receivedMsg = (PKMessage)fromClient.readObject();
-					view.appendTextToConsole("\nServer received " + receivedMsg.getCommandBody() + "from " + clientID);
+					view.appendTextToConsole("\nServer received " + receivedMsg.getCommandBody() + "from " + (1+clientID));
 					receivedMsg.setClientID(clientID);
 					if(toReceive.add(receivedMsg)) view.appendTextToConsole(MSG_ADDED_CORRECTLY);
 				}

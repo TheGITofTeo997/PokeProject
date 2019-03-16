@@ -2,6 +2,7 @@ package it.unibs.pajc.pokeproject.controller;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
@@ -23,9 +24,6 @@ public class PKServerController extends Thread implements ActionListener {
 	private static final String LOADED_TYPE_ARRAYLIST_SUCCESFULLY = "\nLoaded PKType arraylist...";
 	private static final String TYPE_ARRAYLIST_LOADING_FAILURE = "\nFailure while loading PKType arraylist";
 	
-	private TreeMap<Integer, Pokemon> pkDatabase;
-	private ArrayList<PKType> typeDatabase;
-	
 	private PKLoader loader;
 	private Pokemon trainerPoke0;
 	private Pokemon trainerPoke1;
@@ -38,23 +36,30 @@ public class PKServerController extends Thread implements ActionListener {
 	private int firstMoveSelectedID = -1;
 	
 	private PKServerWindow view;
-	
-	//Cerco di ripristinare l'entrypoint
 
-	public PKServerController(PKServerWindow view) {
-		this.view = view;
+	public PKServerController() {
 		loader = new PKLoader();
 	}
 	
 	public void run(){
 		setupServerUtils();
 		openConnection();
-		while(true) {
-			if(!fromQueues.get(FIRST_QUEUE).isEmpty())
-				executeCommand(fromQueues.get(FIRST_QUEUE).poll());
-			if(!fromQueues.get(SECOND_QUEUE).isEmpty())
-				executeCommand(fromQueues.get(SECOND_QUEUE).poll());
-		}
+		Timer t = new Timer();
+		t.schedule(
+				new TimerTask() {
+					public void run() {
+						if(!(fromQueues.get(FIRST_QUEUE).isEmpty())) {
+							executeCommand(fromQueues.get(FIRST_QUEUE).poll());
+						}
+						if(!(fromQueues.get(SECOND_QUEUE).isEmpty())) {
+							executeCommand(fromQueues.get(SECOND_QUEUE).poll());
+						}
+					}
+				}, 0, 1000);
+	}
+	
+	public void drawGUI() {
+		view = new PKServerWindow(this);
 	}
 	
 	public void setupServerUtils() {
@@ -145,16 +150,15 @@ public class PKServerController extends Thread implements ActionListener {
 	}
 		
 	private void selectedPokemon(PKMessage msg) {
-		if(trainerPoke0.equals(null)) {
-			view.appendTextToConsole("SAETTI");
-			trainerPoke0 = pkDatabase.get(msg.getDataToCarry());
+		if(trainerPoke0 == null) {
+			trainerPoke0 = loader.getPokemonFromDB(msg.getDataToCarry());
 			trainerPoke0.setBattleID(msg.getClientID());
 		}
 		else {
-			trainerPoke1 = pkDatabase.get(msg.getDataToCarry());
+			trainerPoke1 = loader.getPokemonFromDB(msg.getDataToCarry());
 			trainerPoke1.setBattleID(msg.getClientID());
 		}
-		if(!trainerPoke0.equals(null) && !trainerPoke1.equals(null)) {
+		if(!(trainerPoke0 == null) && !(trainerPoke1 == null)) {
 			PKMessage startBattle = new PKMessage(Commands.MSG_START_BATTLE);
 			PKMessage wakeup = new PKMessage(Commands.MSG_WAKEUP);
 			PKMessage opponentFor0 = new PKMessage(Commands.MSG_OPPONENT_POKEMON, trainerPoke1.getID());
@@ -165,8 +169,6 @@ public class PKServerController extends Thread implements ActionListener {
 			toQueues.get(SECOND_QUEUE).add(opponentFor1);
 			toQueues.get(FIRST_QUEUE).add(startBattle);
 			toQueues.get(SECOND_QUEUE).add(startBattle);	
-			view.appendTextToConsole("SAETTI2");
-			
 		}
 		else {
 			PKMessage wait = new PKMessage(Commands.MSG_WAITING);
@@ -247,9 +249,4 @@ public class PKServerController extends Thread implements ActionListener {
 		view.disableServerButton();
 		this.start();
 	}
-	
-	public void setView(PKServerWindow view) {
-		this.view = view;
-	}
-	
 }

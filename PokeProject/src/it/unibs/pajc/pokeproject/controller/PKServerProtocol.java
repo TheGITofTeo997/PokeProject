@@ -55,7 +55,7 @@ public class PKServerProtocol extends Thread {
 				view.appendTextToConsole("\n" + clientPorts.get(j).toString());		
 			PKServerSender sender = new PKServerSender(toClient, outputBuffer); // Creazione thread per invio messaggi
 			sender.start(); 
-			PKServerReceiver receiver = new PKServerReceiver(fromClient, inputBuffer, idGen, view); // Creazione thread ricezione messaggi
+			PKServerReceiver receiver = new PKServerReceiver(fromClient, inputBuffer, idCounter, view); // Creazione thread ricezione messaggi
 			receiver.start();
 		}
 		catch(Exception e)

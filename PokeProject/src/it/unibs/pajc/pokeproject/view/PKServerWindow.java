@@ -8,8 +8,6 @@ import java.awt.Font;
 import java.awt.Image;
 import javax.swing.JButton;
 import javax.swing.text.DefaultCaret;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.ImageIcon;
@@ -25,11 +23,12 @@ public class PKServerWindow {
 	/**
 	 * Create the application.
 	 */
-	public PKServerWindow() {
+	public PKServerWindow(PKServerController controller) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					initialize(); // senza questo non so perché ma non carica il background
+					setController(controller);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -79,7 +78,7 @@ public class PKServerWindow {
 		consoleTextArea.append(text);
 	}
 	
-	public void setController(PKServerController controller) {
+	private void setController(PKServerController controller) {
 		btnStart.addActionListener(controller);
 	}
 	

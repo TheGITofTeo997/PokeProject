@@ -262,4 +262,8 @@ public class PKLoader {
 		return pkDatabase != null;
 		// need improvement
 	}
+	
+	public Pokemon getPokemonFromDB (int id) {
+		return pkDatabase.get(id);
+	}
 }

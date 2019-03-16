@@ -7,7 +7,6 @@ import java.net.Socket;
 import java.util.*;
 
 import it.unibs.pajc.pokeproject.controller.PKClientReceiver;
-import it.unibs.pajc.pokeproject.controller.PKClientSender;
 import it.unibs.pajc.pokeproject.util.IdentifiedQueue;
 import it.unibs.pajc.pokeproject.util.PKMessage;
 
@@ -19,7 +18,6 @@ public class PKClientConnector {
 	private PKBattleEnvironment env;
 	private ObjectInputStream fromServer;
 	private ObjectOutputStream toServer;
-	//private IdentifiedQueue<PKMessage> toSend = new IdentifiedQueue<>(5); //this dimension is still arbitrary btw
 	private IdentifiedQueue<PKMessage> toReceive = new IdentifiedQueue<>(5);
 	
 	public PKClientConnector(PKBattleEnvironment env) {
@@ -33,8 +31,6 @@ public class PKClientConnector {
 			socket.setKeepAlive(true); // Potrebbe non servire
 			System.out.println("Successfully connected to server at" + socket.getInetAddress());
 			toServer = new ObjectOutputStream(socket.getOutputStream());
-			//PKClientSender sender = new PKClientSender(toServer, toSend);
-			//sender.start();
 			fromServer = new ObjectInputStream(socket.getInputStream());
 			PKClientReceiver receiver = new PKClientReceiver(fromServer, toReceive);
 			receiver.start();
@@ -46,7 +42,7 @@ public class PKClientConnector {
 		t.schedule(
 				new TimerTask() {
 					public void run() {
-						if(toReceive.isEmpty() == false) {
+						if(!toReceive.isEmpty()) {
 							readMessage();
 						}
 					}
