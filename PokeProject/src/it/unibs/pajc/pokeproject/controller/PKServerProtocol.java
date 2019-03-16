@@ -17,7 +17,7 @@ import it.unibs.pajc.pokeproject.view.PKServerWindow;
 public class PKServerProtocol extends Thread {
 	
 	//Local Components
-	private static final String SERVING_CLIENT_STRING = "\nServing client with address ";
+	
 	private Socket socketPlayer;
 	private ObjectInputStream fromClient; // inputStream su cui si ricevono i messaggi
 	private ObjectOutputStream toClient; // outputStream su cui si scrivono i messaggi
@@ -40,7 +40,7 @@ public class PKServerProtocol extends Thread {
 	}
 	
 	public void run() {
-		view.appendTextToConsole(SERVING_CLIENT_STRING + socketPlayer.getInetAddress());
+		view.appendTextToConsole(PKServerStrings.SERVING_CLIENT_STRING + socketPlayer.getInetAddress());
 		clientList.put(socketPlayer.getPort(), socketPlayer);//aggiunta del client all'hashmap
 		try {		
 			toClient = new ObjectOutputStream(socketPlayer.getOutputStream());

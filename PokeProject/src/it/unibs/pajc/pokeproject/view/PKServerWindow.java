@@ -13,6 +13,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.ImageIcon;
 
 import it.unibs.pajc.pokeproject.controller.*;
+import it.unibs.pajc.pokeproject.util.PKServerStrings;
 
 public class PKServerWindow {
 
@@ -40,7 +41,7 @@ public class PKServerWindow {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frmPokeserverV = new JFrame("PokeServer v0.3");
+		frmPokeserverV = new JFrame(PKServerStrings.FRAME_TITLE);
 		frmPokeserverV.setResizable(false);
 		frmPokeserverV.setBounds(100, 100, 460, 500);
 		frmPokeserverV.setLocationRelativeTo(null);
@@ -48,11 +49,11 @@ public class PKServerWindow {
 		frmPokeserverV.getContentPane().setLayout(null);
 		frmPokeserverV.setVisible(true);
 		
-		btnStart = new JButton("Start Server ->");
+		btnStart = new JButton(PKServerStrings.BTN_START_TXT);
 		btnStart.setBounds(163, 36, 121, 60);
 		frmPokeserverV.getContentPane().add(btnStart);
 		
-		JLabel lblConsole = new JLabel("Console");
+		JLabel lblConsole = new JLabel(PKServerStrings.CONSOLE_LABEL);
 		lblConsole.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblConsole.setBounds(10, 317, 66, 14);
 		frmPokeserverV.getContentPane().add(lblConsole);

@@ -6,7 +6,7 @@ import it.unibs.pajc.pokeproject.util.IdentifiedQueue;
 import it.unibs.pajc.pokeproject.util.PKMessage;
 
 public class PKClientReceiver extends Thread {
-	private static final String ADDED_MESSAGE_TO_THE_QUEUE = "Succesfully added received message to the queue, proceeding...";
+	private static final String ADDED_MESSAGE_TO_THE_QUEUE = "[i]Received message added to the queue correctly. Proceeding..."; //do we need to be this verbose on client?
 	private ObjectInputStream fromServer;
 	private IdentifiedQueue<PKMessage> toReceive;
 	

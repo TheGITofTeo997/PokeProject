@@ -14,17 +14,12 @@ import it.unibs.pajc.pokeproject.view.*;
 
 public class PKServerController extends Thread implements ActionListener {
 	
-	//Local Components (some will probably be moved)
+	//Local Components
 	private static final int FIRST_QUEUE = 0;
 	private static final int SECOND_QUEUE = 1;
 	private static final int DEFALT_QUEUE_ID = -1;
 	private static final int SERVER_PORT = 50000;
 	private static final int QUEUE_SIZE = 5;
-	private static final String SERVER_STARTED_SUCCESFULLY = "\nServer started on port 50000...";
-	private static final String LOADED_PK_TREEMAP_SUCCESFULLY = "\nLoaded PK treemap...";
-	private static final String PK_TREEMAP_LOADING_FAILURE = "\nFailure while loading PK treemap";
-	private static final String LOADED_TYPE_ARRAYLIST_SUCCESFULLY = "\nLoaded PKType arraylist...";
-	private static final String TYPE_ARRAYLIST_LOADING_FAILURE = "\nFailure while loading PKType arraylist";
 	
 	//Controller Components
 	private PKLoader loader;
@@ -63,14 +58,14 @@ public class PKServerController extends Thread implements ActionListener {
 	public void setupServerUtils() {
 		loader.loadTypes();
 		if(loader.typeDatabaseExist()) 
-			view.appendTextToConsole(LOADED_TYPE_ARRAYLIST_SUCCESFULLY);
+			view.appendTextToConsole(PKServerStrings.LOADED_TYPE_ARRAYLIST_SUCCESFULLY);
 		else
-			view.appendTextToConsole(TYPE_ARRAYLIST_LOADING_FAILURE);
+			view.appendTextToConsole(PKServerStrings.TYPE_ARRAYLIST_LOADING_FAILURE);
 		loader.loadPokemon();
 		if(loader.pkDatabaseExist())
-			view.appendTextToConsole(LOADED_PK_TREEMAP_SUCCESFULLY);
+			view.appendTextToConsole(PKServerStrings.LOADED_PK_TREEMAP_SUCCESFULLY);
 		else
-			view.appendTextToConsole(PK_TREEMAP_LOADING_FAILURE);
+			view.appendTextToConsole(PKServerStrings.PK_TREEMAP_LOADING_FAILURE);
 		setupQueues();
 	}
 	
@@ -87,7 +82,7 @@ public class PKServerController extends Thread implements ActionListener {
 			int i=0;
 			int connectedClients=0;
 			server = new ServerSocket(SERVER_PORT);
-			view.appendTextToConsole(SERVER_STARTED_SUCCESFULLY);
+			view.appendTextToConsole(PKServerStrings.SERVER_STARTED_SUCCESFULLY);
 			while(connectedClients<2) {  
 				Socket client = server.accept();
 				connectedClients++;

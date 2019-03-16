@@ -29,7 +29,7 @@ public class PKClientConnector {
 			serverIp = ip;
 			socket = new Socket(serverIp, SERVER_PORT);
 			socket.setKeepAlive(true); // Potrebbe non servire
-			System.out.println("Successfully connected to server at" + socket.getInetAddress());
+			System.out.println("Successfully connected to server at" + socket.getInetAddress()); //do we need to be this verbose on the client?
 			toServer = new ObjectOutputStream(socket.getOutputStream());
 			fromServer = new ObjectInputStream(socket.getInputStream());
 			PKClientReceiver receiver = new PKClientReceiver(fromServer, toReceive);

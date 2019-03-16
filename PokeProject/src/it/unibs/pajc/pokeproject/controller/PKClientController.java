@@ -23,6 +23,7 @@ import it.unibs.pajc.pokeproject.model.*;
 import it.unibs.pajc.pokeproject.util.PKMessage;
 import it.unibs.pajc.pokeproject.view.*;
 import it.unibs.pajc.pokeproject.util.Commands;
+import it.unibs.pajc.pokeproject.util.PKClientStrings;
 
 public class PKClientController{
 	
@@ -192,7 +193,7 @@ public class PKClientController{
 	public void showErrorPopup() {
 		JOptionPane error = new JOptionPane();
 		error.setBounds(view.getBounds());
-		error.showMessageDialog(view, "Cannot connect to Server", "Warning", JOptionPane.ERROR_MESSAGE);
+		error.showMessageDialog(view, PKClientStrings.CONNECTION_ERROR, "Warning", JOptionPane.ERROR_MESSAGE);
 	}
 
 }
