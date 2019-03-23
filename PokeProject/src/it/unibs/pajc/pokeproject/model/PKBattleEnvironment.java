@@ -12,20 +12,28 @@ public class PKBattleEnvironment {
 	private Pokemon ourPokemon;
 	private Pokemon enemyPokemon;
 	private boolean wait;
+	private boolean connection;
 	private ArrayList<PropertyChangeListener> listenerList;
 	
 	public PKBattleEnvironment() {
 		wait = false;
+		connection = false;
 		listenerList = new ArrayList<>();
 	}
 	public void executeCommand(PKMessage msg) {
+		PropertyChangeEvent e;
 		switch(msg.getCommandBody()) {
+		case MSG_TEST_CONNECTION:
+			connection = true;
+			e = new PropertyChangeEvent(this, "connection", false, true);
+			firePropertyChanged(e);
+			break;
 		case MSG_WAITING:
 			wait = true;
 			break;
 		case MSG_WAKEUP:
 			wait = false;
-			PropertyChangeEvent e = new PropertyChangeEvent(this, "wait", true, false);
+			e = new PropertyChangeEvent(this, "wait", true, false);
 			firePropertyChanged(e);
 			break;
 		case MSG_START_BATTLE:
@@ -55,5 +63,9 @@ public class PKBattleEnvironment {
 	public void firePropertyChanged(PropertyChangeEvent e) {
 		for(PropertyChangeListener l : listenerList)
 			l.propertyChange(e);
+	}
+	
+	public void removeListener() {
+		listenerList.remove(0);
 	}
 }

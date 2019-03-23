@@ -254,13 +254,25 @@ public class PKLoader {
 	}
 	
 	public boolean typeDatabaseExist() {
-		return typeDatabase != null;
-		// need improvement
+		if(typeDatabase != null)
+		{
+			return !typeDatabase.isEmpty();
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	public boolean pkDatabaseExist() {
-		return pkDatabase != null;
-		// need improvement
+		if(pkDatabase != null)
+		{
+			return !pkDatabase.isEmpty();
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	public Pokemon getPokemonFromDB (int id) {

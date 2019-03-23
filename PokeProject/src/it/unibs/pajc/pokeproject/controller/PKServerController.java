@@ -39,19 +39,24 @@ public class PKServerController extends Thread implements ActionListener {
 	
 	public void run(){
 		setupServerUtils();
-		openConnection();
-		Timer t = new Timer();
-		t.schedule(
-				new TimerTask() {
-					public void run() {
-						if(!(fromQueues.get(FIRST_QUEUE).isEmpty())) {
-							executeCommand(fromQueues.get(FIRST_QUEUE).poll());
-						}
-						if(!(fromQueues.get(SECOND_QUEUE).isEmpty())) {
-							executeCommand(fromQueues.get(SECOND_QUEUE).poll());
-						}
+		/*
+		 * @author Patrick
+		 * I will replace this piece of code with a ScheduledThreadPoolExecutor
+		 * just to be fancier
+		 */
+		Timer timer = new Timer(); 
+		timer.schedule(
+			new TimerTask() {
+				public void run() {
+					if(!(fromQueues.get(FIRST_QUEUE).isEmpty())) {
+						executeCommand(fromQueues.get(FIRST_QUEUE).poll());
 					}
-				}, 0, 1000);
+					if(!(fromQueues.get(SECOND_QUEUE).isEmpty())) {
+						executeCommand(fromQueues.get(SECOND_QUEUE).poll());
+					}
+				}
+			}, 0, 1000);
+		openConnection();
 	}
 	
 	public void setupServerUtils() {
@@ -115,6 +120,9 @@ public class PKServerController extends Thread implements ActionListener {
 	
 	public void executeCommand(PKMessage msg) {
 		switch(msg.getCommandBody()) {
+		case MSG_TEST_CONNECTION:
+			returnTestConnection(msg);
+			break;
 		case MSG_SELECTED_POKEMON:
 			selectedPokemon(msg);
 			break;
@@ -233,6 +241,13 @@ public class PKServerController extends Thread implements ActionListener {
 				toQueues.get(i).add(damageFirst);
 				toQueues.get(i).add(damageSecond);
 			}
+		}
+	}
+	
+	private void returnTestConnection(PKMessage msg) {
+		for(int i=0; i<toQueues.size(); i++) {
+			if (toQueues.get(i).getId() == msg.getClientID())
+				toQueues.get(i).add(msg);
 		}
 	}
 	
