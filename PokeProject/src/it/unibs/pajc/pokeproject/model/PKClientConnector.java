@@ -52,8 +52,12 @@ public class PKClientConnector {
 	
 	// need a better method to verify if the client is connected
 	
-	public void sendMessage(PKMessage msg) throws IOException {
-		toServer.writeObject(msg);
+	public void sendMessage(PKMessage msg){
+		try {
+			toServer.writeObject(msg);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void readMessage() {

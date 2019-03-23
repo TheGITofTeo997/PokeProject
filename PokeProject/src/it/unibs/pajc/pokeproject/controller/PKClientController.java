@@ -7,7 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.*;
 
 import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
@@ -34,7 +33,7 @@ public class PKClientController{
 	private JFrame view;
 	
 	//View Components
-	private static final String TITLE = "PokeBattle Client v0.4a";
+	private static final String TITLE = "PokeBattle Client v0.5";
 	private MainPanel mainPanel = null;
 	private IpPanel ipPanel = null;
 	private PokeChooserPanel pokeChooserPanel = null;
@@ -135,17 +134,12 @@ public class PKClientController{
 		 * various attempts i could not fit it in. 
 		 */
 		pokeChooserPanel.addListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
-				SwingWorker<Void, Void> mySwingWorker = new SwingWorker<Void, Void>(){
-					@Override
+				SwingWorker<Void, Void> mySwingWorker = new SwingWorker<Void, Void>() {
 					protected Void doInBackground() throws Exception {
 						PKMessage msg = new PKMessage(Commands.MSG_SELECTED_POKEMON, Integer.parseInt(e.getActionCommand()));
-						try {
-							connector.sendMessage(msg);
-							Thread.sleep(5000); // this mimic the wait for server's response
-						} catch (IOException ex) {
-							ex.printStackTrace();
-						}
+						connector.sendMessage(msg);
 						return null;
 					}
 				};
@@ -153,17 +147,14 @@ public class PKClientController{
 				Window win = SwingUtilities.getWindowAncestor((AbstractButton)e.getSource());
 				final JDialog dialog = new JDialog(win, "Dialog", ModalityType.APPLICATION_MODAL);
 				dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-				mySwingWorker.addPropertyChangeListener(new PropertyChangeListener() {
+				battleEnvironment.addPropertyListener(new PropertyChangeListener() {
 					@Override
-					public void propertyChange(PropertyChangeEvent evt) {
-						if (evt.getPropertyName().equals("state")) {
-							if (evt.getNewValue() == SwingWorker.StateValue.DONE) {
-								dialog.dispose();
-								drawBattlePanel();
-				               }
-				            }
-				         }
-				      });
+					public void propertyChange(PropertyChangeEvent e) {
+						dialog.dispose();
+						drawBattlePanel();
+					}
+					
+				});
 			
 				mySwingWorker.execute();
 
@@ -179,7 +170,6 @@ public class PKClientController{
 			}
 		});
 	}
-	
 	
 	private void drawBattlePanel() {
 		battlePanel = new BattlePanel();

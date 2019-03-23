@@ -54,7 +54,7 @@ public class PKLoader {
 			}
 		}
 		else { // altrimenti lo creiamo noi
-			TreeMap<Integer, Pokemon> pkDatabase = readPokemons();
+			pkDatabase = readPokemons();
 			try(ObjectOutputStream databaseWriter = new ObjectOutputStream(new FileOutputStream(pkDbaseFile))){
 				databaseWriter.writeObject(pkDatabase); // scrittura treemap su file
 			}
