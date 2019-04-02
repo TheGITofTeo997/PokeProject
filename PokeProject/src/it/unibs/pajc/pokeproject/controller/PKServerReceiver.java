@@ -4,18 +4,24 @@ import java.io.*;
 
 import it.unibs.pajc.pokeproject.util.IdentifiedQueue;
 import it.unibs.pajc.pokeproject.util.PKMessage;
+import it.unibs.pajc.pokeproject.util.PKServerStrings;
 import it.unibs.pajc.pokeproject.view.PKServerWindow;
 
 public class PKServerReceiver extends Thread {
-	private static final String MSG_ADDED_CORRECTLY = "\nMessage added to the queue correctly :)";
+	
+	//Local Components
 	private ObjectInputStream fromClient;
 	private IdentifiedQueue<PKMessage> toReceive;
 	private int clientID;
 	
-	public PKServerReceiver (ObjectInputStream fromClient, IdentifiedQueue<PKMessage> toReceive, int clientID) {
+	//View Components
+	private PKServerWindow view;
+	
+	public PKServerReceiver (ObjectInputStream fromClient, IdentifiedQueue<PKMessage> toReceive, int clientID, PKServerWindow view) {
 		this.fromClient = fromClient;
 		this.toReceive = toReceive;
 		this.clientID = clientID;
+		this.view = view;
 	}
 	
 	public void run() {
@@ -24,9 +30,9 @@ public class PKServerReceiver extends Thread {
 				if(toReceive.isEmpty())
 				{
 					PKMessage receivedMsg = (PKMessage)fromClient.readObject();
-					PKServerWindow.appendTextToConsole("\nServer received " + receivedMsg.getCommandBody() + "from " + clientID);
+					view.appendTextToConsole("\nServer received " + receivedMsg.getCommandBody() + "from " + (1+clientID));
 					receivedMsg.setClientID(clientID);
-					if(toReceive.add(receivedMsg)) PKServerWindow.appendTextToConsole(MSG_ADDED_CORRECTLY);
+					if(toReceive.add(receivedMsg)) view.appendTextToConsole(PKServerStrings.MSG_ADDED_CORRECTLY);
 				}
 			}
 		}

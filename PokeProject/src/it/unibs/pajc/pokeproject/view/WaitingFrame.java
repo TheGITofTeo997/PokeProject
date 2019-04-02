@@ -5,7 +5,6 @@ import java.io.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-
 public class WaitingFrame extends JFrame {
 	private static final long serialVersionUID = 3669221117391479061L;
 	private static final String PKM_FONT = "PKMN_RBYGSC.ttf";
@@ -34,7 +33,6 @@ public class WaitingFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public WaitingFrame() {
-		setEnabled(false);
 		setAlwaysOnTop(true);
 		
 		try {
@@ -44,10 +42,9 @@ public class WaitingFrame extends JFrame {
 		} catch (IOException|FontFormatException e) {
 		     //Handle exception
 		}
-		setVisible(false);
 		setTitle(TITLE);
 		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 361, 233);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -66,6 +63,6 @@ public class WaitingFrame extends JFrame {
 		lblWaitLabel.setBounds(25, 26, 310, 21);
 		contentPane.add(lblWaitLabel);
 		
-		lblGIFLabel.setIcon(new ImageIcon(new ImageIcon(PokeChooserFrame.class.getResource("/img/wait.gif")).getImage().getScaledInstance(310, 100, Image.SCALE_DEFAULT))); //gif scale
+		lblGIFLabel.setIcon(new ImageIcon(new ImageIcon(WaitingFrame.class.getResource("/img/wait.gif")).getImage().getScaledInstance(310, 100, Image.SCALE_DEFAULT))); //gif scale
 	}
 }

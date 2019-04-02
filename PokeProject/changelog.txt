@@ -1,26 +1,12 @@
-Changelog commit: d5e7247
+Changelog commit: d159efe
 
--Code cleaning
--JAR rebuilt and working
--Added missing back sprites
--Minor fixes to server and chooser
--Added some graphics
+-Partially resolved MVC problem
+-Minor bugfixes in the PKLoader class
+-Reorganized client methods in various class for better understanding
 
+Known issues:
 
-Changelog commit: 5bee42d
-
--Code readability:
--added various comments to the code
--removed some magic numbers in the code
--reordered parts of the code
-
--Bugfixes:
--a client should be able to send a message to the other client
--resolve IndexArrayOutOfBounds exceptions in the code
--the receiving/sending done by the server is now done by 2 threads
--avoided problems with the creation of input/output streams in the classes
--introduced temporary workaround in the code for test function
-
--Known issues 
--the use of queues led to concurrency problems. These problems could be of some importance in the near future but 
- this still need testing/studying.
+-Currently we are unable to visualize the waiting frame
+-Visualizing pokemons in the PokeChooserPanel is still done by code in a brutal way
+-Connection check method still need a correct and solid implementations
+-Many things that i forgot
