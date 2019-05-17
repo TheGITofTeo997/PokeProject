@@ -38,8 +38,8 @@ public class PKBattleEnvironment {
 			firePropertyChanged(e);
 			break;
 		case MSG_OPPONENT_POKEMON:
-			System.out.println("OPPONENT GOT");
-			//opponentID = msg.getDataToCarry();
+			opponentID = msg.getDataToCarry();
+			e = new PropertyChangeEvent(this, "opponent", false, true);
 			break;
 		case MSG_OPPONENT_MOVE:
 			break;
@@ -70,6 +70,7 @@ public class PKBattleEnvironment {
 	}
 	
 	public int getOpponentID() {
+		
 		return this.opponentID;
 	}
 	

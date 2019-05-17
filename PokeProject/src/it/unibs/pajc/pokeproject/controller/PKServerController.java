@@ -158,7 +158,6 @@ public class PKServerController extends Thread implements ActionListener {
 			trainerPoke1.setBattleID(msg.getClientID());
 		}
 		if(!(trainerPoke0 == null) && !(trainerPoke1 == null)) {
-			PKMessage startBattle = new PKMessage(Commands.MSG_START_BATTLE);
 			PKMessage wakeup = new PKMessage(Commands.MSG_WAKEUP);
 			PKMessage opponentFor0 = new PKMessage(Commands.MSG_OPPONENT_POKEMON, trainerPoke1.getID());
 			PKMessage opponentFor1 = new PKMessage(Commands.MSG_OPPONENT_POKEMON, trainerPoke0.getID());

@@ -211,6 +211,10 @@ public class PKClientController{
 						if(e.getPropertyName().equalsIgnoreCase("wait"))
 						{
 							dialog.dispose();
+							
+						}
+						if(e.getPropertyName().equalsIgnoreCase("opponent"))
+						{
 							drawBattlePanel();
 						}
 					}
@@ -239,7 +243,7 @@ public class PKClientController{
 		view.getContentPane().add(battlePanel);
 		pokeChooserPanel.setVisible(false);
 		battlePanel.setBackSprite(loader.getPokemonFromDB(myPokeID).getBackSprite());
-		//battlePanel.setFrontSprite(loader.getPokemonFromDB(battleEnvironment.getOpponentID()).getFrontSprite());
+		battlePanel.setFrontSprite(loader.getPokemonFromDB(battleEnvironment.getOpponentID()).getFrontSprite());
 	}
 	
 	
