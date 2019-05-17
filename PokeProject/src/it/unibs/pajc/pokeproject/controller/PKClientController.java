@@ -233,12 +233,6 @@ public class PKClientController{
 	}
 	
 	private void drawBattlePanel() {
-		try {
-			Thread.sleep(3000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		battlePanel = new BattlePanel();
 		battlePanel.setBounds(0, 0, 618, 400);
 		battlePanel.setVisible(true);
