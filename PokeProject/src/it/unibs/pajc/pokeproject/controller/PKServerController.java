@@ -166,8 +166,6 @@ public class PKServerController extends Thread implements ActionListener {
 			toQueues.get(SECOND_QUEUE).add(wakeup);		
 			toQueues.get(FIRST_QUEUE).add(opponentFor0);
 			toQueues.get(SECOND_QUEUE).add(opponentFor1);
-			toQueues.get(FIRST_QUEUE).add(startBattle);
-			toQueues.get(SECOND_QUEUE).add(startBattle);	
 		}
 		else {
 			PKMessage wait = new PKMessage(Commands.MSG_WAITING);

@@ -37,12 +37,9 @@ public class PKBattleEnvironment {
 			e = new PropertyChangeEvent(this, "wait", true, false);
 			firePropertyChanged(e);
 			break;
-		case MSG_START_BATTLE:
-			//startBattle();
-			break;
 		case MSG_OPPONENT_POKEMON:
-			opponentID = msg.getDataToCarry();
-			System.out.println(opponentID);
+			System.out.println("OPPONENT GOT");
+			//opponentID = msg.getDataToCarry();
 			break;
 		case MSG_OPPONENT_MOVE:
 			break;
