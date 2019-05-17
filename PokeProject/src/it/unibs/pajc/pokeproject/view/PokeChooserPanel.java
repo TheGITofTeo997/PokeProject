@@ -49,6 +49,7 @@ public class PokeChooserPanel extends JPanel implements ActionListener{
 		add(btnStartButton);
 		btnStartButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				btnStartButton.setEnabled(false);
 				ActionEvent arg = new ActionEvent(btnStartButton, ActionEvent.ACTION_PERFORMED, btnStartButton.getActionCommand());
 				fireActionPerformed(arg);
 			}
