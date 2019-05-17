@@ -14,6 +14,7 @@ public class PKBattleEnvironment {
 	private boolean wait;
 	private boolean connection;
 	private ArrayList<PropertyChangeListener> listenerList;
+	private int opponentID;
 	
 	public PKBattleEnvironment() {
 		wait = false;
@@ -40,6 +41,7 @@ public class PKBattleEnvironment {
 			//startBattle();
 			break;
 		case MSG_OPPONENT_POKEMON:
+			opponentID = msg.getDataToCarry();
 			break;
 		case MSG_OPPONENT_MOVE:
 			break;
@@ -68,4 +70,9 @@ public class PKBattleEnvironment {
 	public void removeListener() {
 		listenerList.remove(0);
 	}
+	
+	public int getOpponentID() {
+		return this.opponentID;
+	}
+	
 }

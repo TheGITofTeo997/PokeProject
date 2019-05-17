@@ -19,6 +19,7 @@ public class BattlePanel extends JPanel {
 	private static final long serialVersionUID = 6693764125058218350L;
 	private static final String PKM_FONT = "PKMN_RBYGSC.ttf";
 	private JLabel lblBackMyPoke;
+	private JLabel lblFrontTrainerPoke;
 
 	/**
 	 * Create the panel.
@@ -72,7 +73,7 @@ public class BattlePanel extends JPanel {
 		lblBackMyPoke.setBounds(42, 163, 196, 196);
 		add(lblBackMyPoke);
 		
-		JLabel lblFrontTrainerPoke = new JLabel();
+		lblFrontTrainerPoke = new JLabel();
 		lblFrontTrainerPoke.setBounds(424, 40, 128, 128);
 		add(lblFrontTrainerPoke);
 			
@@ -95,5 +96,9 @@ public class BattlePanel extends JPanel {
 	
 	public void setBackSprite(URL spriteUrl) {
 		lblBackMyPoke.setIcon(new ImageIcon(spriteUrl));
+	}
+	
+	public void setFrontSprite(URL spriteUrl) {
+		lblFrontTrainerPoke.setIcon(new ImageIcon(spriteUrl));
 	}
 }
