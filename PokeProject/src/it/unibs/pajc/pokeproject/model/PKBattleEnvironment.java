@@ -40,6 +40,7 @@ public class PKBattleEnvironment {
 		case MSG_OPPONENT_POKEMON:
 			opponentID = msg.getDataToCarry();
 			e = new PropertyChangeEvent(this, "opponent", false, true);
+			firePropertyChanged(e);
 			break;
 		case MSG_OPPONENT_MOVE:
 			break;
