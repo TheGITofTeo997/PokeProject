@@ -18,8 +18,11 @@ public class BattlePanel extends JPanel {
 	
 	private static final long serialVersionUID = 6693764125058218350L;
 	private static final String PKM_FONT = "PKMN_RBYGSC.ttf";
+	
 	private JLabel lblBackMyPoke;
 	private JLabel lblFrontTrainerPoke;
+	private JLabel lblNameOpponentPoke;
+	private JLabel lblNameMyPoke;
 
 	/**
 	 * Create the panel.
@@ -53,6 +56,16 @@ public class BattlePanel extends JPanel {
 		enemyHPbar.setBounds(123, 72, 99, 6);
 		enemyHPbar.setString(""); //percentage string fix, please do NOT set to null
 		add(enemyHPbar);
+		
+		JLabel lblNameOpponentPoke = new JLabel();
+		lblNameOpponentPoke.setBounds(218, 47, 48, 14);
+		lblNameOpponentPoke.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 10));
+		add(lblNameOpponentPoke);
+		
+		JLabel lblNameMyPoke = new JLabel();
+		lblNameMyPoke.setBounds(387, 227, 48, 14);
+		lblNameMyPoke.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 10));
+		add(lblNameMyPoke);
 		
 		JLabel lblEnemyHPLabel = new JLabel();
 		lblEnemyHPLabel.setBounds(0, 28, 291, 69);
@@ -100,5 +113,10 @@ public class BattlePanel extends JPanel {
 	
 	public void setFrontSprite(URL spriteUrl) {
 		lblFrontTrainerPoke.setIcon(new ImageIcon(new ImageIcon(spriteUrl).getImage().getScaledInstance(lblFrontTrainerPoke.getWidth(), lblFrontTrainerPoke.getHeight(), Image.SCALE_DEFAULT)));
+	}
+	
+	public void setPokeNames(String trainer, String opponent) {
+		lblNameMyPoke.setText(trainer);
+		lblNameOpponentPoke.setText(opponent);
 	}
 }

@@ -7,5 +7,4 @@ public class PKClient {
 		pkClient.setupClientUtils();
 		pkClient.drawGUI();
 	}
-//
 }

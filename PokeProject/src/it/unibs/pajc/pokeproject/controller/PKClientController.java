@@ -244,6 +244,7 @@ public class PKClientController{
 		pokeChooserPanel.setVisible(false);
 		battlePanel.setBackSprite(loader.getPokemonFromDB(myPokeID).getBackSprite());
 		battlePanel.setFrontSprite(loader.getPokemonFromDB(battleEnvironment.getOpponentID()).getFrontSprite());
+		battlePanel.setPokeNames(loader.getPokemonFromDB(myPokeID).getName(), loader.getPokemonFromDB(battleEnvironment.getOpponentID()).getName());
 	}
 	
 	
