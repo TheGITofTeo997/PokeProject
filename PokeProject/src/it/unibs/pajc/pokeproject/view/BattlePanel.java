@@ -7,6 +7,7 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -17,6 +18,7 @@ public class BattlePanel extends JPanel {
 	
 	private static final long serialVersionUID = 6693764125058218350L;
 	private static final String PKM_FONT = "PKMN_RBYGSC.ttf";
+	private JLabel lblBackMyPoke;
 
 	/**
 	 * Create the panel.
@@ -65,6 +67,14 @@ public class BattlePanel extends JPanel {
 		lblTextBoxLabel.setBounds(0, 302, 618, 98);
 		lblTextBoxLabel.setIcon(new ImageIcon(new ImageIcon(BattlePanel.class.getResource("/img/inbattle/utils/battleCommand.png")).getImage().getScaledInstance(lblTextBoxLabel.getWidth(), lblTextBoxLabel.getHeight(), Image.SCALE_DEFAULT))); //box scale
 		add(lblTextBoxLabel);
+		
+		lblBackMyPoke = new JLabel();
+		lblBackMyPoke.setBounds(42, 163, 196, 196);
+		add(lblBackMyPoke);
+		
+		JLabel lblFrontTrainerPoke = new JLabel();
+		lblFrontTrainerPoke.setBounds(424, 40, 128, 128);
+		add(lblFrontTrainerPoke);
 			
 		JLabel lblTrainerBaseLabel = new JLabel();
 		lblTrainerBaseLabel.setBounds(-28, 217, 319, 155);
@@ -81,13 +91,9 @@ public class BattlePanel extends JPanel {
 		background.setBounds(0, 0, 618, 400);
 		add(background);
 		
-		JLabel lblTrainerPokeLabel = new JLabel();
-		lblTrainerPokeLabel.setBounds(60, 207, 137, 84);
-		add(lblTrainerPokeLabel);
-		
-		JLabel lblEnemyPokeLabel = new JLabel();
-		lblEnemyPokeLabel.setBounds(428, 72, 137, 84);
-		add(lblEnemyPokeLabel);
 	}
-
+	
+	public void setBackSprite(URL spriteUrl) {
+		lblBackMyPoke.setIcon(new ImageIcon(spriteUrl));
+	}
 }

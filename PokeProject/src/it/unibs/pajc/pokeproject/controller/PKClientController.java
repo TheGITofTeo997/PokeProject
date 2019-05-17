@@ -33,6 +33,7 @@ public class PKClientController{
 	private PKClientConnector connector;
 	private PKBattleEnvironment battleEnvironment;
 	private JFrame view;
+	private int myPokeID;
 	
 	//View Components
 	private static final String TITLE = "PokeBattle Client v0.5";
@@ -194,14 +195,15 @@ public class PKClientController{
 			public void actionPerformed(ActionEvent e) {
 				SwingWorker<Void, Void> mySwingWorker = new SwingWorker<Void, Void>() {
 					protected Void doInBackground() throws Exception {
-						PKMessage msg = new PKMessage(Commands.MSG_SELECTED_POKEMON, Integer.parseInt(e.getActionCommand()));
+						myPokeID = Integer.parseInt(e.getActionCommand());
+						PKMessage msg = new PKMessage(Commands.MSG_SELECTED_POKEMON, myPokeID);
 						connector.sendMessage(msg);
 						return null;
 					}
 				};
 				
 				Window win = SwingUtilities.getWindowAncestor((AbstractButton)e.getSource());
-				JDialog dialog = new JDialog(win, "Dialog", ModalityType.APPLICATION_MODAL);
+				JDialog dialog = new JDialog(win, "Waiting...", ModalityType.APPLICATION_MODAL);
 				dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 				battleEnvironment.addPropertyListener(new PropertyChangeListener() {
 					@Override
@@ -236,7 +238,10 @@ public class PKClientController{
 		battlePanel.setVisible(true);
 		view.getContentPane().add(battlePanel);
 		pokeChooserPanel.setVisible(false);
+		battlePanel.setBackSprite(loader.getPokemonFromDB(myPokeID).getBackSprite());
 	}
+	
+	
 	
 	@SuppressWarnings("static-access")
 	public void showErrorPopup() {
