@@ -42,6 +42,7 @@ public class PKBattleEnvironment {
 			break;
 		case MSG_OPPONENT_POKEMON:
 			opponentID = msg.getDataToCarry();
+			System.out.println(opponentID);
 			break;
 		case MSG_OPPONENT_MOVE:
 			break;
