@@ -57,14 +57,14 @@ public class BattlePanel extends JPanel {
 		enemyHPbar.setString(""); //percentage string fix, please do NOT set to null
 		add(enemyHPbar);
 		
-		JLabel lblNameOpponentPoke = new JLabel();
-		lblNameOpponentPoke.setBounds(218, 47, 48, 14);
-		lblNameOpponentPoke.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 10));
+		lblNameOpponentPoke = new JLabel("");
+		lblNameOpponentPoke.setBounds(111, 47, 155, 14);
+		lblNameOpponentPoke.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 15));
 		add(lblNameOpponentPoke);
 		
-		JLabel lblNameMyPoke = new JLabel();
-		lblNameMyPoke.setBounds(387, 227, 48, 14);
-		lblNameMyPoke.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 10));
+		lblNameMyPoke = new JLabel("");
+		lblNameMyPoke.setBounds(387, 227, 155, 14);
+		lblNameMyPoke.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 15));
 		add(lblNameMyPoke);
 		
 		JLabel lblEnemyHPLabel = new JLabel();
