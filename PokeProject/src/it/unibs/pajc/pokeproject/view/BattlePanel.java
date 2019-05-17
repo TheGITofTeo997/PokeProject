@@ -74,7 +74,7 @@ public class BattlePanel extends JPanel {
 		add(lblBackMyPoke);
 		
 		lblFrontTrainerPoke = new JLabel();
-		lblFrontTrainerPoke.setBounds(424, 40, 128, 128);
+		lblFrontTrainerPoke.setBounds(446, 72, 96, 96);
 		add(lblFrontTrainerPoke);
 			
 		JLabel lblTrainerBaseLabel = new JLabel();
@@ -99,6 +99,6 @@ public class BattlePanel extends JPanel {
 	}
 	
 	public void setFrontSprite(URL spriteUrl) {
-		lblFrontTrainerPoke.setIcon(new ImageIcon(spriteUrl));
+		lblFrontTrainerPoke.setIcon(new ImageIcon(new ImageIcon(spriteUrl).getImage().getScaledInstance(lblFrontTrainerPoke.getWidth(), lblFrontTrainerPoke.getHeight(), Image.SCALE_DEFAULT)));
 	}
 }
