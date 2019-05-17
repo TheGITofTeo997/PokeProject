@@ -13,6 +13,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.SwingConstants;
 
 public class BattlePanel extends JPanel {
 	
@@ -58,12 +59,13 @@ public class BattlePanel extends JPanel {
 		add(enemyHPbar);
 		
 		lblNameOpponentPoke = new JLabel("");
-		lblNameOpponentPoke.setBounds(111, 47, 155, 14);
+		lblNameOpponentPoke.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblNameOpponentPoke.setBounds(111, 39, 155, 22);
 		lblNameOpponentPoke.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 15));
 		add(lblNameOpponentPoke);
 		
 		lblNameMyPoke = new JLabel("");
-		lblNameMyPoke.setBounds(387, 227, 155, 14);
+		lblNameMyPoke.setBounds(387, 217, 155, 24);
 		lblNameMyPoke.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 15));
 		add(lblNameMyPoke);
 		
