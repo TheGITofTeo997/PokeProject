@@ -4,6 +4,8 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.*;
 import java.net.*;
 
@@ -21,6 +23,7 @@ public class PKServerController extends Thread implements ActionListener {
 	private static final int QUEUE_SIZE = 5;
 	
 	//Controller Components
+	private Logger logger;
 	private PKLoader loader;
 	private Pokemon trainerPoke0;
 	private Pokemon trainerPoke1;
@@ -34,6 +37,7 @@ public class PKServerController extends Thread implements ActionListener {
 	private PKServerWindow view;
 
 	public PKServerController() {
+		logger = new Logger(PKServerStrings.LOGFILE);
 		loader = new PKLoader();
 	}
 	
@@ -162,9 +166,16 @@ public class PKServerController extends Thread implements ActionListener {
 			PKMessage opponentFor0 = new PKMessage(Commands.MSG_OPPONENT_POKEMON, trainerPoke1.getID());
 			PKMessage opponentFor1 = new PKMessage(Commands.MSG_OPPONENT_POKEMON, trainerPoke0.getID());
 			toQueues.get(FIRST_QUEUE).add(wakeup);
-			toQueues.get(SECOND_QUEUE).add(wakeup);		
-			toQueues.get(FIRST_QUEUE).add(opponentFor0);
-			toQueues.get(SECOND_QUEUE).add(opponentFor1);
+			toQueues.get(SECOND_QUEUE).add(wakeup);
+			//the same pokemon issue was cause by this set of instruction, i hope
+			if(trainerPoke0.getBattleID() == toQueues.get(FIRST_QUEUE).getId()) {
+				toQueues.get(FIRST_QUEUE).add(opponentFor0);
+				toQueues.get(SECOND_QUEUE).add(opponentFor1);
+			}
+			else {
+				toQueues.get(FIRST_QUEUE).add(opponentFor1);
+				toQueues.get(SECOND_QUEUE).add(opponentFor0);
+			}
 		}
 		else {
 			PKMessage wait = new PKMessage(Commands.MSG_WAITING);
@@ -250,6 +261,13 @@ public class PKServerController extends Thread implements ActionListener {
 	
 	public void drawGUI() {
 		view = new PKServerWindow(this);
+		view.addWindowAdapter(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				logger.writeLog(view.getConsoleText());
+				logger.closeLogger();
+				System.exit(0);
+			}
+		});
 	}
 
 	@Override

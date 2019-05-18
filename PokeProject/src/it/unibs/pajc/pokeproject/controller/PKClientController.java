@@ -5,6 +5,8 @@ import java.awt.Window;
 import java.awt.Dialog.ModalityType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -22,11 +24,15 @@ import it.unibs.pajc.pokeproject.model.*;
 import it.unibs.pajc.pokeproject.util.PKMessage;
 import it.unibs.pajc.pokeproject.view.*;
 import it.unibs.pajc.pokeproject.util.Commands;
+import it.unibs.pajc.pokeproject.util.Logger;
 import it.unibs.pajc.pokeproject.util.PKClientStrings;
 
 public class PKClientController{
 	
 	private boolean threw; // a boolean for connection errors
+	
+	//Logger
+	private Logger logger;
 	
 	//Controller Components
 	private PKLoader loader;
@@ -36,7 +42,7 @@ public class PKClientController{
 	private int myPokeID;
 	
 	//View Components
-	private static final String TITLE = "PokeBattle Client v0.5";
+	private static final String TITLE = "PokeBattle Client v0.6a";
 	private MainPanel mainPanel = null;
 	private IpPanel ipPanel = null;
 	private PokeChooserPanel pokeChooserPanel = null;
@@ -48,11 +54,13 @@ public class PKClientController{
 		loader = new PKLoader();
 		battleEnvironment = new PKBattleEnvironment();
 		connector = new PKClientConnector(battleEnvironment);
+		logger = new Logger(PKClientStrings.LOGFILE);
 	}
 		
 	public void setupClientUtils() {
 		loader.loadTypes();
 		loader.loadPokemon();
+		logger.writeLog(PKClientStrings.UTILS_SUCCESFULLY);
 	}
 	
 	public void drawGUI() {
@@ -60,6 +68,7 @@ public class PKClientController{
 			public void run() {
 				try {
 					initialize();
+					logger.writeLog(PKClientStrings.GUI_SUCCESFULLY);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -71,11 +80,16 @@ public class PKClientController{
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		view = new JFrame(TITLE);
+		view = new JFrame(PKClientStrings.FRAME_TITLE);
 		view.setResizable(false);
 		view.setBounds(100, 100, 600, 450);
 		view.setLocationRelativeTo(null);
-		view.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		view.addWindowListener(new WindowAdapter() {
+		      public void windowClosing(WindowEvent e) {
+		    	  logger.closeLogger();
+		          System.exit(0);
+		        }
+		      });
 		view.getContentPane().setLayout(null);	
 		view.setVisible(true);
 		drawMainPanel();
@@ -103,6 +117,7 @@ public class PKClientController{
 				mainPanel.setVisible(false); 
 			}
 		});
+		logger.writeLog(PKClientStrings.MAIN_PANEL_SUCCESFULLY);
 	}
 	
 	
@@ -111,6 +126,16 @@ public class PKClientController{
 		ipPanel.setBounds(0, 0, 663, 429);
 		ipPanel.setVisible(true);
 		view.getContentPane().add(ipPanel);
+		
+		ipPanel.addBackButtonListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				mainPanel.setVisible(true);
+				view.setBounds(100, 100, 600, 450);
+				ipPanel.setVisible(false);
+			}
+		});
+		
 		ipPanel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -131,7 +156,6 @@ public class PKClientController{
 
 				Window win = SwingUtilities.getWindowAncestor((AbstractButton)e.getSource());
 				JDialog dialog = new JDialog(win, "Dialog", ModalityType.APPLICATION_MODAL);
-				dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 				
 				mySwingWorker.addPropertyChangeListener(new PropertyChangeListener() {
 					@Override
@@ -176,6 +200,7 @@ public class PKClientController{
 				
 			}
 		});
+		logger.writeLog(PKClientStrings.IP_PANEL_SUCCESFULLY);
 	}
 	
 	
@@ -196,6 +221,7 @@ public class PKClientController{
 				SwingWorker<Void, Void> mySwingWorker = new SwingWorker<Void, Void>() {
 					protected Void doInBackground() throws Exception {
 						myPokeID = Integer.parseInt(e.getActionCommand());
+						battleEnvironment.setOurPokemon(loader.getPokemonFromDB(myPokeID));
 						PKMessage msg = new PKMessage(Commands.MSG_SELECTED_POKEMON, myPokeID);
 						connector.sendMessage(msg);
 						return null;
@@ -204,17 +230,14 @@ public class PKClientController{
 				
 				Window win = SwingUtilities.getWindowAncestor((AbstractButton)e.getSource());
 				JDialog dialog = new JDialog(win, "Waiting...", ModalityType.APPLICATION_MODAL);
-				dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+				
 				battleEnvironment.addPropertyListener(new PropertyChangeListener() {
 					@Override
 					public void propertyChange(PropertyChangeEvent e) {
-						if(e.getPropertyName().equalsIgnoreCase("wait"))
-						{
-							dialog.dispose();
-							
-						}
 						if(e.getPropertyName().equalsIgnoreCase("opponent"))
 						{
+							battleEnvironment.setOpponentPokemon(loader.getPokemonFromDB((Integer)e.getNewValue()));
+							dialog.dispose();
 							drawBattlePanel();
 						}
 					}
@@ -234,6 +257,7 @@ public class PKClientController{
 				dialog.setVisible(true);
 			}
 		});
+		logger.writeLog(PKClientStrings.CHOOSER_PANEL_SUCCESFULLY);
 	}
 	
 	private void drawBattlePanel() {
@@ -242,10 +266,9 @@ public class PKClientController{
 		battlePanel.setVisible(true);
 		view.getContentPane().add(battlePanel);
 		pokeChooserPanel.setVisible(false);	
-		battlePanel.setBackSprite(loader.getPokemonFromDB(myPokeID).getBackSprite());
-		battlePanel.setFrontSprite(loader.getPokemonFromDB(battleEnvironment.getOpponentID()).getFrontSprite());
-		
-		battlePanel.setPokeNames(loader.getPokemonFromDB(myPokeID).getName(), loader.getPokemonFromDB(battleEnvironment.getOpponentID()).getName());
+		battlePanel.setSprites(battleEnvironment.getOurPokemon().getBackSprite(), battleEnvironment.getOpponentPokemon().getFrontSprite());
+		battlePanel.setPokeNames(battleEnvironment.getOurPokemon().getName(), battleEnvironment.getOpponentPokemon().getName());
+		logger.writeLog(PKClientStrings.BATTLE_PANEL_SUCCESFULLY);
 	}
 	
 	
@@ -255,6 +278,7 @@ public class PKClientController{
 		JOptionPane error = new JOptionPane();
 		error.setBounds(view.getBounds());
 		error.showMessageDialog(view, PKClientStrings.CONNECTION_ERROR, "Warning", JOptionPane.ERROR_MESSAGE);
+		logger.writeLog(PKClientStrings.ERROR_POPUP_SHOWN);
 	}
 
 }

@@ -85,13 +85,11 @@ public class IpPanel extends JPanel implements KeyListener {
 			}
 		});
 		
-		btnBackButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				setVisible(false);
-			}
-		});
 	}
 	
+	public void addBackButtonListener(ActionListener listener) {
+		btnBackButton.addActionListener(listener);
+	}
 
 	private boolean checkIPCorrectness() {
 		String address = addressField.getText();

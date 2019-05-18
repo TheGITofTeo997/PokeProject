@@ -109,12 +109,9 @@ public class BattlePanel extends JPanel {
 		
 	}
 	
-	public void setBackSprite(URL spriteUrl) {
-		lblBackMyPoke.setIcon(new ImageIcon(spriteUrl));
-	}
-	
-	public void setFrontSprite(URL spriteUrl) {
-		lblFrontTrainerPoke.setIcon(new ImageIcon(new ImageIcon(spriteUrl).getImage().getScaledInstance(lblFrontTrainerPoke.getWidth(), lblFrontTrainerPoke.getHeight(), Image.SCALE_DEFAULT)));
+	public void setSprites(URL backSpriteUrl, URL frontSpriteUrl) {
+		lblBackMyPoke.setIcon(new ImageIcon(backSpriteUrl));
+		lblFrontTrainerPoke.setIcon(new ImageIcon(new ImageIcon(frontSpriteUrl).getImage().getScaledInstance(lblFrontTrainerPoke.getWidth(), lblFrontTrainerPoke.getHeight(), Image.SCALE_DEFAULT)));
 	}
 	
 	public void setPokeNames(String trainer, String opponent) {

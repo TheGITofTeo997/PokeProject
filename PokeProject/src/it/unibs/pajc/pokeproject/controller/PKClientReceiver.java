@@ -23,7 +23,7 @@ public class PKClientReceiver extends Thread {
 				{
 					PKMessage receivedMsg = (PKMessage)fromServer.readObject();
 					if(toReceive.add(receivedMsg)) {
-						System.out.println(ADDED_MESSAGE_TO_THE_QUEUE + receivedMsg.getCommandBody());					
+						System.out.println(ADDED_MESSAGE_TO_THE_QUEUE + receivedMsg.getCommandBody() + receivedMsg.getClientID());					
 						}	
 				}
 			}

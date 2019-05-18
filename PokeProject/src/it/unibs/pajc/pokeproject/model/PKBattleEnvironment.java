@@ -1,6 +1,5 @@
 package it.unibs.pajc.pokeproject.model;
 
-import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -10,36 +9,30 @@ import it.unibs.pajc.pokeproject.util.PKMessage;
 public class PKBattleEnvironment {
 
 	private Pokemon ourPokemon;
-	private Pokemon enemyPokemon;
-	private boolean wait;
-	private boolean connection;
+	private Pokemon opponentPokemon;
 	private ArrayList<PropertyChangeListener> listenerList;
 	private int opponentID;
 	
 	public PKBattleEnvironment() {
-		wait = false;
-		connection = false;
 		listenerList = new ArrayList<>();
 	}
 	public void executeCommand(PKMessage msg) {
 		PropertyChangeEvent e;
 		switch(msg.getCommandBody()) {
 		case MSG_TEST_CONNECTION:
-			connection = true;
 			e = new PropertyChangeEvent(this, "connection", false, true);
 			firePropertyChanged(e);
 			break;
 		case MSG_WAITING:
-			wait = true;
 			break;
 		case MSG_WAKEUP:
-			wait = false;
+			// this may not be needed, further analysis requested
 			e = new PropertyChangeEvent(this, "wait", true, false);
 			firePropertyChanged(e);
 			break;
 		case MSG_OPPONENT_POKEMON:
 			opponentID = msg.getDataToCarry();
-			e = new PropertyChangeEvent(this, "opponent", false, true);
+			e = new PropertyChangeEvent(this, "opponent", -1, opponentID);
 			firePropertyChanged(e);
 			break;
 		case MSG_OPPONENT_MOVE:
@@ -69,10 +62,21 @@ public class PKBattleEnvironment {
 	public void removeListener() {
 		listenerList.remove(0);
 	}
-	
-	public int getOpponentID() {
-		
-		return this.opponentID;
+	public Pokemon getOurPokemon() {
+		return ourPokemon;
 	}
+	public void setOurPokemon(Pokemon ourPokemon) {
+		this.ourPokemon = ourPokemon;
+	}
+	public Pokemon getOpponentPokemon() {
+		return opponentPokemon;
+	}
+	public void setOpponentPokemon(Pokemon opponentPokemon) {
+		this.opponentPokemon = opponentPokemon;
+	}
+	
+	/*public int getOpponentID() {
+		return this.opponentID;
+	}*/
 	
 }

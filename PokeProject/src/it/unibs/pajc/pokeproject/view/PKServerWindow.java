@@ -6,6 +6,8 @@ import javax.swing.JTextArea;
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.event.WindowAdapter;
+
 import javax.swing.JButton;
 import javax.swing.text.DefaultCaret;
 import javax.swing.JScrollPane;
@@ -45,7 +47,6 @@ public class PKServerWindow {
 		frmPokeserverV.setResizable(false);
 		frmPokeserverV.setBounds(100, 100, 460, 500);
 		frmPokeserverV.setLocationRelativeTo(null);
-		frmPokeserverV.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmPokeserverV.getContentPane().setLayout(null);
 		frmPokeserverV.setVisible(true);
 		
@@ -77,6 +78,23 @@ public class PKServerWindow {
 	
 	public void appendTextToConsole(String text) {
 		consoleTextArea.append(text);
+	}
+	
+	public String getConsoleText() {
+		return consoleTextArea.getText();
+	}
+	
+	public void addWindowAdapter(WindowAdapter windowAdapter) {
+		// This need to be looked carefully
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					frmPokeserverV.addWindowListener(windowAdapter);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 	
 	private void setController(PKServerController controller) {
