@@ -1,12 +1,8 @@
-Changelog commit: d159efe
+Changelog commit: a2790ed
 
--Partially resolved MVC problem
--Minor bugfixes in the PKLoader class
--Reorganized client methods in various class for better understanding
+-Resolved issue #26 (i hope)
+-Improved handling of opponent pokemon drawing
+-NEW: introduced Logger class, for saving log in a file
+-NEW: now the back button in ip panel works
 
-Known issues:
 
--Currently we are unable to visualize the waiting frame
--Visualizing pokemons in the PokeChooserPanel is still done by code in a brutal way
--Connection check method still need a correct and solid implementations
--Many things that i forgot

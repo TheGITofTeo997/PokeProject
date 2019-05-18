@@ -1,0 +1,6 @@
+Utilities loaded succesfully
+Main panel drawn succesfully
+Gui drawn succesfully
+Ip panel drawn succesfully
+Chooser panel drawn succesfully
+Battle panel drawn succesfully
