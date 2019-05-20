@@ -3,17 +3,14 @@ package it.unibs.pajc.pokeproject.controller;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import it.unibs.pajc.pokeproject.util.*;
 import it.unibs.pajc.pokeproject.view.PKServerWindow;
 
-/*
- * Il serverprotocol utilizza un hashmap e un arraylist per gestire i 2 client che si
- * connettono. L'hash map contiene come chiave il numero della porta e come valore i socket dei
- * client. 
- * Quando si deve inviare un messaggio da client1 a client2 il server prende il messaggio dalla coda di ricezione di client1
- * e lo mette sulla coda di invio per client2. In realtà ora le operazioni di poll e add vengono fatte da 2 thread separati.
- */
 public class PKServerProtocol extends Thread {
 	
 	//Local Components
@@ -21,45 +18,47 @@ public class PKServerProtocol extends Thread {
 	private Socket socketPlayer;
 	private ObjectInputStream fromClient; // inputStream su cui si ricevono i messaggi
 	private ObjectOutputStream toClient; // outputStream su cui si scrivono i messaggi
-	private IdentifiedQueue<PKMessage> inputBuffer; // coda in cui vanno messi i messaggi ricevuti
-	private IdentifiedQueue<PKMessage> outputBuffer; // coda da cui vanno presi i messaggi da inviare
-	private int idCounter;
-	private static HashMap<Integer, java.net.Socket> clientList = new HashMap<>(); //hashmap contenente i socket dei client
-	private static ArrayList<Integer> clientPorts = new ArrayList<>(); //arraylist contenente porte dei client
+	private ArrayBlockingQueue<PKMessage> toProcess; // coda in cui vanno messi i messaggi ricevuti
+	private int clientID;
 	private static int idGen=0;
+	private boolean connection = false; //boolean for connection check
 
 	//View Components
 	private PKServerWindow view;
 	
 	public PKServerProtocol(Socket socket, PKServerWindow view) {
 		this.socketPlayer = socket;
-		this.start();
 		this.view = view;
-		idCounter = idGen;
+		clientID = idGen;
 		idGen++;
 	}
 	
 	public void run() {
 		view.appendTextToConsole(PKServerStrings.SERVING_CLIENT_STRING + socketPlayer.getInetAddress());
-		clientList.put(socketPlayer.getPort(), socketPlayer);//aggiunta del client all'hashmap
 		try {		
 			toClient = new ObjectOutputStream(socketPlayer.getOutputStream());
 			fromClient = new ObjectInputStream(socketPlayer.getInputStream());
-			//iteratore per scorrere hashmap e aggiungere l'elenco delle porte all'arraylist
-			int key=0;
-			for(Iterator<Integer> iter = clientList.keySet().iterator(); iter.hasNext(); )
-			{
-				key = iter.next();		
-				view.appendTextToConsole("\n" + clientList.get(key).toString());
-			}
-			clientPorts.add(key);	
-			//stampa arraylist
-			for(int j=0;j<clientPorts.size();j++) 
-				view.appendTextToConsole("\n" + clientPorts.get(j).toString());		
-			PKServerSender sender = new PKServerSender(toClient, outputBuffer); // Creazione thread per invio messaggi
-			sender.start(); 
-			PKServerReceiver receiver = new PKServerReceiver(fromClient, inputBuffer, idCounter, view); // Creazione thread ricezione messaggi
-			receiver.start();
+			ScheduledExecutorService checkMessages = Executors.newSingleThreadScheduledExecutor();
+			checkMessages.scheduleAtFixedRate(new Runnable() {
+				public void run() {
+					try {
+						PKMessage msg = (PKMessage)fromClient.readObject();
+						//this if-else is 'used' one time, need to think about it
+						if(!connection && msg.getCommandBody() == Commands.MSG_TEST_CONNECTION) {
+							connection = true;
+							toClient.writeObject(msg);
+						}
+						else {
+							view.appendTextToConsole("\nServer received " + msg.getCommandBody() + "from " + (1+clientID));
+							msg.setClientID(clientID);
+							if(toProcess.add(msg)) 
+								view.appendTextToConsole(PKServerStrings.MSG_ADDED_CORRECTLY);
+						}
+					} catch (ClassNotFoundException | IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}, 0, 1, TimeUnit.SECONDS);
 		}
 		catch(Exception e)
 		{
@@ -68,18 +67,22 @@ public class PKServerProtocol extends Thread {
 	}
 
 	// Questo metodo serve per settare la coda in cui verranno messi i messaggi ricevuti dal client
-	public void setInputBuffer(IdentifiedQueue<PKMessage> inputBuffer) {
-		this.inputBuffer = inputBuffer;
-	}
-
-	// Questo metodo serve per settare la coda da cui verranno presi i messaggi da inviare al client
-	public void setOutputBuffer(IdentifiedQueue<PKMessage> outputBuffer) {
-		this.outputBuffer = outputBuffer;
+	public void setInputBuffer(ArrayBlockingQueue<PKMessage> inputBuffer) {
+		this.toProcess = inputBuffer;
 	}
 
 	// Questo metodo server per restituire l'id del protocollo
-	public int getIdCounter() {
-		return idCounter;
+	public int getClientID() {
+		return clientID;
+	}
+	
+	public void sendMessage(PKMessage msg) {
+		try {
+			toClient.writeObject(msg);
+		} catch (IOException e) {
+			view.appendTextToConsole(PKServerStrings.MESSAGE_SEND_FAIL + socketPlayer.getInetAddress());
+			e.printStackTrace();
+		}
 	}
 	
 	

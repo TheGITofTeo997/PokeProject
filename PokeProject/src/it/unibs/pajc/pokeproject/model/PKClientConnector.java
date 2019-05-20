@@ -7,11 +7,14 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
-import it.unibs.pajc.pokeproject.controller.PKClientReceiver;
 import it.unibs.pajc.pokeproject.util.Commands;
-import it.unibs.pajc.pokeproject.util.IdentifiedQueue;
 import it.unibs.pajc.pokeproject.util.PKMessage;
+import it.unibs.pajc.pokeproject.util.PKServerStrings;
 
 public class PKClientConnector {
 	
@@ -21,7 +24,7 @@ public class PKClientConnector {
 	private PKBattleEnvironment env;
 	private ObjectInputStream fromServer;
 	private ObjectOutputStream toServer;
-	private IdentifiedQueue<PKMessage> toReceive = new IdentifiedQueue<>(5);
+	private ArrayBlockingQueue<PKMessage> toReceive = new ArrayBlockingQueue<>(5);
 	
 	public PKClientConnector(PKBattleEnvironment env) {
 		this.env = env;
@@ -34,18 +37,21 @@ public class PKClientConnector {
 		System.out.println("Successfully connected to server at" + socket.getInetAddress()); //do we need to be this verbose on the client?
 		toServer = new ObjectOutputStream(socket.getOutputStream());
 		fromServer = new ObjectInputStream(socket.getInputStream());
-		PKClientReceiver receiver = new PKClientReceiver(fromServer, toReceive);
-		receiver.start();
-		Timer t = new Timer();
-		t.schedule(
-				new TimerTask() {
-					public void run() {
-						if(!toReceive.isEmpty()) {
-							readMessage();
-						}
-					}
-				}, 0, 1000);
-		sendTestMessage();
+		
+		ScheduledExecutorService checkMessages = Executors.newSingleThreadScheduledExecutor();
+		checkMessages.scheduleAtFixedRate(new Runnable() {
+			public void run() {
+				try {
+					PKMessage msg = (PKMessage)fromServer.readObject();
+					env.executeCommand(msg);
+				} catch (ClassNotFoundException | IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}, 0, 1, TimeUnit.SECONDS);
+		
+		PKMessage testConnection = new PKMessage(Commands.MSG_TEST_CONNECTION);
+		sendMessage(testConnection);
 	}
 	
 	// need a better method to verify if the client is connected
@@ -56,14 +62,5 @@ public class PKClientConnector {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	public void readMessage() {
-		env.executeCommand(toReceive.poll());
-	}
-	
-	public void sendTestMessage() {
-		PKMessage testConnection = new PKMessage(Commands.MSG_TEST_CONNECTION);
-		sendMessage(testConnection);
 	}
 }

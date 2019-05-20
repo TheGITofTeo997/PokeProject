@@ -29,7 +29,7 @@ import it.unibs.pajc.pokeproject.util.PKClientStrings;
 
 public class PKClientController{
 	
-	private boolean threw; // a boolean for connection errors
+	private boolean connectionHasThrown; // a boolean for connection errors
 	
 	//Logger
 	private Logger logger;
@@ -50,7 +50,7 @@ public class PKClientController{
 	
 	
 	public PKClientController() {
-		threw = false;
+		connectionHasThrown = false;
 		loader = new PKLoader();
 		battleEnvironment = new PKBattleEnvironment();
 		connector = new PKClientConnector(battleEnvironment);
@@ -147,7 +147,7 @@ public class PKClientController{
 						catch(Exception e)
 						{
 							e.printStackTrace();
-							threw = true;
+							connectionHasThrown = true;
 							showErrorPopup();
 						}
 						return null;
@@ -162,10 +162,10 @@ public class PKClientController{
 					public void propertyChange(PropertyChangeEvent e) {
 						if(e.getPropertyName().equals("state")) {
 							if(e.getNewValue() == SwingWorker.StateValue.DONE) {
-								if(threw == true)
+								if(connectionHasThrown == true)
 								{
 									dialog.dispose();
-									threw = false;
+									connectionHasThrown = false;
 									battleEnvironment.removeListener(); // to avoid double creation of pokechooserpanel
 								}
 				            }
@@ -177,6 +177,22 @@ public class PKClientController{
 					@Override
 					public void propertyChange(PropertyChangeEvent e) {
 						if(e.getPropertyName().equalsIgnoreCase("connection"))
+						{
+							/*
+							dialog.dispose();
+							ipPanel.setVisible(false);
+							drawPokeChooserPanel();
+							view.setBounds(view.getX(), view.getY(), pokeChooserPanel.getWidth(), pokeChooserPanel.getHeight());
+							*/
+							System.out.println("La connessione è online");
+						}
+					}
+				});
+				
+				battleEnvironment.addPropertyListener(new PropertyChangeListener() {
+					@Override
+					public void propertyChange(PropertyChangeEvent e) {
+						if(e.getPropertyName().equalsIgnoreCase("player_found"))
 						{
 							dialog.dispose();
 							ipPanel.setVisible(false);

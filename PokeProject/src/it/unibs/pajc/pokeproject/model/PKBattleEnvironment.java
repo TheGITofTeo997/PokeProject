@@ -11,7 +11,6 @@ public class PKBattleEnvironment {
 	private Pokemon ourPokemon;
 	private Pokemon opponentPokemon;
 	private ArrayList<PropertyChangeListener> listenerList;
-	private int opponentID;
 	
 	public PKBattleEnvironment() {
 		listenerList = new ArrayList<>();
@@ -30,8 +29,12 @@ public class PKBattleEnvironment {
 			e = new PropertyChangeEvent(this, "wait", true, false);
 			firePropertyChanged(e);
 			break;
+		case MSG_PLAYER_FOUND:
+			e = new PropertyChangeEvent(this, "player_found", false, true);
+			firePropertyChanged(e);
+			break;
 		case MSG_OPPONENT_POKEMON:
-			opponentID = msg.getDataToCarry();
+			int opponentID = msg.getDataToCarry();
 			e = new PropertyChangeEvent(this, "opponent", -1, opponentID);
 			firePropertyChanged(e);
 			break;
@@ -74,9 +77,4 @@ public class PKBattleEnvironment {
 	public void setOpponentPokemon(Pokemon opponentPokemon) {
 		this.opponentPokemon = opponentPokemon;
 	}
-	
-	/*public int getOpponentID() {
-		return this.opponentID;
-	}*/
-	
 }

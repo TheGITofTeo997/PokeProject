@@ -1,4 +1,28 @@
+A client has connected to the server
+The client request is being handled
+Client request handled succesfully
+A client has connected to the server
+The client request is being handled
+Client request handled succesfully
+A client has connected to the server
+The client request is being handled
+Client request handled succesfully
+A client has connected to the server
+The client request is being handled
+Client request handled succesfully
 
 [OK]Loaded PKType arraylist...
 [OK]Loaded PK treemap...
 [OK]Server started on port 50000...
+[i]Serving client with address /127.0.0.1
+[i]Serving client with address /127.0.0.1
+[i]Serving client with address /127.0.0.1
+[i]Serving client with address /127.0.0.1
+Server received MSG_SELECTED_POKEMONfrom 1
+[i]Message added to the queue correctly. Proceeding...
+Server received MSG_SELECTED_POKEMONfrom 2
+[i]Message added to the queue correctly. Proceeding...
+Server received MSG_SELECTED_POKEMONfrom 3
+[i]Message added to the queue correctly. Proceeding...
+Server received MSG_SELECTED_POKEMONfrom 4
+[i]Message added to the queue correctly. Proceeding...

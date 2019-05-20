@@ -17,6 +17,10 @@ public class PKServerStrings {
 	public static final String TYPE_ARRAYLIST_LOADING_FAILURE = "\n[!]Error while loading PKType arraylist!";
 	public static final String SERVING_CLIENT_STRING = "\n[i]Serving client with address ";
 	public static final String MSG_ADDED_CORRECTLY = "\n[i]Message added to the queue correctly. Proceeding...";
+	public static final String CLIENT_CONNECTED = "A client has connected to the server\n";
+	public static final String CLIENT_REQUEST_HANDLED = "The client request is being handled\n";
+	public static final String CLIENT_REQUEST_HANDLED_OK = "Client request handled succesfully\n";
+	public static final String MESSAGE_SEND_FAIL = "Failure while sending message to ";
 	
 	//View strings
 	public static final String FRAME_TITLE = "PokeServer v0.4.1";
