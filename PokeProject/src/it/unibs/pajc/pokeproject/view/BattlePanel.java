@@ -5,9 +5,12 @@ import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -29,6 +32,10 @@ public class BattlePanel extends JPanel {
 	private JLabel lblNameOpponentPoke;
 	private JLabel lblNameMyPoke;
 	private JButton[] btnMoves;
+	private JProgressBar trainerHPbar;
+	private JProgressBar enemyHPbar;
+	
+	private ArrayList<ActionListener> listenerList = new ArrayList<>();
 
 	/**
 	 * Create the panel.
@@ -46,7 +53,7 @@ public class BattlePanel extends JPanel {
 		setBounds(100, 100, 618, 400);
 		setVisible(false);
 		
-		JProgressBar trainerHPbar = new JProgressBar();
+		trainerHPbar = new JProgressBar();
 		trainerHPbar.setValue(100);
 		trainerHPbar.setStringPainted(true);
 		trainerHPbar.setString("");
@@ -55,7 +62,7 @@ public class BattlePanel extends JPanel {
 		trainerHPbar.setString(""); //percentage string fix, please do NOT set to null
 		add(trainerHPbar);
 		
-		JProgressBar enemyHPbar = new JProgressBar();
+		enemyHPbar = new JProgressBar();
 		enemyHPbar.setStringPainted(true);
 		enemyHPbar.setValue(100);
 		enemyHPbar.setForeground(Color.GREEN);
@@ -152,7 +159,34 @@ public class BattlePanel extends JPanel {
 	
 	public void setMoveNames(PKMove[] moves) {
 		for(int i=0;i<4;i++) {
+			int j = i;
 			btnMoves[i].setText(moves[i].getName());
+			btnMoves[i].setActionCommand(String.valueOf(i));
+			btnMoves[i].addActionListener(new ActionListener() {
+				public void actionPerformed (ActionEvent e) {
+					ActionEvent event = new ActionEvent(btnMoves[j], ActionEvent.ACTION_PERFORMED, btnMoves[j].getActionCommand());
+					fireActionPerformed(event);
+				}
+			});
+		}
+	}
+	
+	public void setPokeHP(int trainerHP, int enemyHP) {
+		trainerHPbar.setMaximum(trainerHP);
+		enemyHPbar.setMaximum(enemyHP);
+	}
+	
+	public void setTrainerHPLevel(int value) {
+		//trainerHPbar.setValue(value);
+	}
+	
+	public void addListener(ActionListener e) {
+			listenerList.add(e);
+	}
+	
+	private void fireActionPerformed(ActionEvent e) {
+		for(ActionListener l : listenerList) {
+			l.actionPerformed(e);
 		}
 	}
 }

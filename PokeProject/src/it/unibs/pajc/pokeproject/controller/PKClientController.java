@@ -155,7 +155,7 @@ public class PKClientController{
 				};
 
 				Window win = SwingUtilities.getWindowAncestor((AbstractButton)e.getSource());
-				JDialog dialog = new JDialog(win, "Dialog", ModalityType.APPLICATION_MODAL);
+				JDialog dialog = new JDialog(win, "Waiting...", ModalityType.APPLICATION_MODAL);
 				
 				mySwingWorker.addPropertyChangeListener(new PropertyChangeListener() {
 					@Override
@@ -285,6 +285,21 @@ public class PKClientController{
 		battlePanel.setSprites(battleEnvironment.getOurPokemon().getBackSprite(), battleEnvironment.getOpponentPokemon().getFrontSprite());
 		battlePanel.setPokeNames(battleEnvironment.getOurPokemon().getName(), battleEnvironment.getOpponentPokemon().getName());
 		battlePanel.setMoveNames(battleEnvironment.getOurPokemon().getMoveSet());
+		battlePanel.setPokeHP(battleEnvironment.getOurPokemon().getHP(), battleEnvironment.getOpponentPokemon().getHP());
+		battlePanel.addListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				SwingWorker<Void, Void> mySwingWorker = new SwingWorker<Void, Void>() {
+					protected Void doInBackground() throws Exception {
+						PKMessage msg = new PKMessage(Commands.MSG_SELECTED_MOVE, Integer.parseInt(e.getActionCommand()));
+						connector.sendMessage(msg);
+						return null;
+					}
+				};
+				Window win = SwingUtilities.getWindowAncestor((AbstractButton)e.getSource());
+				JDialog dialog = new JDialog(win, "Waiting...", ModalityType.APPLICATION_MODAL);
+				mySwingWorker.execute();
+			}
+		});
 		logger.writeLog(PKClientStrings.BATTLE_PANEL_SUCCESFULLY);
 	}
 	

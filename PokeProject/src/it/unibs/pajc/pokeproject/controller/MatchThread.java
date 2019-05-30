@@ -113,7 +113,7 @@ public class MatchThread implements Runnable {
 	
 	private void selectedMove(PKMessage msg) {
 		int selected = msg.getDataToCarry();
-		//first, we understand which client send the move
+		//first, we understand which client sent the move
 		if(msg.getClientID() == pokePlayer1.getBattleID()) {
 			moveSelectedBy1 = selected;
 		}
