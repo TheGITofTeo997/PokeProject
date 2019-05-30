@@ -153,6 +153,9 @@ public class MatchThread implements Runnable {
 				sendSelectedMoveMessage(pokePlayer2, pokePlayer1, firstAttackerID, moveSelectedBy2, moveSelectedBy1);
 				System.out.println("2 attacca per primo");
 			}
+			//Refreshing moves
+			moveSelectedBy1 = -1;
+			moveSelectedBy2 = -1;
 		}
 	}
 	
