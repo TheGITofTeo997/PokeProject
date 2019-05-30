@@ -311,6 +311,7 @@ public class PKClientController{
 							dialog.dispose();
 						}
 					}
+				
 				});
 				JLabel lblGIFLabel = new JLabel();
 				lblGIFLabel.setIcon(new ImageIcon(PKClientController.class.getResource("/img/wait.gif")));

@@ -177,7 +177,9 @@ public class BattlePanel extends JPanel {
 	}
 	
 	private void setTrainerBarColor() {
-		int percentage = (trainerHPbar.getValue()/trainerHPbar.getMaximum())*100;
+		double percentage = ((double)trainerHPbar.getValue()/(double)trainerHPbar.getMaximum())*100;
+		percentage = (int)percentage;
+		System.out.println(percentage + "%");
 		if(percentage>50) 
 			trainerHPbar.setForeground(Color.GREEN);
 		else if(percentage>20 && percentage<=50) 
@@ -187,7 +189,9 @@ public class BattlePanel extends JPanel {
 	}
 	
 	private void setEnemyBarColor() {
-		int percentage = (enemyHPbar.getValue()/enemyHPbar.getMaximum())*100;
+		double percentage = ((double)enemyHPbar.getValue()/(double)enemyHPbar.getMaximum())*100;
+		percentage = (int)percentage;
+		System.out.println(percentage + "%");
 		if(percentage>50) 
 			enemyHPbar.setForeground(Color.GREEN);
 		else if(percentage>20 && percentage<=50) 
