@@ -46,9 +46,10 @@ public class PKBattleEnvironment {
 			if(ourRemainingHP<0)
 				ourRemainingHP=0;
 			ourPokemon.setBattleHP(ourRemainingHP);
-			System.out.println(ourPokemon.getHP() + "hp iniziali nostri");
+			
 			System.out.println(ourRemainingHP+"hp rimasti a noi" +","+ receivedDamage + "danno ricevuto");
-			System.out.println(ourPokemon.getBattleHP() + "battlehp");
+			System.out.println("****************************");
+			
 			e = new PropertyChangeEvent(this, "ourHP", -1, ourRemainingHP);
 			firePropertyChanged(e);
 			break;
@@ -58,9 +59,10 @@ public class PKBattleEnvironment {
 			if(opponentRemainingHP<0)
 				opponentRemainingHP=0;
 			opponentPokemon.setBattleHP(opponentRemainingHP);
-			System.out.println(opponentPokemon.getHP() + "hp iniziali nemico");
+			
 			System.out.println(opponentRemainingHP +"hp rimasti al nemico"+","+ doneDamage+ "danno fatto");
-			System.out.println(opponentPokemon.getBattleHP() + "battlehp opponent");
+			System.out.println("****************************");
+			
 			e = new PropertyChangeEvent(this, "opponentHP", -1, opponentRemainingHP);
 			firePropertyChanged(e);
 			break;
