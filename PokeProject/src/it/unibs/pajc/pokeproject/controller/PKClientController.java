@@ -310,6 +310,7 @@ public class PKClientController{
 							battlePanel.setEnemyHPLevel((Integer)e.getNewValue());
 							dialog.dispose();
 						}
+						battleEnvironment.removeListener(); //removing test
 					}
 				
 				});
