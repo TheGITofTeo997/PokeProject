@@ -300,7 +300,9 @@ public class PKClientController{
 				JDialog dialog = new JDialog(win, "Waiting...", ModalityType.APPLICATION_MODAL);		
 				mySwingWorker.execute();
 				
+				
 				battleEnvironment.addPropertyListener(new PropertyChangeListener() {
+			
 					public void propertyChange(PropertyChangeEvent e) {
 						if(e.getPropertyName().equalsIgnoreCase("ourHP")) {
 							battlePanel.setTrainerHPLevel((Integer)e.getNewValue());
@@ -310,9 +312,7 @@ public class PKClientController{
 							battlePanel.setEnemyHPLevel((Integer)e.getNewValue());
 							dialog.dispose();
 						}
-						battleEnvironment.removeListener(); //removing test
-					}
-				
+					}			
 				});
 				JLabel lblGIFLabel = new JLabel();
 				lblGIFLabel.setIcon(new ImageIcon(PKClientController.class.getResource("/img/wait.gif")));
