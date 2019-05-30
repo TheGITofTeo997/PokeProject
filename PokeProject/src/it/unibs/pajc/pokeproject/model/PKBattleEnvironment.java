@@ -41,8 +41,16 @@ public class PKBattleEnvironment {
 		case MSG_OPPONENT_MOVE:
 			break;
 		case MSG_RECEIVED_DAMAGE:
+			int receivedDamage = msg.getDataToCarry();
+			int ourRemainingHP = ourPokemon.getHP()-receivedDamage;
+			e = new PropertyChangeEvent(this, "ourHP", -1, ourRemainingHP);
+			firePropertyChanged(e);
 			break;
 		case MSG_DONE_DAMAGE:
+			int doneDamage = msg.getDataToCarry();
+			int opponentRemainingHP = opponentPokemon.getHP()-doneDamage;
+			e = new PropertyChangeEvent(this, "opponentHP", -1, opponentRemainingHP);
+			firePropertyChanged(e);
 			break;
 		case MSG_BATTLE_OVER:
 			break;

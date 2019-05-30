@@ -176,8 +176,34 @@ public class BattlePanel extends JPanel {
 		enemyHPbar.setMaximum(enemyHP);
 	}
 	
+	private void setTrainerBarColor() {
+		int percentage = (trainerHPbar.getValue()/trainerHPbar.getMaximum())*100;
+		if(percentage>50) 
+			trainerHPbar.setForeground(Color.GREEN);
+		else if(percentage>20 && percentage<=50) 
+			trainerHPbar.setForeground(Color.ORANGE);
+		else
+			trainerHPbar.setForeground(Color.RED);
+	}
+	
+	private void setEnemyBarColor() {
+		int percentage = (enemyHPbar.getValue()/enemyHPbar.getMaximum())*100;
+		if(percentage>50) 
+			enemyHPbar.setForeground(Color.GREEN);
+		else if(percentage>20 && percentage<=50) 
+			enemyHPbar.setForeground(Color.ORANGE);
+		else
+			enemyHPbar.setForeground(Color.RED);
+	}
+	
 	public void setTrainerHPLevel(int value) {
-		//trainerHPbar.setValue(value);
+		trainerHPbar.setValue(value); //remaining hp after damage
+		setTrainerBarColor();
+	}
+	
+	public void setEnemyHPLevel(int value) {
+		enemyHPbar.setValue(value); //remaining hp after damage
+		setEnemyBarColor();
 	}
 	
 	public void addListener(ActionListener e) {

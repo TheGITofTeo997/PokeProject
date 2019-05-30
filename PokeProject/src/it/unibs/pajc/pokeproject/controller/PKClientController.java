@@ -300,6 +300,16 @@ public class PKClientController{
 				mySwingWorker.execute();
 			}
 		});
+		battleEnvironment.addPropertyListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent e) {
+				if(e.getPropertyName().equalsIgnoreCase("ourHP")) {
+					battlePanel.setTrainerHPLevel((Integer)e.getNewValue());
+				}
+				else if(e.getPropertyName().equalsIgnoreCase("opponentHP")) {
+					battlePanel.setEnemyHPLevel((Integer)e.getNewValue());
+				}
+			}
+		});
 		logger.writeLog(PKClientStrings.BATTLE_PANEL_SUCCESFULLY);
 	}
 	
