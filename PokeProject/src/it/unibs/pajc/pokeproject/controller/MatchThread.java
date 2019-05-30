@@ -116,33 +116,42 @@ public class MatchThread implements Runnable {
 		//first, we understand which client sent the move
 		if(msg.getClientID() == pokePlayer1.getBattleID()) {
 			moveSelectedBy1 = selected;
+			System.out.println("mossa selezionata da 1");
 		}
 		else {
 			moveSelectedBy2 = selected;
+			System.out.println("mossa selezionata da 2");
 		}	
 		//then we send the wait, if needed
 		if(moveSelectedBy2 == -1) { //if player1 sends the move first
 			PKMessage wait = new PKMessage(Commands.MSG_WAITING);
 			player1.sendMessage(wait);
+			System.out.println("wait 1");
 		}
 		else if(moveSelectedBy1 == -1){ //if player2 sends the move first
 			PKMessage wait = new PKMessage(Commands.MSG_WAITING);
 			player2.sendMessage(wait);
+			System.out.println("wait 2");
 		}
 		else { // everything is ready
+			System.out.println("mosse inviate da tutti");
 			int firstAttackerID = setPriorityBattle(pokePlayer1, pokePlayer2);
 			
 			if(firstAttackerID == pokePlayer1.getBattleID() && firstAttackerID == msg.getClientID()) {
 				sendSelectedMoveMessage(pokePlayer1, pokePlayer2, firstAttackerID, moveSelectedBy1, moveSelectedBy2);
+				System.out.println("1 attacca per primo");
 			}
 			else if(firstAttackerID == pokePlayer2.getBattleID() && firstAttackerID == msg.getClientID()) {
 				sendSelectedMoveMessage(pokePlayer2, pokePlayer1, firstAttackerID, moveSelectedBy2, moveSelectedBy1);
+				System.out.println("2 attacca per primo");
 			}
 			else if(firstAttackerID == pokePlayer1.getBattleID() && firstAttackerID != msg.getClientID()) {
 				sendSelectedMoveMessage(pokePlayer1, pokePlayer2, firstAttackerID, moveSelectedBy1, moveSelectedBy2);
+				System.out.println("1 attacca per primo");
 			}
 			else {
 				sendSelectedMoveMessage(pokePlayer2, pokePlayer1, firstAttackerID, moveSelectedBy2, moveSelectedBy1);
+				System.out.println("2 attacca per primo");
 			}
 		}
 	}
@@ -156,9 +165,8 @@ public class MatchThread implements Runnable {
 		
 		//message creation
 		PKMessage damageDoneByFirst = new PKMessage(Commands.MSG_DONE_DAMAGE, damageFirstAttacker);
-		PKMessage opponentMove = new PKMessage(Commands.MSG_OPPONENT_MOVE, secondMove);
 		PKMessage damageDoneBySecond = new PKMessage(Commands.MSG_RECEIVED_DAMAGE, damageSecondAttacker);
-		
+		PKMessage opponentMove = new PKMessage(Commands.MSG_OPPONENT_MOVE, secondMove);
 		PKMessage trainerMove = new PKMessage(Commands.MSG_OPPONENT_MOVE, firstMove);
 		PKMessage damageFirst = new PKMessage(Commands.MSG_RECEIVED_DAMAGE, damageFirstAttacker);
 		PKMessage damageSecond = new PKMessage(Commands.MSG_DONE_DAMAGE, damageSecondAttacker);

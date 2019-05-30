@@ -295,10 +295,9 @@ public class PKClientController{
 						return null;
 					}
 				};
-				Window win = SwingUtilities.getWindowAncestor((AbstractButton)e.getSource());
-				JDialog dialog = new JDialog(win, "Waiting...", ModalityType.APPLICATION_MODAL);
-				mySwingWorker.execute();
 				
+				Window win = SwingUtilities.getWindowAncestor((AbstractButton)e.getSource());
+				JDialog dialog = new JDialog(win, "Waiting...", ModalityType.APPLICATION_MODAL);		
 				JLabel lblGIFLabel = new JLabel();
 				lblGIFLabel.setIcon(new ImageIcon(PKClientController.class.getResource("/img/wait.gif")));
 				lblGIFLabel.setBounds(25, 83, 310, 100);
@@ -308,16 +307,21 @@ public class PKClientController{
 				dialog.pack();
 				dialog.setLocationRelativeTo(win);
 				dialog.setVisible(true);
-			}
-		});
-		battleEnvironment.addPropertyListener(new PropertyChangeListener() {
-			public void propertyChange(PropertyChangeEvent e) {
-				if(e.getPropertyName().equalsIgnoreCase("ourHP")) {
-					battlePanel.setTrainerHPLevel((Integer)e.getNewValue());
-				}
-				else if(e.getPropertyName().equalsIgnoreCase("opponentHP")) {
-					battlePanel.setEnemyHPLevel((Integer)e.getNewValue());
-				}
+				mySwingWorker.execute();
+				
+				battleEnvironment.addPropertyListener(new PropertyChangeListener() {
+					public void propertyChange(PropertyChangeEvent e) {
+						if(e.getPropertyName().equalsIgnoreCase("ourHP")) {
+							battlePanel.setTrainerHPLevel((Integer)e.getNewValue());
+							dialog.dispose();
+						}
+						else if(e.getPropertyName().equalsIgnoreCase("opponentHP")) {
+							battlePanel.setEnemyHPLevel((Integer)e.getNewValue());
+							dialog.dispose();
+						}
+					}
+				});
+
 			}
 		});
 		logger.writeLog(PKClientStrings.BATTLE_PANEL_SUCCESFULLY);
