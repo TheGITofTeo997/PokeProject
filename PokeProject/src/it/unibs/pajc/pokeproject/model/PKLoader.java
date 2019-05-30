@@ -276,10 +276,31 @@ public class PKLoader {
 	}
 	
 	public Pokemon getPokemonFromDB (int id) {
-		return pkDatabase.get(id);
+		Pokemon toGet = pkDatabase.get(id);
+		return (Pokemon)deepCopy(toGet);
 	}
 
 	public TreeMap<Integer, Pokemon> getPkDatabase() {
 		return pkDatabase;
 	}
+	
+	/*
+	 * We create a copy of the object we need by creating a stream of it
+	 * and then reading it. Obviously we can if the object is serializable. 
+	 */
+	private static Object deepCopy (Object object) {
+		try {
+			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+			ObjectOutputStream outputStrm = new ObjectOutputStream(outputStream);
+			outputStrm.writeObject(object);
+			ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
+			ObjectInputStream objInputStream = new ObjectInputStream(inputStream);
+			return objInputStream.readObject();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 }

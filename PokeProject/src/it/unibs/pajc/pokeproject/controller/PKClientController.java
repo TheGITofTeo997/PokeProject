@@ -30,6 +30,7 @@ import it.unibs.pajc.pokeproject.util.PKClientStrings;
 public class PKClientController{
 	
 	private boolean connectionHasThrown; // a boolean for connection errors
+	private boolean alreadyHadListener;
 	
 	//Logger
 	private Logger logger;
@@ -39,10 +40,10 @@ public class PKClientController{
 	private PKClientConnector connector;
 	private PKBattleEnvironment battleEnvironment;
 	private JFrame view;
+	private JDialog dialog;
 	private int myPokeID;
 	
 	//View Components
-	private static final String TITLE = "PokeBattle Client v0.6a";
 	private MainPanel mainPanel = null;
 	private IpPanel ipPanel = null;
 	private PokeChooserPanel pokeChooserPanel = null;
@@ -51,6 +52,7 @@ public class PKClientController{
 	
 	public PKClientController() {
 		connectionHasThrown = false;
+		alreadyHadListener = false;
 		loader = new PKLoader();
 		battleEnvironment = new PKBattleEnvironment();
 		connector = new PKClientConnector(battleEnvironment);
@@ -155,7 +157,7 @@ public class PKClientController{
 				};
 
 				Window win = SwingUtilities.getWindowAncestor((AbstractButton)e.getSource());
-				JDialog dialog = new JDialog(win, "Waiting...", ModalityType.APPLICATION_MODAL);
+				dialog = new JDialog(win, "Waiting...", ModalityType.APPLICATION_MODAL);
 				
 				mySwingWorker.addPropertyChangeListener(new PropertyChangeListener() {
 					@Override
@@ -166,38 +168,8 @@ public class PKClientController{
 								{
 									dialog.dispose();
 									connectionHasThrown = false;
-									battleEnvironment.removeListener(); // to avoid double creation of pokechooserpanel
 								}
 				            }
-						}
-					}
-				});
-				
-				battleEnvironment.addPropertyListener(new PropertyChangeListener() {
-					@Override
-					public void propertyChange(PropertyChangeEvent e) {
-						if(e.getPropertyName().equalsIgnoreCase("connection"))
-						{
-							/*
-							dialog.dispose();
-							ipPanel.setVisible(false);
-							drawPokeChooserPanel();
-							view.setBounds(view.getX(), view.getY(), pokeChooserPanel.getWidth(), pokeChooserPanel.getHeight());
-							*/
-							System.out.println("La connessione è online");
-						}
-					}
-				});
-				
-				battleEnvironment.addPropertyListener(new PropertyChangeListener() {
-					@Override
-					public void propertyChange(PropertyChangeEvent e) {
-						if(e.getPropertyName().equalsIgnoreCase("player_found"))
-						{
-							dialog.dispose();
-							ipPanel.setVisible(false);
-							drawPokeChooserPanel();
-							view.setBounds(view.getX(), view.getY(), pokeChooserPanel.getWidth(), pokeChooserPanel.getHeight());
 						}
 					}
 				});
@@ -216,6 +188,31 @@ public class PKClientController{
 				
 			}
 		});
+		
+		battleEnvironment.addPropertyListener(new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent e) {
+				if(e.getPropertyName().equalsIgnoreCase("connection"))
+				{
+
+					System.out.println("La connessione è online");
+				}
+			}
+		});
+		
+		battleEnvironment.addPropertyListener(new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent e) {
+				if(e.getPropertyName().equalsIgnoreCase("player_found"))
+				{
+					dialog.dispose();
+					ipPanel.setVisible(false);
+					drawPokeChooserPanel();
+					view.setBounds(view.getX(), view.getY(), pokeChooserPanel.getWidth(), pokeChooserPanel.getHeight());
+				}
+			}
+		});
+		
 		logger.writeLog(PKClientStrings.IP_PANEL_SUCCESFULLY);
 	}
 	
@@ -245,8 +242,10 @@ public class PKClientController{
 				};
 				
 				Window win = SwingUtilities.getWindowAncestor((AbstractButton)e.getSource());
-				JDialog dialog = new JDialog(win, "Waiting...", ModalityType.APPLICATION_MODAL);
-				
+				dialog = new JDialog(win, "Waiting...", ModalityType.APPLICATION_MODAL);
+			
+				mySwingWorker.execute();
+
 				battleEnvironment.addPropertyListener(new PropertyChangeListener() {
 					@Override
 					public void propertyChange(PropertyChangeEvent e) {
@@ -259,9 +258,7 @@ public class PKClientController{
 					}
 					
 				});
-			
-				mySwingWorker.execute();
-
+				
 				JLabel lblGIFLabel = new JLabel();
 				lblGIFLabel.setIcon(new ImageIcon(PKClientController.class.getResource("/img/wait.gif")));
 				lblGIFLabel.setBounds(25, 83, 310, 100);
@@ -273,6 +270,7 @@ public class PKClientController{
 				dialog.setVisible(true);
 			}
 		});
+		
 		logger.writeLog(PKClientStrings.CHOOSER_PANEL_SUCCESFULLY);
 	}
 	
@@ -297,23 +295,27 @@ public class PKClientController{
 				};
 				
 				Window win = SwingUtilities.getWindowAncestor((AbstractButton)e.getSource());
-				JDialog dialog = new JDialog(win, "Waiting...", ModalityType.APPLICATION_MODAL);		
+				dialog = new JDialog(win, "Waiting...", ModalityType.APPLICATION_MODAL);	
+				
 				mySwingWorker.execute();
 				
-				
-				battleEnvironment.addPropertyListener(new PropertyChangeListener() {
-			
-					public void propertyChange(PropertyChangeEvent e) {
-						if(e.getPropertyName().equalsIgnoreCase("ourHP")) {
-							battlePanel.setTrainerHPLevel((Integer)e.getNewValue());
-							dialog.dispose();
-						}
-						else if(e.getPropertyName().equalsIgnoreCase("opponentHP")) {
-							battlePanel.setEnemyHPLevel((Integer)e.getNewValue());
-							dialog.dispose();
-						}
-					}			
-				});
+				if(!alreadyHadListener)
+				{
+					battleEnvironment.addPropertyListener(new PropertyChangeListener() {
+						public void propertyChange(PropertyChangeEvent e) {
+							if(e.getPropertyName().equalsIgnoreCase("ourHP")) {
+								battlePanel.setTrainerHPLevel((Integer)e.getNewValue());
+								dialog.dispose();
+							}
+							else if(e.getPropertyName().equalsIgnoreCase("opponentHP")) {
+								battlePanel.setOpponentHPLevel((Integer)e.getNewValue());
+								dialog.dispose();
+							}
+						}			
+					});
+					alreadyHadListener = true;
+				}
+					
 				JLabel lblGIFLabel = new JLabel();
 				lblGIFLabel.setIcon(new ImageIcon(PKClientController.class.getResource("/img/wait.gif")));
 				lblGIFLabel.setBounds(25, 83, 310, 100);

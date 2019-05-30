@@ -43,11 +43,12 @@ public class PKBattleEnvironment {
 		case MSG_RECEIVED_DAMAGE:
 			int receivedDamage = msg.getDataToCarry();
 			int ourRemainingHP = ourPokemon.getBattleHP()-receivedDamage;
+			System.out.println("Nostri HP iniziali turno: "+ ourPokemon.getBattleHP());
 			if(ourRemainingHP<0)
 				ourRemainingHP=0;
 			ourPokemon.setBattleHP(ourRemainingHP);
 			
-			System.out.println(ourRemainingHP+"hp rimasti a noi" +","+ receivedDamage + "danno ricevuto");
+			System.out.println("Danno ricevuto da noi: " + receivedDamage + "\nHP rimasti a noi: " + ourRemainingHP);
 			System.out.println("****************************");
 			
 			e = new PropertyChangeEvent(this, "ourHP", -1, ourRemainingHP);
@@ -56,11 +57,12 @@ public class PKBattleEnvironment {
 		case MSG_DONE_DAMAGE:
 			int doneDamage = msg.getDataToCarry();
 			int opponentRemainingHP = opponentPokemon.getBattleHP()-doneDamage;
+			System.out.println("Loro HP iniziali turno: "+ opponentPokemon.getBattleHP());
 			if(opponentRemainingHP<0)
 				opponentRemainingHP=0;
 			opponentPokemon.setBattleHP(opponentRemainingHP);
 			
-			System.out.println(opponentRemainingHP +"hp rimasti al nemico"+","+ doneDamage+ "danno fatto");
+			System.out.println("Danno ricevuto dal nemico: " + doneDamage + "\nHP rimasti al nemico: " + opponentRemainingHP);
 			System.out.println("****************************");
 			
 			e = new PropertyChangeEvent(this, "opponentHP", -1, opponentRemainingHP);
@@ -84,9 +86,6 @@ public class PKBattleEnvironment {
 			l.propertyChange(e);
 	}
 	
-	public void removeListener() {
-		listenerList.remove(0);
-	}
 	public Pokemon getOurPokemon() {
 		return ourPokemon;
 	}

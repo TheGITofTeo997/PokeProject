@@ -33,7 +33,7 @@ public class BattlePanel extends JPanel {
 	private JLabel lblNameMyPoke;
 	private JButton[] btnMoves;
 	private JProgressBar trainerHPbar;
-	private JProgressBar enemyHPbar;
+	private JProgressBar opponentHPbar;
 	
 	private ArrayList<ActionListener> listenerList = new ArrayList<>();
 
@@ -62,13 +62,13 @@ public class BattlePanel extends JPanel {
 		trainerHPbar.setString(""); //percentage string fix, please do NOT set to null
 		add(trainerHPbar);
 		
-		enemyHPbar = new JProgressBar();
-		enemyHPbar.setStringPainted(true);
-		enemyHPbar.setValue(100);
-		enemyHPbar.setForeground(Color.GREEN);
-		enemyHPbar.setBounds(123, 72, 99, 6);
-		enemyHPbar.setString(""); //percentage string fix, please do NOT set to null
-		add(enemyHPbar);
+		opponentHPbar = new JProgressBar();
+		opponentHPbar.setStringPainted(true);
+		opponentHPbar.setValue(100);
+		opponentHPbar.setForeground(Color.GREEN);
+		opponentHPbar.setBounds(123, 72, 99, 6);
+		opponentHPbar.setString(""); //percentage string fix, please do NOT set to null
+		add(opponentHPbar);
 		
 		lblNameOpponentPoke = new JLabel("");
 		lblNameOpponentPoke.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -173,41 +173,28 @@ public class BattlePanel extends JPanel {
 	
 	public void setPokeHP(int trainerHP, int enemyHP) {
 		trainerHPbar.setMaximum(trainerHP);
-		enemyHPbar.setMaximum(enemyHP);
+		opponentHPbar.setMaximum(enemyHP);
 	}
 	
-	private void setTrainerBarColor() {
-		double percentage = ((double)trainerHPbar.getValue()/(double)trainerHPbar.getMaximum())*100;
-		percentage = (int)percentage;
+	private void setBarColor(JProgressBar bar) {
+		int percentage = (int)((double)bar.getValue()/bar.getMaximum()*100);
 		System.out.println(percentage + "%");
 		if(percentage>50) 
-			trainerHPbar.setForeground(Color.GREEN);
+			bar.setForeground(Color.GREEN);
 		else if(percentage>20 && percentage<=50) 
-			trainerHPbar.setForeground(Color.ORANGE);
+			bar.setForeground(Color.ORANGE);
 		else
-			trainerHPbar.setForeground(Color.RED);
-	}
-	
-	private void setEnemyBarColor() {
-		double percentage = ((double)enemyHPbar.getValue()/(double)enemyHPbar.getMaximum())*100;
-		percentage = (int)percentage;
-		System.out.println(percentage + "%");
-		if(percentage>50) 
-			enemyHPbar.setForeground(Color.GREEN);
-		else if(percentage>20 && percentage<=50) 
-			enemyHPbar.setForeground(Color.ORANGE);
-		else
-			enemyHPbar.setForeground(Color.RED);
+			bar.setForeground(Color.RED);
 	}
 	
 	public void setTrainerHPLevel(int value) {
 		trainerHPbar.setValue(value); //remaining hp after damage
-		setTrainerBarColor();
+		setBarColor(trainerHPbar);
 	}
 	
-	public void setEnemyHPLevel(int value) {
-		enemyHPbar.setValue(value); //remaining hp after damage
-		setEnemyBarColor();
+	public void setOpponentHPLevel(int value) {
+		opponentHPbar.setValue(value); //remaining hp after damage
+		setBarColor(opponentHPbar);
 	}
 	
 	public void addListener(ActionListener e) {
