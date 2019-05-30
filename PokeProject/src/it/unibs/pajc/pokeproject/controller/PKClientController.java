@@ -298,15 +298,6 @@ public class PKClientController{
 				
 				Window win = SwingUtilities.getWindowAncestor((AbstractButton)e.getSource());
 				JDialog dialog = new JDialog(win, "Waiting...", ModalityType.APPLICATION_MODAL);		
-				JLabel lblGIFLabel = new JLabel();
-				lblGIFLabel.setIcon(new ImageIcon(PKClientController.class.getResource("/img/wait.gif")));
-				lblGIFLabel.setBounds(25, 83, 310, 100);
-				JPanel panel = new JPanel();
-				panel.add(lblGIFLabel);
-				dialog.add(panel);
-				dialog.pack();
-				dialog.setLocationRelativeTo(win);
-				dialog.setVisible(true);
 				mySwingWorker.execute();
 				
 				battleEnvironment.addPropertyListener(new PropertyChangeListener() {
@@ -321,9 +312,18 @@ public class PKClientController{
 						}
 					}
 				});
-
+				JLabel lblGIFLabel = new JLabel();
+				lblGIFLabel.setIcon(new ImageIcon(PKClientController.class.getResource("/img/wait.gif")));
+				lblGIFLabel.setBounds(25, 83, 310, 100);
+				JPanel panel = new JPanel();
+				panel.add(lblGIFLabel);
+				dialog.add(panel);
+				dialog.pack();
+				dialog.setLocationRelativeTo(win);
+				dialog.setVisible(true);
 			}
 		});
+		
 		logger.writeLog(PKClientStrings.BATTLE_PANEL_SUCCESFULLY);
 	}
 	
