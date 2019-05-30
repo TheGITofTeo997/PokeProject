@@ -43,12 +43,18 @@ public class PKBattleEnvironment {
 		case MSG_RECEIVED_DAMAGE:
 			int receivedDamage = msg.getDataToCarry();
 			int ourRemainingHP = ourPokemon.getHP()-receivedDamage;
+			if(ourRemainingHP<0)
+				ourRemainingHP=0;
+			ourPokemon.setBattleHP(ourRemainingHP);
 			e = new PropertyChangeEvent(this, "ourHP", -1, ourRemainingHP);
 			firePropertyChanged(e);
 			break;
 		case MSG_DONE_DAMAGE:
 			int doneDamage = msg.getDataToCarry();
 			int opponentRemainingHP = opponentPokemon.getHP()-doneDamage;
+			if(opponentRemainingHP<0)
+				opponentRemainingHP=0;
+			opponentPokemon.setBattleHP(opponentRemainingHP);
 			e = new PropertyChangeEvent(this, "opponentHP", -1, opponentRemainingHP);
 			firePropertyChanged(e);
 			break;
@@ -78,11 +84,13 @@ public class PKBattleEnvironment {
 	}
 	public void setOurPokemon(Pokemon ourPokemon) {
 		this.ourPokemon = ourPokemon;
+		ourPokemon.setBattleHP(ourPokemon.getHP());
 	}
 	public Pokemon getOpponentPokemon() {
 		return opponentPokemon;
 	}
 	public void setOpponentPokemon(Pokemon opponentPokemon) {
 		this.opponentPokemon = opponentPokemon;
+		opponentPokemon.setBattleHP(opponentPokemon.getHP());
 	}
 }

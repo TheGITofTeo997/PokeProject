@@ -19,6 +19,7 @@ public class Pokemon implements Serializable {
 	private URL frontSprite;
 	private URL backSprite;
 	private int battleID;
+	private int battleHP;
 	private PKMove[] moves = new PKMove[NUMBER_OF_MOVES];
 	private HashMap<String, Integer> stats = new HashMap<>();
 	
@@ -97,6 +98,14 @@ public class Pokemon implements Serializable {
 		this.battleID = battleID;
 	}
 	
+	public int getBattleHP() {
+		return battleHP;
+	}
+
+	public void setBattleHP(int battleHP) {
+		this.battleHP = battleHP;
+	}
+
 	public void setStat(String stat, int value) {
 		stats.put(stat, value);
 	}
