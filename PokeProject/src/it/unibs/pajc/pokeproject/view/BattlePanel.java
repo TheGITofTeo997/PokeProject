@@ -86,18 +86,26 @@ public class BattlePanel extends JPanel {
 		
 		JButton btnMove1 = new JButton("MOVE1");
 		btnMove1.setBounds(25, 323, 122, 31);
+		btnMove1.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 10));
+		btnMove1.setBorderPainted(false);
 		add(btnMove1);
 		
 		JButton btnMove2 = new JButton("MOVE2");
 		btnMove2.setBounds(157, 323, 122, 31);
+		btnMove2.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 10));
+		btnMove1.setBorderPainted(false);
 		add(btnMove2);
 		
 		JButton btnMove3 = new JButton("MOVE3");
 		btnMove3.setBounds(25, 358, 122, 31);
+		btnMove3.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 10));
+		btnMove1.setBorderPainted(false);
 		add(btnMove3);
 		
 		JButton btnMove4 = new JButton("MOVE4");
 		btnMove4.setBounds(157, 358, 122, 31);
+		btnMove4.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 10));
+		btnMove1.setBorderPainted(false);
 		add(btnMove4);
 		
 		btnMoves = new JButton[]{btnMove1, btnMove2, btnMove3, btnMove4};
