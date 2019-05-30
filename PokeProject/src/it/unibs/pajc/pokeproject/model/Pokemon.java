@@ -81,6 +81,10 @@ public class Pokemon implements Serializable {
 		return moves[moveID];
 	}
 	
+	public PKMove[] getMoveSet() {
+		return moves;
+	}
+	
 	public PKType getType() {
 		return this.type;
 	}

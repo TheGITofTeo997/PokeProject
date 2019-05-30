@@ -15,6 +15,10 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
 
+import it.unibs.pajc.pokeproject.model.PKMove;
+
+import javax.swing.JButton;
+
 public class BattlePanel extends JPanel {
 	
 	private static final long serialVersionUID = 6693764125058218350L;
@@ -24,6 +28,7 @@ public class BattlePanel extends JPanel {
 	private JLabel lblFrontTrainerPoke;
 	private JLabel lblNameOpponentPoke;
 	private JLabel lblNameMyPoke;
+	private JButton[] btnMoves;
 
 	/**
 	 * Create the panel.
@@ -79,6 +84,24 @@ public class BattlePanel extends JPanel {
 		lblTrainerHPLabel.setIcon(new ImageIcon(new ImageIcon(BattlePanel.class.getResource("/img/inbattle/utils/battlePlayerBoxD.png")).getImage().getScaledInstance(lblTrainerHPLabel.getWidth(), lblTrainerHPLabel.getHeight(), Image.SCALE_DEFAULT))); //box scale
 		add(lblTrainerHPLabel);
 		
+		JButton btnMove1 = new JButton("MOVE1");
+		btnMove1.setBounds(25, 323, 122, 31);
+		add(btnMove1);
+		
+		JButton btnMove2 = new JButton("MOVE2");
+		btnMove2.setBounds(157, 323, 122, 31);
+		add(btnMove2);
+		
+		JButton btnMove3 = new JButton("MOVE3");
+		btnMove3.setBounds(25, 358, 122, 31);
+		add(btnMove3);
+		
+		JButton btnMove4 = new JButton("MOVE4");
+		btnMove4.setBounds(157, 358, 122, 31);
+		add(btnMove4);
+		
+		btnMoves = new JButton[]{btnMove1, btnMove2, btnMove3, btnMove4};
+		
 		JLabel lblTextBoxLabel = new JLabel();
 		lblTextBoxLabel.setBounds(0, 302, 618, 98);
 		lblTextBoxLabel.setIcon(new ImageIcon(new ImageIcon(BattlePanel.class.getResource("/img/inbattle/utils/battleCommand.png")).getImage().getScaledInstance(lblTextBoxLabel.getWidth(), lblTextBoxLabel.getHeight(), Image.SCALE_DEFAULT))); //box scale
@@ -117,5 +140,11 @@ public class BattlePanel extends JPanel {
 	public void setPokeNames(String trainer, String opponent) {
 		lblNameMyPoke.setText(trainer);
 		lblNameOpponentPoke.setText(opponent);
+	}
+	
+	public void setMoveNames(PKMove[] moves) {
+		for(int i=0;i<4;i++) {
+			btnMoves[i].setText(moves[i].getName());
+		}
 	}
 }

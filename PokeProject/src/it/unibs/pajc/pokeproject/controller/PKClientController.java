@@ -284,6 +284,7 @@ public class PKClientController{
 		pokeChooserPanel.setVisible(false);	
 		battlePanel.setSprites(battleEnvironment.getOurPokemon().getBackSprite(), battleEnvironment.getOpponentPokemon().getFrontSprite());
 		battlePanel.setPokeNames(battleEnvironment.getOurPokemon().getName(), battleEnvironment.getOpponentPokemon().getName());
+		battlePanel.setMoveNames(battleEnvironment.getOurPokemon().getMoveSet());
 		logger.writeLog(PKClientStrings.BATTLE_PANEL_SUCCESFULLY);
 	}
 	
