@@ -298,20 +298,7 @@ public class PKClientController{
 				dialog = new JDialog(win, "Waiting...", ModalityType.APPLICATION_MODAL);	
 				
 				mySwingWorker.execute();
-				
-				/*battleEnvironment.addPropertyListener(new PropertyChangeListener() {
-					public void propertyChange(PropertyChangeEvent e) {
-						if(e.getPropertyName().equalsIgnoreCase("ourVictory")) {
-							JOptionPane victory = new JOptionPane();
-							victory.showMessageDialog(null, "You Win!");
-						}
-						else if(e.getPropertyName().equalsIgnoreCase("opponentHP")) {
-							JOptionPane victory = new JOptionPane();
-							victory.showMessageDialog(null, "You Lose!");
-						}
-					}			
-				});*/
-								
+										
 				if(!alreadyHadListener)
 				{
 					battleEnvironment.addPropertyListener(new PropertyChangeListener() {
