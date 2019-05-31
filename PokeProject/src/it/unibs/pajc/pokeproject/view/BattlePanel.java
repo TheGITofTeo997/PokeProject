@@ -17,6 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
+import javax.swing.Timer;
 
 import it.unibs.pajc.pokeproject.model.PKMove;
 
@@ -36,6 +37,11 @@ public class BattlePanel extends JPanel {
 	private JProgressBar opponentHPbar;
 	
 	private ArrayList<ActionListener> listenerList = new ArrayList<>();
+	
+	private Timer trainerHPTimer;
+	private Timer opponentHPTimer;
+	private ActionListener trainerHPdelay;
+	private ActionListener opponentHPdelay;
 
 	/**
 	 * Create the panel.
@@ -145,6 +151,9 @@ public class BattlePanel extends JPanel {
 		background.setBounds(0, 0, 618, 400);
 		add(background);
 		
+		
+		
+		
 	}
 	
 	public void setSprites(URL backSpriteUrl, URL frontSpriteUrl) {
@@ -188,13 +197,37 @@ public class BattlePanel extends JPanel {
 	}
 	
 	public void setTrainerHPLevel(int value) {
-		trainerHPbar.setValue(value); //remaining hp after damage
-		setBarColor(trainerHPbar);
+		trainerHPdelay = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(trainerHPbar.getValue() > value) {
+					trainerHPbar.setValue(trainerHPbar.getValue()-1);
+					setBarColor(trainerHPbar);
+				}
+				else
+				trainerHPTimer.stop();
+			}
+			
+		};
+		trainerHPTimer = new Timer(200, trainerHPdelay);
+		trainerHPTimer.start();
 	}
 	
 	public void setOpponentHPLevel(int value) {
-		opponentHPbar.setValue(value); //remaining hp after damage
-		setBarColor(opponentHPbar);
+		opponentHPdelay = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(opponentHPbar.getValue() > value) {
+					opponentHPbar.setValue(opponentHPbar.getValue()-1);
+					setBarColor(opponentHPbar);
+				}
+				else
+				opponentHPTimer.stop();
+			}
+			
+		};
+		opponentHPTimer = new Timer(200, opponentHPdelay);
+		opponentHPTimer.start();
 	}
 	
 	public void addListener(ActionListener e) {

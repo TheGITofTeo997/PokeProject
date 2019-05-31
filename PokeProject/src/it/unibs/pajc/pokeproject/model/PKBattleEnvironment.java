@@ -22,8 +22,6 @@ public class PKBattleEnvironment {
 			e = new PropertyChangeEvent(this, "connection", false, true);
 			firePropertyChanged(e);
 			break;
-		case MSG_WAITING:
-			break;
 		case MSG_WAKEUP:
 			// this may not be needed, further analysis requested
 			e = new PropertyChangeEvent(this, "wait", true, false);
@@ -69,6 +67,7 @@ public class PKBattleEnvironment {
 			firePropertyChanged(e);
 			break;
 		case MSG_BATTLE_OVER:
+			
 			break;
 		case MSG_REMATCH:
 			break;

@@ -201,6 +201,8 @@ public class MatchThread implements Runnable {
 			return p1.getBattleID();
 	}
 	
+	
+	
 	private int calcDamage(Pokemon attacker, Pokemon defender, int moveID) {
 		double N = ThreadLocalRandom.current().nextDouble(0.85, 1);
 		double stab = (attacker.getType().getTypeName().compareToIgnoreCase(attacker.getMove(moveID).getTypeName())==0) ? 1.5 : 1;
