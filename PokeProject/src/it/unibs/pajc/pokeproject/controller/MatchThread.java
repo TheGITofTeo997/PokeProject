@@ -86,12 +86,14 @@ public class MatchThread implements Runnable {
 				pokePlayerOne = loader.getPokemonFromDB(msg.getDataToCarry());
 			}
 			pokePlayerOne.setBattleID(msg.getClientID());
+			pokePlayerOne.setBattleHP(pokePlayerOne.getHP());
 		}
 		else {
 			synchronized(loader) {
 				pokePlayerTwo = loader.getPokemonFromDB(msg.getDataToCarry());
 			}
 			pokePlayerTwo.setBattleID(msg.getClientID());
+			pokePlayerTwo.setBattleHP(pokePlayerTwo.getHP());
 		}
 		
 		if(!(pokePlayerOne == null) && !(pokePlayerTwo == null)) {
@@ -168,6 +170,7 @@ public class MatchThread implements Runnable {
 		//message sending
 		if(isDead(secondAttacker))
 		{
+			System.out.println("morto il secondo" + secondAttacker.getName());
 			PKMessage battleOver = new PKMessage(Commands.MSG_BATTLE_OVER);
 			if(playerOne.getClientID() == firstAttackerID)
 			{
@@ -225,6 +228,7 @@ public class MatchThread implements Runnable {
 			}
 			if(isDead(firstAttacker))
 			{
+				System.out.println("morto il primo" + firstAttacker.getName());
 				PKMessage battleOver = new PKMessage(Commands.MSG_BATTLE_OVER);
 				playerOne.sendMessage(battleOver);
 				playerTwo.sendMessage(battleOver);

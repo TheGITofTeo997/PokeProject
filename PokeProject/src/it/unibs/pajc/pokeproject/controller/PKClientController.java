@@ -299,6 +299,19 @@ public class PKClientController{
 				
 				mySwingWorker.execute();
 				
+				/*battleEnvironment.addPropertyListener(new PropertyChangeListener() {
+					public void propertyChange(PropertyChangeEvent e) {
+						if(e.getPropertyName().equalsIgnoreCase("ourVictory")) {
+							JOptionPane victory = new JOptionPane();
+							victory.showMessageDialog(null, "You Win!");
+						}
+						else if(e.getPropertyName().equalsIgnoreCase("opponentHP")) {
+							JOptionPane victory = new JOptionPane();
+							victory.showMessageDialog(null, "You Lose!");
+						}
+					}			
+				});*/
+								
 				if(!alreadyHadListener)
 				{
 					battleEnvironment.addPropertyListener(new PropertyChangeListener() {
@@ -311,8 +324,16 @@ public class PKClientController{
 								battlePanel.setOpponentHPLevel((Integer)e.getNewValue());
 								dialog.dispose();
 							}
+							else if(e.getPropertyName().equalsIgnoreCase("ourVictory")) {
+								JOptionPane victory = new JOptionPane();
+								victory.showMessageDialog(null, "You Win!");
+							}
+							else if(e.getPropertyName().equalsIgnoreCase("opponentVictory")) {
+								JOptionPane victory = new JOptionPane();
+								victory.showMessageDialog(null, "You Lose!");
+							}
 						}			
-					});
+					});					
 					alreadyHadListener = true;
 				}
 					
@@ -326,8 +347,7 @@ public class PKClientController{
 				dialog.setLocationRelativeTo(win);
 				dialog.setVisible(true);
 			}
-		});
-		
+		});		
 		logger.writeLog(PKClientStrings.BATTLE_PANEL_SUCCESFULLY);
 	}
 	

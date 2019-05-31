@@ -67,7 +67,15 @@ public class PKBattleEnvironment {
 			firePropertyChanged(e);
 			break;
 		case MSG_BATTLE_OVER:
-			
+			 if(ourPokemon.getBattleHP()==0) {
+				 e = new PropertyChangeEvent(this, "opponentVictory", -1, 0);
+				 firePropertyChanged(e);
+			 }
+			 else if (opponentPokemon.getBattleHP()==0) {
+				 e = new PropertyChangeEvent(this, "ourVictory", -1, 0);
+				 firePropertyChanged(e);
+			 }
+				 
 			break;
 		case MSG_REMATCH:
 			break;

@@ -103,7 +103,10 @@ public class Pokemon implements Serializable {
 	}
 
 	public void setBattleHP(int battleHP) {
-		this.battleHP = battleHP;
+		if(battleHP<0)
+			this.battleHP = 0;
+		else
+			this.battleHP = battleHP;
 	}
 
 	public void setStat(String stat, int value) {
