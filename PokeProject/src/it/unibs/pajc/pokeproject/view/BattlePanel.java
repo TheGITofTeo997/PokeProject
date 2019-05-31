@@ -7,6 +7,8 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -87,6 +89,11 @@ public class BattlePanel extends JPanel {
 		lblNameMyPoke.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 15));
 		add(lblNameMyPoke);
 		
+		JLabel lblMoveText = new JLabel("");
+		lblMoveText.setForeground(Color.WHITE);
+		lblMoveText.setBounds(344, 327, 254, 62);
+		add(lblMoveText);
+		
 		JLabel lblEnemyHPLabel = new JLabel();
 		lblEnemyHPLabel.setBounds(0, 28, 291, 69);
 		lblEnemyHPLabel.setIcon(new ImageIcon(new ImageIcon(BattlePanel.class.getResource("/img/inbattle/utils/battleFoeBoxD.png")).getImage().getScaledInstance(lblEnemyHPLabel.getWidth(), lblEnemyHPLabel.getHeight(), Image.SCALE_DEFAULT))); //box scale
@@ -102,27 +109,59 @@ public class BattlePanel extends JPanel {
 		btnMove1.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 10));
 		btnMove1.setBorderPainted(false);
 		add(btnMove1);
+		btnMove1.addMouseListener(new MouseAdapter() {
+	         public void mouseEntered(MouseEvent me) {
+	            lblMoveText.setText("Usa " + btnMoves[0].getText());
+	         }
+	         public void mouseExited(MouseEvent me) {
+	        	 lblMoveText.setText("");
+	         }
+			});
 		
 		JButton btnMove2 = new JButton("MOVE2");
 		btnMove2.setBounds(157, 323, 122, 31);
 		btnMove2.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 10));
 		btnMove1.setBorderPainted(false);
 		add(btnMove2);
+		btnMove2.addMouseListener(new MouseAdapter() {
+	         public void mouseEntered(MouseEvent me) {
+	            lblMoveText.setText("Usa " + btnMoves[1].getText());
+	         }
+	         public void mouseExited(MouseEvent me) {
+	        	 lblMoveText.setText("");
+	         }
+			});
 		
 		JButton btnMove3 = new JButton("MOVE3");
 		btnMove3.setBounds(25, 358, 122, 31);
 		btnMove3.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 10));
 		btnMove1.setBorderPainted(false);
 		add(btnMove3);
+		btnMove3.addMouseListener(new MouseAdapter() {
+	         public void mouseEntered(MouseEvent me) {
+	            lblMoveText.setText("Usa " + btnMoves[2].getText());
+	         }
+	         public void mouseExited(MouseEvent me) {
+	        	 lblMoveText.setText("");
+	         }
+			});
 		
 		JButton btnMove4 = new JButton("MOVE4");
 		btnMove4.setBounds(157, 358, 122, 31);
 		btnMove4.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 10));
 		btnMove1.setBorderPainted(false);
 		add(btnMove4);
+		btnMove4.addMouseListener(new MouseAdapter() {
+	         public void mouseEntered(MouseEvent me) {
+	            lblMoveText.setText("Usa " + btnMoves[3].getText());
+	         }
+	         public void mouseExited(MouseEvent me) {
+	        	 lblMoveText.setText("");
+	         }
+			});
 		
 		btnMoves = new JButton[]{btnMove1, btnMove2, btnMove3, btnMove4};
-		
+				
 		JLabel lblTextBoxLabel = new JLabel();
 		lblTextBoxLabel.setBounds(0, 302, 618, 98);
 		lblTextBoxLabel.setIcon(new ImageIcon(new ImageIcon(BattlePanel.class.getResource("/img/inbattle/utils/battleCommand.png")).getImage().getScaledInstance(lblTextBoxLabel.getWidth(), lblTextBoxLabel.getHeight(), Image.SCALE_DEFAULT))); //box scale
