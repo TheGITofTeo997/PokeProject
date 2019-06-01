@@ -92,6 +92,7 @@ public class BattlePanel extends JPanel {
 		JLabel lblMoveText = new JLabel("");
 		lblMoveText.setForeground(Color.WHITE);
 		lblMoveText.setBounds(344, 327, 254, 62);
+		lblMoveText.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 10));
 		add(lblMoveText);
 		
 		JLabel lblEnemyHPLabel = new JLabel();
@@ -108,7 +109,7 @@ public class BattlePanel extends JPanel {
 		btnMove1.setBounds(25, 323, 122, 31);
 		btnMove1.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 10));
 		btnMove1.setBorderPainted(false);
-		add(btnMove1);
+		add(btnMove1);	
 		btnMove1.addMouseListener(new MouseAdapter() {
 	         public void mouseEntered(MouseEvent me) {
 	            lblMoveText.setText("Usa " + btnMoves[0].getText());
