@@ -22,6 +22,9 @@ public class PKBattleEnvironment {
 			e = new PropertyChangeEvent(this, "connection", false, true);
 			firePropertyChanged(e);
 			break;
+		case MSG_CONNECTION_CLOSED:
+			e = new PropertyChangeEvent(this, "connection_closed", false, true);
+			firePropertyChanged(e);
 		case MSG_WAKEUP:
 			// this may not be needed, further analysis requested
 			e = new PropertyChangeEvent(this, "wait", true, false);
@@ -67,18 +70,22 @@ public class PKBattleEnvironment {
 			firePropertyChanged(e);
 			break;
 		case MSG_BATTLE_OVER:
-			 if(ourPokemon.getBattleHP()==0) {
-				 e = new PropertyChangeEvent(this, "opponentVictory", -1, 0);
-				 firePropertyChanged(e);
-			 }
-			 else if (opponentPokemon.getBattleHP()==0) {
-				 e = new PropertyChangeEvent(this, "ourVictory", -1, 0);
-				 firePropertyChanged(e);
-			 }
-				 
+			if(ourPokemon.getBattleHP()==0) {
+				e = new PropertyChangeEvent(this, "opponentVictory", -1, 0);
+				firePropertyChanged(e);
+			}
+			else if (opponentPokemon.getBattleHP()==0) {
+				e = new PropertyChangeEvent(this, "ourVictory", -1, 0);
+				firePropertyChanged(e);
+			} 
 			break;
-		case MSG_REMATCH:
+		case MSG_REMATCH_YES:
+			e = new PropertyChangeEvent(this, "rematch_yes", false, true);
+			firePropertyChanged(e);
 			break;
+		case MSG_REMATCH_NO:
+			e = new PropertyChangeEvent(this, "rematch_no", false, true);
+			firePropertyChanged(e);
 		default:
 			break;
 		}

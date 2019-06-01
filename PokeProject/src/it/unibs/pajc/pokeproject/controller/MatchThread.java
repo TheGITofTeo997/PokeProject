@@ -13,9 +13,13 @@ import it.unibs.pajc.pokeproject.util.*;
 public class MatchThread implements Runnable {
 	
 	private PKLoader loader;
+	private ScheduledExecutorService checkMessages;
 	
 	private Pokemon pokePlayerOne;
 	private Pokemon pokePlayerTwo;
+	
+	private boolean rematchPlayerOne;
+	private boolean rematchPlayerTwo;
 	
 	private int moveSelectedByOne;
 	private int moveSelectedByTwo;
@@ -32,6 +36,9 @@ public class MatchThread implements Runnable {
 		this.playerTwo = playerTwo;
 		this.loader = loader;
 		
+		rematchPlayerOne = false;
+		rematchPlayerTwo = false;
+		
 		moveSelectedByOne = -1;
 		moveSelectedByTwo = -1;
 		
@@ -43,7 +50,7 @@ public class MatchThread implements Runnable {
 	}
 	
 	public void run() {
-		ScheduledExecutorService checkMessages = Executors.newSingleThreadScheduledExecutor();
+		checkMessages = Executors.newSingleThreadScheduledExecutor();
 		PKMessage msg = new PKMessage(Commands.MSG_PLAYER_FOUND);
 		playerOne.sendMessage(msg);
 		playerTwo.sendMessage(msg);
@@ -67,9 +74,8 @@ public class MatchThread implements Runnable {
 		case MSG_SELECTED_MOVE:
 			selectedMove(msg);
 			break;
-		case MSG_REMATCH_YES:
-			break;
-		case MSG_REMATCH_NO:
+		case MSG_REMATCH:
+			rematch(msg);
 			break;	
 		default:
 			break;
@@ -95,21 +101,11 @@ public class MatchThread implements Runnable {
 			pokePlayerTwo.setBattleID(msg.getClientID());
 			pokePlayerTwo.setBattleHP(pokePlayerTwo.getHP());
 		}
-		
 		if(!(pokePlayerOne == null) && !(pokePlayerTwo == null)) {
 			PKMessage opponentFor1 = new PKMessage(Commands.MSG_OPPONENT_POKEMON, pokePlayerTwo.getID());
 			PKMessage opponentFor2 = new PKMessage(Commands.MSG_OPPONENT_POKEMON, pokePlayerOne.getID());
 			playerOne.sendMessage(opponentFor1);
 			playerTwo.sendMessage(opponentFor2);
-		}
-		else {
-			PKMessage wait = new PKMessage(Commands.MSG_WAITING);
-			if(msg.getClientID() == playerOne.getClientID()) {
-				playerOne.sendMessage(wait);
-			}
-			else {
-				playerTwo.sendMessage(wait);
-			}
 		}
 	}
 	
@@ -125,17 +121,9 @@ public class MatchThread implements Runnable {
 			System.out.println("mossa selezionata da 2");
 		}	
 		//then we send the wait, if needed
-		if(moveSelectedByTwo == -1) { //if player1 sends the move first
-			PKMessage wait = new PKMessage(Commands.MSG_WAITING);
-			playerOne.sendMessage(wait);
-			System.out.println("wait 1");
-		}
-		else if(moveSelectedByOne == -1){ //if player2 sends the move first
-			PKMessage wait = new PKMessage(Commands.MSG_WAITING);
-			playerTwo.sendMessage(wait);
-			System.out.println("wait 2");
-		}
-		else { // everything is ready
+		
+		if(moveSelectedByOne != -1 && moveSelectedByTwo != -1) 
+		{ // everything is ready
 			System.out.println("mosse inviate da tutti");
 			int firstAttackerID = setPriorityBattle(pokePlayerOne, pokePlayerTwo);
 			
@@ -153,7 +141,6 @@ public class MatchThread implements Runnable {
 		}
 	}
 	
-	//need rework
 	private void sendSelectedMoveMessage(Pokemon firstAttacker, Pokemon secondAttacker, int firstAttackerID, int firstMove, int secondMove) {
 		int damageFirstAttacker = calcDamage(firstAttacker, secondAttacker, firstMove);
 		int damageSecondAttacker = calcDamage(secondAttacker, firstAttacker, secondMove);
@@ -250,7 +237,31 @@ public class MatchThread implements Runnable {
 			return p1.getBattleID();
 	}
 	
-	
+	private void rematch(PKMessage msg) {
+		if(playerOne.getClientID() == msg.getClientID())
+			if(msg.getDataToCarry() == 1)
+				rematchPlayerOne = true;
+			else
+			{
+				PKMessage noRematch = new PKMessage(Commands.MSG_REMATCH_NO);
+				playerTwo.sendMessage(noRematch);
+			}
+		else if(msg.getDataToCarry() == 1)
+			rematchPlayerTwo = true;
+		else
+		{
+			PKMessage noRematch = new PKMessage(Commands.MSG_REMATCH_NO);
+			playerOne.sendMessage(noRematch);
+		}
+		if(rematchPlayerOne && rematchPlayerTwo)
+		{
+			pokePlayerOne = null;
+			pokePlayerTwo = null;
+			PKMessage rematch = new PKMessage(Commands.MSG_REMATCH_YES);
+			playerOne.sendMessage(rematch);
+			playerTwo.sendMessage(rematch);
+		}		
+	}
 	
 	private int calcDamage(Pokemon attacker, Pokemon defender, int moveID) {
 		double N = ThreadLocalRandom.current().nextDouble(0.85, 1);
@@ -259,5 +270,25 @@ public class MatchThread implements Runnable {
 				(250*defender.getDefense()) ) + 2) * stab * attacker.getMove(moveID).getType().getEffectiveness(defender.getType().getTypeName())
 				* N;
 		return (int)damage;
+	}
+	
+	public void end() {
+		checkMessages.shutdown();
+		playerOne.closeConnection();
+		playerTwo.closeConnection();
+	}
+	
+	public boolean checkConnection() {
+		if(!playerOne.isConnected())
+			return true;
+		else if(!playerTwo.isConnected())
+			return true;
+		else
+			return false;
+	}
+	
+	public void writeConnectionClosed(PKMessage connectionClosed) {
+		playerOne.sendMessage(connectionClosed);
+		playerTwo.sendMessage(connectionClosed);
 	}
 }

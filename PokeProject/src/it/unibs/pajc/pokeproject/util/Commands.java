@@ -2,6 +2,7 @@ package it.unibs.pajc.pokeproject.util;
 
 public enum Commands {
 	MSG_TEST_CONNECTION,
+	MSG_CONNECTION_CLOSED,
 	MSG_SELECTED_POKEMON,
 	MSG_WAITING,
 	MSG_WAKEUP,

@@ -21,15 +21,13 @@ import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
 import it.unibs.pajc.pokeproject.model.*;
-import it.unibs.pajc.pokeproject.util.PKMessage;
+import it.unibs.pajc.pokeproject.util.*;
 import it.unibs.pajc.pokeproject.view.*;
-import it.unibs.pajc.pokeproject.util.Commands;
-import it.unibs.pajc.pokeproject.util.Logger;
-import it.unibs.pajc.pokeproject.util.PKClientStrings;
 
 public class PKClientController{
 	
-	private boolean connectionHasThrown; // a boolean for connection errors
+	//Booleans for listeners control
+	private boolean connected;
 	private boolean alreadyHadListener;
 	
 	//Logger
@@ -51,7 +49,7 @@ public class PKClientController{
 	
 	
 	public PKClientController() {
-		connectionHasThrown = false;
+		connected = false;
 		alreadyHadListener = false;
 		loader = new PKLoader();
 		battleEnvironment = new PKBattleEnvironment();
@@ -87,11 +85,16 @@ public class PKClientController{
 		view.setBounds(100, 100, 600, 450);
 		view.setLocationRelativeTo(null);
 		view.addWindowListener(new WindowAdapter() {
-		      public void windowClosing(WindowEvent e) {
-		    	  logger.closeLogger();
-		          System.exit(0);
-		        }
-		      });
+			public void windowClosing(WindowEvent e) {
+				logger.closeLogger();
+				if(connected) {
+					PKMessage connectionClosed = new PKMessage(Commands.MSG_CONNECTION_CLOSED);
+					connector.sendMessage(connectionClosed);
+					connector.closeConnection();
+				}
+				System.exit(0);
+			}
+		});
 		view.getContentPane().setLayout(null);	
 		view.setVisible(true);
 		drawMainPanel();
@@ -119,6 +122,9 @@ public class PKClientController{
 				mainPanel.setVisible(false); 
 			}
 		});
+		
+		addBattleEnvironmentListeners();
+		
 		logger.writeLog(PKClientStrings.MAIN_PANEL_SUCCESFULLY);
 	}
 	
@@ -137,7 +143,7 @@ public class PKClientController{
 				ipPanel.setVisible(false);
 			}
 		});
-		
+			
 		ipPanel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -145,17 +151,18 @@ public class PKClientController{
 					protected Void doInBackground() throws Exception {
 						try {
 							connector.connectToServer(ipPanel.getIP());
+							connected = true;
 						}
 						catch(Exception e)
 						{
 							e.printStackTrace();
-							connectionHasThrown = true;
+							connected = false;
 							showErrorPopup();
 						}
 						return null;
 					}
 				};
-
+			
 				Window win = SwingUtilities.getWindowAncestor((AbstractButton)e.getSource());
 				dialog = new JDialog(win, "Waiting...", ModalityType.APPLICATION_MODAL);
 				
@@ -164,18 +171,17 @@ public class PKClientController{
 					public void propertyChange(PropertyChangeEvent e) {
 						if(e.getPropertyName().equals("state")) {
 							if(e.getNewValue() == SwingWorker.StateValue.DONE) {
-								if(connectionHasThrown == true)
+								if(!connected)
 								{
 									dialog.dispose();
-									connectionHasThrown = false;
 								}
 				            }
 						}
 					}
 				});
-			
+				
 				mySwingWorker.execute();
-
+	
 				JLabel lblGIFLabel = new JLabel();
 				lblGIFLabel.setIcon(new ImageIcon(PKClientController.class.getResource("/img/wait.gif")));
 				lblGIFLabel.setBounds(25, 83, 310, 100);
@@ -185,37 +191,11 @@ public class PKClientController{
 				dialog.pack();
 				dialog.setLocationRelativeTo(win);
 				dialog.setVisible(true);
-				
-			}
-		});
-		
-		battleEnvironment.addPropertyListener(new PropertyChangeListener() {
-			@Override
-			public void propertyChange(PropertyChangeEvent e) {
-				if(e.getPropertyName().equalsIgnoreCase("connection"))
-				{
-
-					System.out.println("La connessione è online");
-				}
-			}
-		});
-		
-		battleEnvironment.addPropertyListener(new PropertyChangeListener() {
-			@Override
-			public void propertyChange(PropertyChangeEvent e) {
-				if(e.getPropertyName().equalsIgnoreCase("player_found"))
-				{
-					dialog.dispose();
-					ipPanel.setVisible(false);
-					drawPokeChooserPanel();
-					view.setBounds(view.getX(), view.getY(), pokeChooserPanel.getWidth(), pokeChooserPanel.getHeight());
-				}
 			}
 		});
 		
 		logger.writeLog(PKClientStrings.IP_PANEL_SUCCESFULLY);
 	}
-	
 	
 	public void drawPokeChooserPanel() {
 		pokeChooserPanel = new PokeChooserPanel(loader.getPkDatabase());
@@ -246,19 +226,6 @@ public class PKClientController{
 			
 				mySwingWorker.execute();
 
-				battleEnvironment.addPropertyListener(new PropertyChangeListener() {
-					@Override
-					public void propertyChange(PropertyChangeEvent e) {
-						if(e.getPropertyName().equalsIgnoreCase("opponent"))
-						{
-							battleEnvironment.setOpponentPokemon(loader.getPokemonFromDB((Integer)e.getNewValue()));
-							dialog.dispose();
-							drawBattlePanel();
-						}
-					}
-					
-				});
-				
 				JLabel lblGIFLabel = new JLabel();
 				lblGIFLabel.setIcon(new ImageIcon(PKClientController.class.getResource("/img/wait.gif")));
 				lblGIFLabel.setBounds(25, 83, 310, 100);
@@ -301,26 +268,7 @@ public class PKClientController{
 										
 				if(!alreadyHadListener)
 				{
-					battleEnvironment.addPropertyListener(new PropertyChangeListener() {
-						public void propertyChange(PropertyChangeEvent e) {
-							if(e.getPropertyName().equalsIgnoreCase("ourHP")) {
-								battlePanel.setTrainerHPLevel((Integer)e.getNewValue());
-								dialog.dispose();
-							}
-							else if(e.getPropertyName().equalsIgnoreCase("opponentHP")) {
-								battlePanel.setOpponentHPLevel((Integer)e.getNewValue());
-								dialog.dispose();
-							}
-							else if(e.getPropertyName().equalsIgnoreCase("ourVictory")) {
-								JOptionPane victory = new JOptionPane();
-								victory.showMessageDialog(null, "You Win!");
-							}
-							else if(e.getPropertyName().equalsIgnoreCase("opponentVictory")) {
-								JOptionPane victory = new JOptionPane();
-								victory.showMessageDialog(null, "You Lose!");
-							}
-						}			
-					});					
+									
 					alreadyHadListener = true;
 				}
 					
@@ -338,7 +286,142 @@ public class PKClientController{
 		logger.writeLog(PKClientStrings.BATTLE_PANEL_SUCCESFULLY);
 	}
 	
-	
+	private void addBattleEnvironmentListeners() {
+		battleEnvironment.addPropertyListener(new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent e) {
+				if(e.getPropertyName().equalsIgnoreCase("connection_closed"))
+				{
+					showErrorPopup();
+					if(ipPanel.isVisible())
+						ipPanel.setVisible(false);
+					else if(pokeChooserPanel.isVisible())
+						pokeChooserPanel.setVisible(false);
+					else if(battlePanel.isVisible())
+						battlePanel.setVisible(false);
+					connector.closeConnection();
+					dialog.dispose();
+					mainPanel.setVisible(true);
+				}
+			}
+		});
+		
+		battleEnvironment.addPropertyListener(new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent e) {
+				if(e.getPropertyName().equalsIgnoreCase("connection"))
+				{
+					System.out.println("La connessione è online");
+				}
+			}
+		});
+		
+		battleEnvironment.addPropertyListener(new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent e) {
+				if(e.getPropertyName().equalsIgnoreCase("player_found"))
+				{
+					dialog.dispose();
+					ipPanel.setVisible(false);
+					drawPokeChooserPanel();
+					view.setBounds(view.getX(), view.getY(), pokeChooserPanel.getWidth(), pokeChooserPanel.getHeight());
+				}
+			}
+		});
+		
+		battleEnvironment.addPropertyListener(new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent e) {
+				if(e.getPropertyName().equalsIgnoreCase("opponent"))
+				{
+					battleEnvironment.setOpponentPokemon(loader.getPokemonFromDB((Integer)e.getNewValue()));
+					dialog.dispose();
+					drawBattlePanel();
+				}
+			}
+			
+		});
+		
+		battleEnvironment.addPropertyListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent e) {
+				if(e.getPropertyName().equalsIgnoreCase("ourHP")) {
+					battlePanel.setTrainerHPLevel((Integer)e.getNewValue());
+					dialog.dispose();
+				}
+				else if(e.getPropertyName().equalsIgnoreCase("opponentHP")) {
+					battlePanel.setOpponentHPLevel((Integer)e.getNewValue());
+					dialog.dispose();
+				}
+			}
+		});	
+		
+		battleEnvironment.addPropertyListener(new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent e) {
+				if(e.getPropertyName().equalsIgnoreCase("ourVictory")) {
+					JOptionPane victory = new JOptionPane();
+					victory.showMessageDialog(null, "You Won!");
+					int reply = JOptionPane.showConfirmDialog(null, "You won, but do you want to have a rematch?", "Rematch?", JOptionPane.YES_NO_OPTION);
+					if (reply == JOptionPane.YES_OPTION) 
+					{
+						PKMessage rematchYes = new PKMessage(Commands.MSG_REMATCH, 1);
+						connector.sendMessage(rematchYes);
+					}
+					else 
+					{
+						PKMessage rematchNo = new PKMessage(Commands.MSG_REMATCH, 0);
+						connector.sendMessage(rematchNo);
+						connector.closeConnection();
+						battlePanel.setVisible(false);
+						mainPanel.setVisible(true);
+					}
+				}
+				else if(e.getPropertyName().equalsIgnoreCase("opponentVictory")) {
+					JOptionPane victory = new JOptionPane();
+					victory.showMessageDialog(null, "You Lost!");
+					int reply = JOptionPane.showConfirmDialog(null, "You lost, but do you want to have a rematch?", "Rematch?", JOptionPane.YES_NO_OPTION);
+					if (reply == JOptionPane.YES_OPTION) 
+					{				
+						PKMessage rematchYes = new PKMessage(Commands.MSG_REMATCH, 1);
+						connector.sendMessage(rematchYes);
+					}
+					else 
+					{
+						PKMessage rematchNo = new PKMessage(Commands.MSG_REMATCH, 0);	
+						connector.sendMessage(rematchNo);
+						connector.closeConnection();
+						battlePanel.setVisible(false);
+						mainPanel.setVisible(true);
+					}
+				}
+			}
+		});
+		
+		battleEnvironment.addPropertyListener(new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent e) {
+				if(e.getPropertyName().equalsIgnoreCase("rematch_yes"))
+				{
+					dialog.dispose();
+					battlePanel.setVisible(false);
+					drawPokeChooserPanel();
+					view.setBounds(view.getX(), view.getY(), pokeChooserPanel.getWidth(), pokeChooserPanel.getHeight());
+				}
+			}	
+		});
+		
+		battleEnvironment.addPropertyListener(new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent e) {
+				if(e.getPropertyName().equalsIgnoreCase("rematch_no"))
+				{
+					dialog.dispose();
+					battlePanel.setVisible(false);
+					mainPanel.setVisible(true);
+				}
+			}	
+		});
+	}
 	
 	@SuppressWarnings("static-access")
 	public void showErrorPopup() {

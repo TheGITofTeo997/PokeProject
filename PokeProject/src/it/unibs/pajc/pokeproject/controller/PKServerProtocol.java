@@ -16,12 +16,13 @@ public class PKServerProtocol extends Thread {
 	//Local Components
 	
 	private Socket socketPlayer;
-	private ObjectInputStream fromClient; // inputStream su cui si ricevono i messaggi
-	private ObjectOutputStream toClient; // outputStream su cui si scrivono i messaggi
-	private ArrayBlockingQueue<PKMessage> toProcess; // coda in cui vanno messi i messaggi ricevuti
+	private ObjectInputStream fromClient; //inputStream for received messages
+	private ObjectOutputStream toClient; //outputStream to write messages
+	private ArrayBlockingQueue<PKMessage> toProcess; //queue where to put messages
+	private ScheduledExecutorService checkMessages;
 	private int clientID;
 	private static int idGen=0;
-	private boolean connection = false; //boolean for connection check
+	private boolean connection; //boolean for connection check
 
 	//View Components
 	private PKServerWindow view;
@@ -31,6 +32,7 @@ public class PKServerProtocol extends Thread {
 		this.view = view;
 		clientID = idGen;
 		idGen++;
+		connection = false;
 	}
 	
 	public void run() {
@@ -38,18 +40,21 @@ public class PKServerProtocol extends Thread {
 		try {		
 			toClient = new ObjectOutputStream(socketPlayer.getOutputStream());
 			fromClient = new ObjectInputStream(socketPlayer.getInputStream());
-			ScheduledExecutorService checkMessages = Executors.newSingleThreadScheduledExecutor();
+			checkMessages = Executors.newSingleThreadScheduledExecutor();
 			checkMessages.scheduleAtFixedRate(new Runnable() {
 				public void run() {
 					try {
 						PKMessage msg = (PKMessage)fromClient.readObject();
+						view.appendTextToConsole("\nServer received " + msg.getCommandBody() + "from " + (1+clientID));
 						//this if-else is 'used' one time, need to think about it
 						if(!connection && msg.getCommandBody() == Commands.MSG_TEST_CONNECTION) {
 							connection = true;
 							toClient.writeObject(msg);
 						}
+						else if(msg.getCommandBody() == Commands.MSG_CONNECTION_CLOSED) {
+							connection = false;
+						}
 						else {
-							view.appendTextToConsole("\nServer received " + msg.getCommandBody() + "from " + (1+clientID));
 							msg.setClientID(clientID);
 							if(toProcess.add(msg)) 
 								view.appendTextToConsole(PKServerStrings.MSG_ADDED_CORRECTLY);
@@ -84,7 +89,20 @@ public class PKServerProtocol extends Thread {
 			e.printStackTrace();
 		}
 	}
-	
-	
 
+	public boolean isConnected() {
+		return connection;
+	}
+	
+	public void closeConnection() {
+		try {
+			checkMessages.shutdownNow();
+			fromClient.close();
+			toClient.close();
+			socketPlayer.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

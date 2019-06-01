@@ -25,6 +25,7 @@ public class PKServerController extends Thread implements ActionListener {
 	
 	//Controller Components
 	private LinkedList<PKServerProtocol> playersQueue;
+	private ArrayList<MatchThread> matchList;
 	private ExecutorService playerExecutor;
 	private ExecutorService matchExecutor;
 	private Logger logger;
@@ -39,6 +40,7 @@ public class PKServerController extends Thread implements ActionListener {
 
 	public PKServerController() {
 		playersQueue = new LinkedList<>();
+		matchList = new ArrayList<>();
 		playerExecutor = Executors.newFixedThreadPool(64);
 		matchExecutor = Executors.newFixedThreadPool(32);
 		logger = new Logger(PKServerStrings.LOGFILE);
@@ -96,14 +98,45 @@ public class PKServerController extends Thread implements ActionListener {
 			PKServerProtocol player1 = playersQueue.poll();
 			PKServerProtocol player2 = playersQueue.poll();
 			MatchThread match = new MatchThread(player1, player2, loader);
+			matchList.add(match);
 			matchExecutor.execute(match);
 		}
+	}
+	
+	public void checkClientStatus() {
+		for(PKServerProtocol player : playersQueue)
+			if(!player.isConnected())
+			{
+				player.closeConnection();
+				playersQueue.remove(player);
+				connectedClients--;
+			}
+		
+		//Should fix this, because it cause ConcurrentModificationException
+		for(MatchThread match : matchList)
+			if(match.checkConnection()) 
+			{
+				connectedClients-=2;
+				match.end();
+				matchList.remove(match);
+			}
 	}
 	
 	public void drawGUI() {
 		view = new PKServerWindow(this);
 		view.addWindowAdapter(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
+				matchExecutor.shutdown();
+				playerExecutor.shutdown();
+				PKMessage connectionClosed = new PKMessage(Commands.MSG_CONNECTION_CLOSED);
+				for(PKServerProtocol player : playersQueue)
+				{
+					player.sendMessage(connectionClosed);
+				}
+				for(MatchThread match : matchList)
+				{
+					match.writeConnectionClosed(connectionClosed);
+				}
 				logger.writeLog(view.getConsoleText());
 				logger.closeLogger();
 				System.exit(0);
