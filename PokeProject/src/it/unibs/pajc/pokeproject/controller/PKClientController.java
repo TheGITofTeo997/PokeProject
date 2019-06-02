@@ -337,6 +337,9 @@ public class PKClientController{
 					battleEnvironment.setOpponentPokemon(loader.getPokemonFromDB((Integer)e.getNewValue()));
 					dialog.dispose();
 					drawBattlePanel();
+					view.setBounds(view.getX(), view.getY(), battlePanel.getWidth()+17, battlePanel.getHeight()+40);
+					//this is just a temporary resize workaround and it should be NEVER used this way, this is just
+					//for esthetic
 				}
 			}
 			
@@ -356,6 +359,7 @@ public class PKClientController{
 		});	
 		
 		battleEnvironment.addPropertyListener(new PropertyChangeListener() {
+			@SuppressWarnings("static-access")
 			@Override
 			public void propertyChange(PropertyChangeEvent e) {
 				if(e.getPropertyName().equalsIgnoreCase("ourVictory")) {
@@ -373,6 +377,7 @@ public class PKClientController{
 						connector.sendMessage(rematchNo);
 						connector.closeConnection();
 						battlePanel.setVisible(false);
+						view.setBounds(view.getX(), view.getY(), mainPanel.getWidth(), mainPanel.getHeight());
 						mainPanel.setVisible(true);
 					}
 				}
@@ -391,6 +396,7 @@ public class PKClientController{
 						connector.sendMessage(rematchNo);
 						connector.closeConnection();
 						battlePanel.setVisible(false);
+						view.setBounds(view.getX(), view.getY(), mainPanel.getWidth(), mainPanel.getHeight());
 						mainPanel.setVisible(true);
 					}
 				}

@@ -58,7 +58,7 @@ public class BattlePanel extends JPanel {
 		}
 		
 		setLayout(null);
-		setBounds(100, 100, 618, 400);
+		setBounds(0, 0, 618, 400);
 		setVisible(false);
 		
 		trainerHPbar = new JProgressBar();
