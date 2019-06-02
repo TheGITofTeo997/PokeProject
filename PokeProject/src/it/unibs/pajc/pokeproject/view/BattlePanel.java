@@ -7,6 +7,8 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -25,7 +27,7 @@ import it.unibs.pajc.pokeproject.model.PKMove;
 
 import javax.swing.JButton;
 
-public class BattlePanel extends JPanel {
+public class BattlePanel extends JPanel implements KeyListener {
 	
 	private static final long serialVersionUID = 6693764125058218350L;
 	private static final String PKM_FONT = "PKMN_RBYGSC.ttf";
@@ -37,6 +39,10 @@ public class BattlePanel extends JPanel {
 	private JButton[] btnMoves;
 	private JProgressBar trainerHPbar;
 	private JProgressBar opponentHPbar;
+	private JButton btnMove1;
+	private JButton btnMove2;
+	private JButton btnMove3;
+	private JButton btnMove4;
 	
 	private ArrayList<ActionListener> listenerList = new ArrayList<>();
 	
@@ -56,7 +62,8 @@ public class BattlePanel extends JPanel {
 		} catch (IOException|FontFormatException e) {
 		     e.printStackTrace();
 		}
-		
+		setFocusable(true);
+		addKeyListener(this); //KeyListener sul Panel
 		setLayout(null);
 		setBounds(0, 0, 618, 400);
 		setVisible(false);
@@ -105,7 +112,7 @@ public class BattlePanel extends JPanel {
 		lblTrainerHPLabel.setIcon(new ImageIcon(new ImageIcon(BattlePanel.class.getResource("/img/inbattle/utils/battlePlayerBoxD.png")).getImage().getScaledInstance(lblTrainerHPLabel.getWidth(), lblTrainerHPLabel.getHeight(), Image.SCALE_DEFAULT))); //box scale
 		add(lblTrainerHPLabel);
 		
-		JButton btnMove1 = new JButton("MOVE1");
+		btnMove1 = new JButton("MOVE1");
 		btnMove1.setBounds(25, 323, 122, 31);
 		btnMove1.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 10));
 		btnMove1.setBorderPainted(false);
@@ -119,7 +126,7 @@ public class BattlePanel extends JPanel {
 	         }
 			});
 		
-		JButton btnMove2 = new JButton("MOVE2");
+		btnMove2 = new JButton("MOVE2");
 		btnMove2.setBounds(157, 323, 122, 31);
 		btnMove2.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 10));
 		btnMove1.setBorderPainted(false);
@@ -133,7 +140,7 @@ public class BattlePanel extends JPanel {
 	         }
 			});
 		
-		JButton btnMove3 = new JButton("MOVE3");
+		btnMove3 = new JButton("MOVE3");
 		btnMove3.setBounds(25, 358, 122, 31);
 		btnMove3.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 10));
 		btnMove1.setBorderPainted(false);
@@ -147,7 +154,7 @@ public class BattlePanel extends JPanel {
 	         }
 			});
 		
-		JButton btnMove4 = new JButton("MOVE4");
+		btnMove4 = new JButton("MOVE4");
 		btnMove4.setBounds(157, 358, 122, 31);
 		btnMove4.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 10));
 		btnMove1.setBorderPainted(false);
@@ -278,5 +285,27 @@ public class BattlePanel extends JPanel {
 		for(ActionListener l : listenerList) {
 			l.actionPerformed(e);
 		}
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if(e.getExtendedKeyCode() == KeyEvent.VK_1 || 
+				e.getExtendedKeyCode() == KeyEvent.VK_NUMPAD1) btnMove1.doClick();
+		if(e.getExtendedKeyCode() == KeyEvent.VK_2 || 
+				e.getExtendedKeyCode() == KeyEvent.VK_NUMPAD2) btnMove2.doClick();
+		if(e.getExtendedKeyCode() == KeyEvent.VK_3 || 
+				e.getExtendedKeyCode() == KeyEvent.VK_NUMPAD3) btnMove3.doClick();
+		if(e.getExtendedKeyCode() == KeyEvent.VK_4 || 
+				e.getExtendedKeyCode() == KeyEvent.VK_NUMPAD4) btnMove4.doClick();
+
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {		
 	}
 }
