@@ -1,6 +1,7 @@
 package it.unibs.pajc.pokeproject.controller;
 
 import java.awt.EventQueue;
+import java.awt.Image;
 import java.awt.Window;
 import java.awt.Dialog.ModalityType;
 import java.awt.event.ActionEvent;
@@ -273,8 +274,8 @@ public class PKClientController{
 				}
 					
 				JLabel lblGIFLabel = new JLabel();
-				lblGIFLabel.setIcon(new ImageIcon(PKClientController.class.getResource("/img/wait.gif")));
-				lblGIFLabel.setBounds(25, 83, 310, 100);
+				lblGIFLabel.setIcon(new ImageIcon(new ImageIcon(PokeChooserPanel.class.getResource("/img/miniwait.gif")).getImage().getScaledInstance(64, 64, Image.SCALE_DEFAULT)));	
+				lblGIFLabel.setBounds(25, 83, 64, 64);
 				JPanel panel = new JPanel();
 				panel.add(lblGIFLabel);
 				dialog.add(panel);
