@@ -23,16 +23,16 @@ public class PKLoader {
 	private static final String AZIONE = "Azione";
 	private static final String RUGGITO = "Ruggito";
 	private static final String FORZA = "Forza";
-	private static final String FOGLIELAMA = "Foglielama";
-	private static final String IDROPULSAR = "Idropulsar";
-	private static final String LANCIAFIAMME = "Lanciafiamme";
+	private static final String FRUSTATA = "Frustata";
+	private static final String PISTOLACQUA = "Pistolacqua";
+	private static final String BRACIERE = "Braciere";
 	
 	private static final int AZIONE_PWR = 40;
 	private static final int FORZA_PWR = 80;
 	private static final int RUGGITO_PWR = 0;
-	private static final int FOGLIELAMA_PWR = 90;
-	private static final int LANCIAFIAMME_PWR = 90;
-	private static final int IDROPULSAR_PWR = 60;
+	private static final int FRUSTATA_PWR = 45;
+	private static final int BRACIERE_PWR = 40;
+	private static final int PISTOLACQUA_PWR = 40;
 	private static final int MOVE_1 = 0;
 	private static final int MOVE_2 = 1;
 	private static final int MOVE_3 = 2;
@@ -242,13 +242,13 @@ public class PKLoader {
 		
 		switch(poke.getType().getTypeName()) {
 			case GRASS:
-				poke.setMove(MOVE_4, new PKMove(FOGLIELAMA, FOGLIELAMA_PWR, getType(GRASS)));
+				poke.setMove(MOVE_4, new PKMove(FRUSTATA, FRUSTATA_PWR, getType(GRASS)));
 				break;
 			case FIRE:
-				poke.setMove(MOVE_4, new PKMove(LANCIAFIAMME, LANCIAFIAMME_PWR, getType(FIRE)));
+				poke.setMove(MOVE_4, new PKMove(BRACIERE, BRACIERE_PWR, getType(FIRE)));
 				break;
 			case WATER:
-				poke.setMove(MOVE_4, new PKMove(IDROPULSAR, IDROPULSAR_PWR, getType(WATER)));
+				poke.setMove(MOVE_4, new PKMove(PISTOLACQUA, PISTOLACQUA_PWR, getType(WATER)));
 				break;
 		}
 	}
