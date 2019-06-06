@@ -14,7 +14,7 @@ public class PKClientStrings {
 	
 	//Logging strings
 	public static final String LOGFILE = "clientLog.txt";
-	public static final String UTILS_SUCCESFULLY = "-Utilities loaded succesfully";
+	public static final String UTILS_SUCCESFULLY = "\n-Utilities loaded succesfully";
 	public static final String GUI_SUCCESFULLY = "-Gui drawn succesfully";
 	public static final String MAIN_PANEL_SUCCESFULLY = "-Main panel drawn succesfully";
 	public static final String IP_PANEL_SUCCESFULLY = "-Ip panel drawn succesfully";
@@ -38,6 +38,9 @@ public class PKClientStrings {
 	public static final String OPPONENT_VICTORY = "-Match ended with opponent victory";
 	public static final String REMATCH_YES = "-Both player agreed to have a rematch";
 	public static final String REMATCH_NO = "-At least one player did not agree to have a rematch";
+	public static final String CHECK_MESSAGES = "-Check messages task created";
+	public static final String MESSAGE_SENDING_FAILURE = "-Message was not send because of exception: ";
+	public static final String RESOURCES_CLOSED = "-Socket and output/input streams closed";
 	
 	//View strings
 	public static final String BTN_STARTBATTLE_TEXT = "Start Battle ->";

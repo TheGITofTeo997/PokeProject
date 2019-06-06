@@ -31,7 +31,7 @@ public class Logger {
         writeLog("OS information: " + System.getProperty("os.arch") + ", " + System.getProperty("os.name") + ", " + System.getProperty("os.version"));
 	}
 	
-	public void writeLog(String text) {
+	public synchronized void writeLog(String text) {
 		try {
 			writer.write(text + '\n');
 			writer.flush();

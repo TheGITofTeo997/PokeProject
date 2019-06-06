@@ -19,15 +19,16 @@ public class PKClientConnector {
 	private PKBattleEnvironment env;
 	private ObjectInputStream fromServer;
 	private ObjectOutputStream toServer;
+	private Logger logger;
 	
-	public PKClientConnector(PKBattleEnvironment env) {
+	public PKClientConnector(PKBattleEnvironment env, Logger logger) {
 		this.env = env;
+		this.logger = logger;
 	}
 	
-	public void connectToServer(String ip) throws Exception { // we probably need to be more specific
+	public void connectToServer(String ip) throws Exception { 
 		serverIp = ip;
 		socket = new Socket(serverIp, SERVER_PORT);
-		System.out.println("Successfully connected to server at" + socket.getInetAddress()); //do we need to be this verbose on the client?
 		toServer = new ObjectOutputStream(socket.getOutputStream());
 		fromServer = new ObjectInputStream(socket.getInputStream());
 		
@@ -42,6 +43,7 @@ public class PKClientConnector {
 				}
 			}
 		}, 0, 1, TimeUnit.SECONDS);
+		logger.writeLog(PKClientStrings.CHECK_MESSAGES);
 		
 		PKMessage testConnection = new PKMessage(Commands.MSG_TEST_CONNECTION);
 		sendMessage(testConnection);
@@ -51,7 +53,7 @@ public class PKClientConnector {
 		try {
 			toServer.writeObject(msg);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.writeLog(PKClientStrings.MESSAGE_SENDING_FAILURE + e.toString());
 		}
 	}
 	
@@ -62,6 +64,7 @@ public class PKClientConnector {
 			socket.close();
 			toServer.close();
 			fromServer.close();
+			logger.writeLog(PKClientStrings.RESOURCES_CLOSED);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

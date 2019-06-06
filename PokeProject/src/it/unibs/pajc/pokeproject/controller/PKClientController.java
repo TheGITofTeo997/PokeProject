@@ -50,10 +50,10 @@ public class PKClientController{
 	
 	public PKClientController() {
 		connected = false;
+		logger = new Logger(PKClientStrings.LOGFILE);
 		loader = new PKLoader();
 		battleEnvironment = new PKBattleEnvironment();
-		connector = new PKClientConnector(battleEnvironment);
-		logger = new Logger(PKClientStrings.LOGFILE);
+		connector = new PKClientConnector(battleEnvironment, logger);
 	}
 		
 	public void setupClientUtils() {
@@ -291,6 +291,7 @@ public class PKClientController{
 					connector.closeConnection();
 					dialog.dispose();
 					mainPanel.setVisible(true);
+					view.setBounds(view.getX(), view.getY(), mainPanel.getWidth()+16, mainPanel.getHeight()+39);
 					logger.writeLog(PKClientStrings.CONNECTION_CLOSED);
 				}
 			}

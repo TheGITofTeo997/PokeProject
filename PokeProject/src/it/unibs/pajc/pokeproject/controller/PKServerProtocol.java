@@ -2,7 +2,6 @@ package it.unibs.pajc.pokeproject.controller;
 
 import java.io.*;
 import java.net.*;
-import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -45,7 +44,7 @@ public class PKServerProtocol extends Thread {
 				public void run() {
 					try {
 						PKMessage msg = (PKMessage)fromClient.readObject();
-						view.appendTextToConsole("\nServer received " + msg.getCommandBody() + "from " + (1+clientID));
+						view.appendTextToConsole("\nServer received " + msg.getCommandBody() + "from: " + (1+clientID));
 						//this if-else is 'used' one time, need to think about it
 						if(!connection && msg.getCommandBody() == Commands.MSG_TEST_CONNECTION) {
 							connection = true;

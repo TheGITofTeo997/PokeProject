@@ -4,7 +4,6 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,10 +29,6 @@ public class PKServerController extends Thread implements ActionListener {
 	private ExecutorService matchExecutor;
 	private Logger logger;
 	private PKLoader loader;
-	private Pokemon trainerPoke0;
-	private Pokemon trainerPoke1; 
-
-	private int firstMoveSelectedID = -1;
 	
 	//View Components
 	private PKServerWindow view;
@@ -80,13 +75,14 @@ public class PKServerController extends Thread implements ActionListener {
 			view.appendTextToConsole(PKServerStrings.SERVER_STARTED_SUCCESFULLY);
 			while(true) {
 				Socket clientSocket = server.accept();
-				logger.writeLog(PKServerStrings.CLIENT_CONNECTED);
+				view.appendTextToConsole(PKServerStrings.CLIENT_CONNECTED);
 				PKServerProtocol player = new PKServerProtocol(clientSocket, view);
-				logger.writeLog(PKServerStrings.CLIENT_REQUEST_HANDLED);
+				view.appendTextToConsole(PKServerStrings.CLIENT_REQUEST_HANDLED);
 				playersQueue.add(player);
 				playerExecutor.execute(player);
 				connectedClients++;
-				logger.writeLog(PKServerStrings.CLIENT_REQUEST_HANDLED_OK);
+				view.appendTextToConsole(PKServerStrings.CONNECTED_CLIENTS + connectedClients);
+				view.appendTextToConsole(PKServerStrings.CLIENT_REQUEST_HANDLED_OK);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -126,8 +122,10 @@ public class PKServerController extends Thread implements ActionListener {
 		view = new PKServerWindow(this);
 		view.addWindowAdapter(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
+				logger.writeLog(view.getConsoleText());
 				matchExecutor.shutdown();
 				playerExecutor.shutdown();
+				logger.writeLog(PKServerStrings.TASKS_STOPPED);
 				PKMessage connectionClosed = new PKMessage(Commands.MSG_CONNECTION_CLOSED);
 				for(PKServerProtocol player : playersQueue)
 				{
@@ -137,11 +135,11 @@ public class PKServerController extends Thread implements ActionListener {
 				{
 					match.writeConnectionClosed(connectionClosed);
 				}
-				logger.writeLog(view.getConsoleText());
 				logger.closeLogger();
 				System.exit(0);
 			}
 		});
+		logger.writeLog(PKServerStrings.GUI_SUCCESFULLY);
 	}
 
 	@Override

@@ -13,16 +13,11 @@ import it.unibs.pajc.pokeproject.util.*;
 public class MatchThread implements Runnable {
 	
 	private PKLoader loader;
+	private Logger logger;
 	private ScheduledExecutorService checkMessages;
 	
 	private Pokemon pokePlayerOne;
 	private Pokemon pokePlayerTwo;
-	
-	private boolean rematchPlayerOne;
-	private boolean rematchPlayerTwo;
-	
-	private int moveSelectedByOne;
-	private int moveSelectedByTwo;
 	
 	private PKServerProtocol playerOne; 
 	private PKServerProtocol playerTwo;
@@ -30,11 +25,17 @@ public class MatchThread implements Runnable {
 	private ArrayBlockingQueue<PKMessage> messagesFromOne;
 	private ArrayBlockingQueue<PKMessage> messagesFromTwo;
 	
+	private int moveSelectedByOne;
+	private int moveSelectedByTwo;
+	
+	private boolean rematchPlayerOne;
+	private boolean rematchPlayerTwo;
 	
 	public MatchThread(PKServerProtocol playerOne, PKServerProtocol playerTwo, PKLoader loader) {
 		this.playerOne = playerOne;
 		this.playerTwo = playerTwo;
 		this.loader = loader;
+		logger = new Logger(PKServerStrings.MATCH_LOG_FILE);
 		
 		rematchPlayerOne = false;
 		rematchPlayerTwo = false;
@@ -50,10 +51,11 @@ public class MatchThread implements Runnable {
 	}
 	
 	public void run() {
-		checkMessages = Executors.newSingleThreadScheduledExecutor();
 		PKMessage msg = new PKMessage(Commands.MSG_PLAYER_FOUND);
 		playerOne.sendMessage(msg);
 		playerTwo.sendMessage(msg);
+		logger.writeLog(PKServerStrings.SENT_PLAYER_FOUND_MESSAGES);
+		checkMessages = Executors.newSingleThreadScheduledExecutor();
 		checkMessages.scheduleAtFixedRate(new Runnable() {
 			public void run() {
 				if(!(messagesFromOne.isEmpty())) {
@@ -64,6 +66,7 @@ public class MatchThread implements Runnable {
 				}
 			}
 		}, 0, 1, TimeUnit.SECONDS);
+		logger.writeLog(PKServerStrings.MATCH_CHECK_MESSAGES);
 	}
 	
 	private void executeCommand(PKMessage msg) {
@@ -84,10 +87,7 @@ public class MatchThread implements Runnable {
 	
 	private void selectedPokemon(PKMessage msg) {
 		if(msg.getClientID() == playerOne.getClientID()) {
-			/*
-			 * The various MatchThreads use the same resources. So they need to be synchronized on that resource
-			 * which is the loader. This is purely hypothetic and may be changed.
-			 */
+			logger.writeLog(PKServerStrings.SELECTED_POKEMON_FROM_ONE);
 			synchronized(loader) { 
 				pokePlayerOne = loader.getPokemonFromDB(msg.getDataToCarry());
 			}
@@ -95,6 +95,7 @@ public class MatchThread implements Runnable {
 			pokePlayerOne.setBattleHP(pokePlayerOne.getHP());
 		}
 		else {
+			logger.writeLog(PKServerStrings.SELECTED_POKEMON_FROM_TWO);
 			synchronized(loader) {
 				pokePlayerTwo = loader.getPokemonFromDB(msg.getDataToCarry());
 			}
@@ -106,6 +107,7 @@ public class MatchThread implements Runnable {
 			PKMessage opponentFor2 = new PKMessage(Commands.MSG_OPPONENT_POKEMON, pokePlayerOne.getID());
 			playerOne.sendMessage(opponentFor1);
 			playerTwo.sendMessage(opponentFor2);
+			logger.writeLog(PKServerStrings.OPPONENT_POKEMON_MESSAGES);
 		}
 	}
 	
@@ -114,28 +116,28 @@ public class MatchThread implements Runnable {
 		//first, we understand which client sent the move
 		if(msg.getClientID() == pokePlayerOne.getBattleID()) {
 			moveSelectedByOne = selected;
-			System.out.println("mossa selezionata da 1");
+			logger.writeLog(PKServerStrings.SELECTED_MOVE_FROM_ONE);
 		}
 		else {
 			moveSelectedByTwo = selected;
-			System.out.println("mossa selezionata da 2");
+			logger.writeLog(PKServerStrings.SELECTED_MOVE_FROM_TWO);
 		}	
 		//then we send the wait, if needed
 		
 		if(moveSelectedByOne != -1 && moveSelectedByTwo != -1) 
 		{ // everything is ready
-			System.out.println("mosse inviate da tutti");
 			int firstAttackerID = setPriorityBattle(pokePlayerOne, pokePlayerTwo);
 			
 			if(firstAttackerID == pokePlayerOne.getBattleID()) {
 				sendSelectedMoveMessage(pokePlayerOne, pokePlayerTwo, firstAttackerID, moveSelectedByOne, moveSelectedByTwo);
-				System.out.println("Il giocatore che si è connesso per primo attacca per primo");
 			}
 			else {
 				sendSelectedMoveMessage(pokePlayerTwo, pokePlayerOne, firstAttackerID, moveSelectedByTwo, moveSelectedByOne);
-				System.out.println("Il giocatore che si è connesso per secondo attacca per primo");
 			}
-			//Refreshing moves
+			
+			logger.writeLog(PKServerStrings.TURN_DONE);
+			
+			//Refreshing moves for next turn
 			moveSelectedByOne = -1;
 			moveSelectedByTwo = -1;
 		}
@@ -157,7 +159,7 @@ public class MatchThread implements Runnable {
 		//message sending
 		if(isDead(secondAttacker))
 		{
-			System.out.println("morto il secondo" + secondAttacker.getName());
+			logger.writeLog(PKServerStrings.SECOND_ATTACKER_DEAD + secondAttacker.getName());
 			PKMessage battleOver = new PKMessage(Commands.MSG_BATTLE_OVER);
 			if(playerOne.getClientID() == firstAttackerID)
 			{
@@ -215,7 +217,7 @@ public class MatchThread implements Runnable {
 			}
 			if(isDead(firstAttacker))
 			{
-				System.out.println("morto il primo" + firstAttacker.getName());
+				logger.writeLog(PKServerStrings.FIRST_ATTACKER_DEAD + firstAttacker.getName());
 				PKMessage battleOver = new PKMessage(Commands.MSG_BATTLE_OVER);
 				playerOne.sendMessage(battleOver);
 				playerTwo.sendMessage(battleOver);
@@ -279,9 +281,7 @@ public class MatchThread implements Runnable {
 	}
 	
 	public boolean checkConnection() {
-		if(!playerOne.isConnected())
-			return true;
-		else if(!playerTwo.isConnected())
+		if(!playerOne.isConnected() || !playerTwo.isConnected())
 			return true;
 		else
 			return false;
