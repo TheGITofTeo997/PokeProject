@@ -6,6 +6,8 @@ import javax.swing.JTextArea;
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 
 import javax.swing.JButton;
@@ -17,7 +19,7 @@ import javax.swing.ImageIcon;
 import it.unibs.pajc.pokeproject.controller.*;
 import it.unibs.pajc.pokeproject.util.PKServerStrings;
 
-public class PKServerWindow {
+public class PKServerWindow implements KeyListener{
 
 	private JFrame frmPokeserverV;
 	private JTextArea consoleTextArea;
@@ -49,6 +51,8 @@ public class PKServerWindow {
 		frmPokeserverV.setLocationRelativeTo(null);
 		frmPokeserverV.getContentPane().setLayout(null);
 		frmPokeserverV.setVisible(true);
+		frmPokeserverV.setFocusable(true);
+		frmPokeserverV.addKeyListener(this);
 		
 		btnStart = new JButton(PKServerStrings.BTN_START_TXT);
 		btnStart.setBounds(163, 36, 121, 60);
@@ -103,5 +107,18 @@ public class PKServerWindow {
 	
 	public void disableServerButton() {
 		btnStart.setEnabled(false);
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if(e.getExtendedKeyCode() == KeyEvent.VK_ENTER) btnStart.doClick();
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
 	}
 }
