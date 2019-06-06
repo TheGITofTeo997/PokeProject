@@ -46,9 +46,9 @@ public class BattlePanel extends JPanel implements KeyListener {
 	
 	private ArrayList<ActionListener> listenerList = new ArrayList<>();
 	
-	private Timer moveTimer;
 	private Timer trainerHPTimer;
 	private Timer opponentHPTimer;
+	private Timer moveTimer;
 	private ActionListener trainerHPdelay;
 	private ActionListener opponentHPdelay;
 
@@ -366,7 +366,6 @@ public class BattlePanel extends JPanel implements KeyListener {
 				e.getExtendedKeyCode() == KeyEvent.VK_NUMPAD3) btnMove3.doClick();
 		if(e.getExtendedKeyCode() == KeyEvent.VK_4 || 
 				e.getExtendedKeyCode() == KeyEvent.VK_NUMPAD4) btnMove4.doClick();
-
 		
 	}
 
