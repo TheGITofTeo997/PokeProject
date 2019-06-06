@@ -29,7 +29,6 @@ public class PKClientController{
 	
 	//Booleans for listeners control
 	private boolean connected;
-	private boolean alreadyHadListener;
 	
 	//Logger
 	private Logger logger;
@@ -51,7 +50,6 @@ public class PKClientController{
 	
 	public PKClientController() {
 		connected = false;
-		alreadyHadListener = false;
 		loader = new PKLoader();
 		battleEnvironment = new PKBattleEnvironment();
 		connector = new PKClientConnector(battleEnvironment);
@@ -76,10 +74,7 @@ public class PKClientController{
 			}
 		});
 	}
-	
-	/**
-	 * Initialize the contents of the frame.
-	 */
+
 	private void initialize() {
 		view = new JFrame(PKClientStrings.FRAME_TITLE);
 		view.setResizable(false);
@@ -100,7 +95,6 @@ public class PKClientController{
 		view.setVisible(true);
 		drawMainPanel();
 	}
-	
 	
 	public void drawMainPanel() {
 		mainPanel = new MainPanel();
@@ -141,6 +135,7 @@ public class PKClientController{
 			public void actionPerformed(ActionEvent arg0) {
 				mainPanel.setVisible(true);
 				view.setBounds(100, 100, 600, 450);
+				view.setLocationRelativeTo(null);
 				ipPanel.setVisible(false);
 			}
 		});
@@ -203,12 +198,6 @@ public class PKClientController{
 		view.getContentPane().add(pokeChooserPanel);
 		pokeChooserPanel.setVisible(true);
 		
-		/*
-		 * @author Patrick
-		 * This is the part where we create the popup waiting window.
-		 * At the moment this is not done by using the WaitingFrame because, despite
-		 * various attempts i could not fit it in. 
-		 */
 		pokeChooserPanel.addListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -266,12 +255,6 @@ public class PKClientController{
 				dialog = new JDialog(win, "Waiting...", ModalityType.APPLICATION_MODAL);	
 				
 				mySwingWorker.execute();
-										
-				if(!alreadyHadListener)
-				{
-									
-					alreadyHadListener = true;
-				}
 					
 				JLabel lblGIFLabel = new JLabel();
 				lblGIFLabel.setIcon(new ImageIcon(new ImageIcon(PokeChooserPanel.class.getResource("/img/miniwait.gif")).getImage().getScaledInstance(64, 64, Image.SCALE_DEFAULT)));	
@@ -311,9 +294,7 @@ public class PKClientController{
 			@Override
 			public void propertyChange(PropertyChangeEvent e) {
 				if(e.getPropertyName().equalsIgnoreCase("connection"))
-				{
 					System.out.println("La connessione è online");
-				}
 			}
 		});
 		
@@ -325,7 +306,7 @@ public class PKClientController{
 					dialog.dispose();
 					ipPanel.setVisible(false);
 					drawPokeChooserPanel();
-					view.setBounds(view.getX(), view.getY(), pokeChooserPanel.getWidth(), pokeChooserPanel.getHeight());
+					view.setBounds(view.getX(), view.getY(), pokeChooserPanel.getWidth()+16, pokeChooserPanel.getHeight()+39);
 				}
 			}
 		});
@@ -338,7 +319,7 @@ public class PKClientController{
 					battleEnvironment.setOpponentPokemon(loader.getPokemonFromDB((Integer)e.getNewValue()));
 					dialog.dispose();
 					drawBattlePanel();
-					view.setBounds(view.getX(), view.getY(), battlePanel.getWidth()+17, battlePanel.getHeight()+40);
+					view.setBounds(view.getX(), view.getY(), battlePanel.getWidth()+16, battlePanel.getHeight()+39);
 					//this is just a temporary resize workaround and it should be NEVER used this way, this is just
 					//for esthetic
 				}
@@ -378,7 +359,7 @@ public class PKClientController{
 						connector.sendMessage(rematchNo);
 						connector.closeConnection();
 						battlePanel.setVisible(false);
-						view.setBounds(view.getX(), view.getY(), mainPanel.getWidth(), mainPanel.getHeight());
+						view.setBounds(view.getX(), view.getY(), mainPanel.getWidth()+16, mainPanel.getHeight()+39);
 						mainPanel.setVisible(true);
 					}
 				}
@@ -397,7 +378,7 @@ public class PKClientController{
 						connector.sendMessage(rematchNo);
 						connector.closeConnection();
 						battlePanel.setVisible(false);
-						view.setBounds(view.getX(), view.getY(), mainPanel.getWidth(), mainPanel.getHeight());
+						view.setBounds(view.getX(), view.getY(), mainPanel.getWidth()+16, mainPanel.getHeight()+39);
 						mainPanel.setVisible(true);
 					}
 				}
@@ -412,7 +393,7 @@ public class PKClientController{
 					dialog.dispose();
 					battlePanel.setVisible(false);
 					drawPokeChooserPanel();
-					view.setBounds(view.getX(), view.getY(), pokeChooserPanel.getWidth(), pokeChooserPanel.getHeight());
+					view.setBounds(view.getX(), view.getY(), pokeChooserPanel.getWidth()+16, pokeChooserPanel.getHeight()+39);
 				}
 			}	
 		});
