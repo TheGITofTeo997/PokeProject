@@ -4,6 +4,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.Date;
 
 /*
  * @author Patrick
@@ -23,11 +25,15 @@ public class Logger {
 			e.printStackTrace();
 		}
 		
+		Date date = new Date();
+		writeLog("Logfile v0.2");
+        writeLog("Application started on: " + new Timestamp(date.getTime()).toString());
+        writeLog("OS information: " + System.getProperty("os.arch") + ", " + System.getProperty("os.name") + ", " + System.getProperty("os.version"));
 	}
 	
 	public void writeLog(String text) {
 		try {
-			writer.write(text);
+			writer.write(text + '\n');
 			writer.flush();
 		} catch (IOException e) {
 			e.printStackTrace();

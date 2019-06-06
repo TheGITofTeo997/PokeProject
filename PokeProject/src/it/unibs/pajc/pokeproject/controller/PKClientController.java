@@ -119,6 +119,7 @@ public class PKClientController{
 		});
 		
 		addBattleEnvironmentListeners();
+		logger.writeLog(PKClientStrings.BATTLE_ENVIRONMENT_LISTENERS);
 		
 		logger.writeLog(PKClientStrings.MAIN_PANEL_SUCCESFULLY);
 	}
@@ -148,12 +149,14 @@ public class PKClientController{
 						try {
 							connector.connectToServer(ipPanel.getIP());
 							connected = true;
+							logger.writeLog(PKClientStrings.CONNECTED_SUCCESFULLY);
 						}
 						catch(Exception e)
 						{
 							e.printStackTrace();
 							connected = false;
 							showErrorPopup();
+							logger.writeLog(PKClientStrings.EXCEPTION_THROWN + e.toString());
 						}
 						return null;
 					}
@@ -207,6 +210,7 @@ public class PKClientController{
 						battleEnvironment.setOurPokemon(loader.getPokemonFromDB(myPokeID));
 						PKMessage msg = new PKMessage(Commands.MSG_SELECTED_POKEMON, myPokeID);
 						connector.sendMessage(msg);
+						logger.writeLog(PKClientStrings.POKEMON_SENT);
 						return null;
 					}
 				};
@@ -247,6 +251,7 @@ public class PKClientController{
 					protected Void doInBackground() throws Exception {
 						PKMessage msg = new PKMessage(Commands.MSG_SELECTED_MOVE, Integer.parseInt(e.getActionCommand()));
 						connector.sendMessage(msg);
+						logger.writeLog(PKClientStrings.MOVE_SENT);
 						return null;
 					}
 				};
@@ -286,6 +291,7 @@ public class PKClientController{
 					connector.closeConnection();
 					dialog.dispose();
 					mainPanel.setVisible(true);
+					logger.writeLog(PKClientStrings.CONNECTION_CLOSED);
 				}
 			}
 		});
@@ -294,7 +300,7 @@ public class PKClientController{
 			@Override
 			public void propertyChange(PropertyChangeEvent e) {
 				if(e.getPropertyName().equalsIgnoreCase("connection"))
-					System.out.println("La connessione è online");
+					logger.writeLog(PKClientStrings.CONNECTION_ONLINE);
 			}
 		});
 		
@@ -303,6 +309,7 @@ public class PKClientController{
 			public void propertyChange(PropertyChangeEvent e) {
 				if(e.getPropertyName().equalsIgnoreCase("player_found"))
 				{
+					logger.writeLog(PKClientStrings.PLAYER_FOUND);
 					dialog.dispose();
 					ipPanel.setVisible(false);
 					drawPokeChooserPanel();
@@ -316,6 +323,7 @@ public class PKClientController{
 			public void propertyChange(PropertyChangeEvent e) {
 				if(e.getPropertyName().equalsIgnoreCase("opponent"))
 				{
+					logger.writeLog(PKClientStrings.OPPONENT_POKEMON);
 					battleEnvironment.setOpponentPokemon(loader.getPokemonFromDB((Integer)e.getNewValue()));
 					dialog.dispose();
 					drawBattlePanel();
@@ -330,10 +338,12 @@ public class PKClientController{
 		battleEnvironment.addPropertyListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent e) {
 				if(e.getPropertyName().equalsIgnoreCase("ourHP")) {
+					logger.writeLog(PKClientStrings.OUR_HP);
 					battlePanel.setTrainerHPLevel((Integer)e.getNewValue());
 					dialog.dispose();
 				}
 				else if(e.getPropertyName().equalsIgnoreCase("opponentHP")) {
+					logger.writeLog(PKClientStrings.OPPONENT_HP);
 					battlePanel.setOpponentHPLevel((Integer)e.getNewValue());
 					dialog.dispose();
 				}
@@ -345,16 +355,19 @@ public class PKClientController{
 			@Override
 			public void propertyChange(PropertyChangeEvent e) {
 				if(e.getPropertyName().equalsIgnoreCase("ourVictory")) {
+					logger.writeLog(PKClientStrings.OUR_VICTORY);
 					JOptionPane victory = new JOptionPane();
 					victory.showMessageDialog(null, "You Won!");
 					int reply = JOptionPane.showConfirmDialog(null, "You won, but do you want to have a rematch?", "Rematch?", JOptionPane.YES_NO_OPTION);
 					if (reply == JOptionPane.YES_OPTION) 
 					{
+						logger.writeLog(PKClientStrings.REMATCH_ANSWER_YES);
 						PKMessage rematchYes = new PKMessage(Commands.MSG_REMATCH, 1);
 						connector.sendMessage(rematchYes);
 					}
 					else 
 					{
+						logger.writeLog(PKClientStrings.REMATCH_ANSWER_NO);
 						PKMessage rematchNo = new PKMessage(Commands.MSG_REMATCH, 0);
 						connector.sendMessage(rematchNo);
 						connector.closeConnection();
@@ -364,16 +377,19 @@ public class PKClientController{
 					}
 				}
 				else if(e.getPropertyName().equalsIgnoreCase("opponentVictory")) {
+					logger.writeLog(PKClientStrings.OPPONENT_VICTORY);
 					JOptionPane victory = new JOptionPane();
 					victory.showMessageDialog(null, "You Lost!");
 					int reply = JOptionPane.showConfirmDialog(null, "You lost, but do you want to have a rematch?", "Rematch?", JOptionPane.YES_NO_OPTION);
 					if (reply == JOptionPane.YES_OPTION) 
 					{				
+						logger.writeLog(PKClientStrings.REMATCH_ANSWER_YES);
 						PKMessage rematchYes = new PKMessage(Commands.MSG_REMATCH, 1);
 						connector.sendMessage(rematchYes);
 					}
 					else 
 					{
+						logger.writeLog(PKClientStrings.REMATCH_ANSWER_NO);
 						PKMessage rematchNo = new PKMessage(Commands.MSG_REMATCH, 0);	
 						connector.sendMessage(rematchNo);
 						connector.closeConnection();
@@ -390,6 +406,7 @@ public class PKClientController{
 			public void propertyChange(PropertyChangeEvent e) {
 				if(e.getPropertyName().equalsIgnoreCase("rematch_yes"))
 				{
+					logger.writeLog(PKClientStrings.REMATCH_YES);
 					dialog.dispose();
 					battlePanel.setVisible(false);
 					drawPokeChooserPanel();
@@ -403,6 +420,7 @@ public class PKClientController{
 			public void propertyChange(PropertyChangeEvent e) {
 				if(e.getPropertyName().equalsIgnoreCase("rematch_no"))
 				{
+					logger.writeLog(PKClientStrings.REMATCH_NO);
 					dialog.dispose();
 					battlePanel.setVisible(false);
 					mainPanel.setVisible(true);
