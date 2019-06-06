@@ -30,6 +30,7 @@ public class PKClientStrings {
 	public static final String CONNECTION_ONLINE = "-Connection tested succesfully";
 	public static final String PLAYER_FOUND = "-Server found a player for us";
 	public static final String OPPONENT_POKEMON = "-Server sent opponent pokemon";
+	public static final String OPPONENT_MOVE = "-Server sent opponent move";
 	public static final String OUR_HP = "-Updated our hp after the turn";
 	public static final String OPPONENT_HP = "-Updated opponent hp after the turn";
 	public static final String OUR_VICTORY = "-Match ended with our victory";

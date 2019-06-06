@@ -249,7 +249,9 @@ public class PKClientController{
 			public void actionPerformed(ActionEvent e) {
 				SwingWorker<Void, Void> mySwingWorker = new SwingWorker<Void, Void>() {
 					protected Void doInBackground() throws Exception {
-						PKMessage msg = new PKMessage(Commands.MSG_SELECTED_MOVE, Integer.parseInt(e.getActionCommand()));
+						int moveID = Integer.parseInt(e.getActionCommand());
+						PKMessage msg = new PKMessage(Commands.MSG_SELECTED_MOVE, moveID);
+						battleEnvironment.setOurMove(moveID);
 						connector.sendMessage(msg);
 						logger.writeLog(PKClientStrings.MOVE_SENT);
 						return null;
@@ -333,8 +335,33 @@ public class PKClientController{
 					//for esthetic
 				}
 			}
-			
 		});
+		
+		/*
+		battleEnvironment.addPropertyListener(new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent e) {
+				if(e.getPropertyName().equalsIgnoreCase("opponent_move"))
+				{
+					logger.writeLog(PKClientStrings.OPPONENT_MOVE);
+					battlePanel.writeTextInMoveBox(battleEnvironment.getOpponentPokemon().getName() + " nemico usa " + e.getNewValue());
+				}
+			}
+		});
+		*/
+		
+		/*
+		battleEnvironment.addPropertyListener(new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent e) {
+				if(e.getPropertyName().equalsIgnoreCase("our_move"))
+				{
+					logger.writeLog(PKClientStrings.OPPONENT_MOVE);
+					battlePanel.writeTextInMoveBox(battleEnvironment.getOurPokemon().getName() + " usa " + e.getNewValue());
+				}
+			}
+		});
+		*/
 		
 		battleEnvironment.addPropertyListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent e) {

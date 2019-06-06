@@ -10,6 +10,9 @@ public class PKBattleEnvironment {
 
 	private Pokemon ourPokemon;
 	private Pokemon opponentPokemon;
+	
+	private String ourMove;
+	
 	private ArrayList<PropertyChangeListener> listenerList;
 	
 	public PKBattleEnvironment() {
@@ -40,7 +43,12 @@ public class PKBattleEnvironment {
 			firePropertyChanged(e);
 			break;
 		case MSG_OPPONENT_MOVE:
+			/*
+			String opponentMove = opponentPokemon.getMove(msg.getDataToCarry()).getName();
+			e = new PropertyChangeEvent(this, "opponent_move", null, opponentMove);
+			firePropertyChanged(e);
 			break;
+			*/
 		case MSG_RECEIVED_DAMAGE:
 			int receivedDamage = msg.getDataToCarry();
 			int ourRemainingHP = ourPokemon.getBattleHP()-receivedDamage;
@@ -56,6 +64,10 @@ public class PKBattleEnvironment {
 			firePropertyChanged(e);
 			break;
 		case MSG_DONE_DAMAGE:
+			/*
+			e = new PropertyChangeEvent(this, "our_move", null, ourMove);
+			firePropertyChanged(e);
+			*/
 			int doneDamage = msg.getDataToCarry();
 			int opponentRemainingHP = opponentPokemon.getBattleHP()-doneDamage;
 			System.out.println("Loro HP iniziali turno: "+ opponentPokemon.getBattleHP());
@@ -107,9 +119,15 @@ public class PKBattleEnvironment {
 		this.ourPokemon = ourPokemon;
 		ourPokemon.setBattleHP(ourPokemon.getHP());
 	}
+	
+	public void setOurMove(int moveID) {
+		ourMove = ourPokemon.getMove(moveID).getName();
+	}
+	
 	public Pokemon getOpponentPokemon() {
 		return opponentPokemon;
 	}
+	
 	public void setOpponentPokemon(Pokemon opponentPokemon) {
 		this.opponentPokemon = opponentPokemon;
 		opponentPokemon.setBattleHP(opponentPokemon.getHP());

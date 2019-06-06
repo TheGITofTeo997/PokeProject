@@ -1,0 +1,21 @@
+Logfile v0.2
+Application started on: 2019-06-06 16:22:25.255
+OS information: amd64, Windows 10, 10.0
+
+-Notified both clients that server found them an opponent
+-Check messages task created in match thread
+-Received selected pokemon from player two
+-Received selected pokemon from player one
+-Notified both clients about the pokemon chosen by the ohter 
+-Received move selected by player two
+-Received move selected by player one
+-Turn damage calculation and messages sending done
+-Received move selected by player two
+-Received move selected by player one
+-Turn damage calculation and messages sending done
+-Received move selected by player one
+-Received move selected by player two
+-Turn damage calculation and messages sending done
+-Received move selected by player two
+-Received move selected by player one
+-Turn damage calculation and messages sending done
