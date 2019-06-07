@@ -31,6 +31,9 @@ public class MatchThread implements Runnable {
 	private boolean rematchPlayerOne;
 	private boolean rematchPlayerTwo;
 	
+	private boolean connectionPlayerOne;
+	private boolean connectionPlayerTwo;
+	
 	public MatchThread(PKServerProtocol playerOne, PKServerProtocol playerTwo, PKLoader loader) {
 		this.playerOne = playerOne;
 		this.playerTwo = playerTwo;
@@ -39,6 +42,9 @@ public class MatchThread implements Runnable {
 		
 		rematchPlayerOne = false;
 		rematchPlayerTwo = false;
+		
+		connectionPlayerOne = true;
+		connectionPlayerTwo = true;
 		
 		moveSelectedByOne = -1;
 		moveSelectedByTwo = -1;
@@ -250,8 +256,15 @@ public class MatchThread implements Runnable {
 			}
 			else
 			{
-				PKMessage noRematch = new PKMessage(Commands.MSG_REMATCH_NO);
-				playerTwo.sendMessage(noRematch);
+				connectionPlayerOne = false;
+				playerOne.setConnectionStatus(false);
+				playerOne.closeConnection();
+				
+				if(playerTwo.isConnected())
+				{
+					PKMessage noRematch = new PKMessage(Commands.MSG_REMATCH_NO);
+					playerTwo.sendMessage(noRematch);
+				}
 				logger.writeLog(PKServerStrings.PLAYER_ONE_DID_NOT_AGREE_REMATCH);
 			}
 		else if(msg.getDataToCarry() == 1)
@@ -261,14 +274,24 @@ public class MatchThread implements Runnable {
 		}
 		else
 		{
-			PKMessage noRematch = new PKMessage(Commands.MSG_REMATCH_NO);
-			playerOne.sendMessage(noRematch);
+			connectionPlayerTwo = false;
+			playerTwo.setConnectionStatus(false);
+			playerTwo.closeConnection();
+			
+			if(playerOne.isConnected())
+			{
+				PKMessage noRematch = new PKMessage(Commands.MSG_REMATCH_NO);
+				playerOne.sendMessage(noRematch);
+			}
 			logger.writeLog(PKServerStrings.PLAYER_TWO_DID_NOT_AGREE_REMATCH);
 		}
+		
 		if(rematchPlayerOne && rematchPlayerTwo)
 		{
 			pokePlayerOne = null;
 			pokePlayerTwo = null;
+			rematchPlayerOne = false;
+			rematchPlayerTwo = false;
 			PKMessage rematch = new PKMessage(Commands.MSG_REMATCH_YES);
 			playerOne.sendMessage(rematch);
 			playerTwo.sendMessage(rematch);
@@ -285,22 +308,28 @@ public class MatchThread implements Runnable {
 		return (int)damage;
 	}
 	
-	public void end() {
+	public void closeMatchConnection() {
 		checkMessages.shutdown();
-		playerOne.closeConnection();
-		playerTwo.closeConnection();
+		PKMessage closeConnection = new PKMessage(Commands.MSG_CONNECTION_CLOSED);
+		if(!connectionPlayerOne)
+			playerOne.closeConnection();
+		else
+			playerOne.sendMessage(closeConnection);
+		if(!connectionPlayerTwo)
+			playerTwo.closeConnection();
+		else
+			playerTwo.sendMessage(closeConnection);
 		logger.writeLog(PKServerStrings.MATCH_CONNECTION_CLOSED);
 	}
 	
 	public boolean checkConnection() {
-		if(!playerOne.isConnected() || !playerTwo.isConnected())
-			return true;
-		else
-			return false;
+		connectionPlayerOne = playerOne.isConnected();
+		connectionPlayerTwo = playerTwo.isConnected();
+		return connectionPlayerOne && connectionPlayerTwo;
 	}
 	
-	public void writeConnectionClosed(PKMessage connectionClosed) {
-		playerOne.sendMessage(connectionClosed);
-		playerTwo.sendMessage(connectionClosed);
+	public void sendMessageToBoth(PKMessage msg) {
+		playerOne.sendMessage(msg);
+		playerTwo.sendMessage(msg);
 	}
 }

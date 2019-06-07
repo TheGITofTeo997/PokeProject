@@ -92,6 +92,10 @@ public class PKServerProtocol extends Thread {
 		return connection;
 	}
 	
+	public void setConnectionStatus(boolean connection) {
+		this.connection = connection;
+	}
+	
 	public void closeConnection() {
 		checkMessages.shutdown();
 		try {

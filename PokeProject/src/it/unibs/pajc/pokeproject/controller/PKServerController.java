@@ -100,24 +100,26 @@ public class PKServerController extends Thread implements ActionListener {
 	}
 	
 	public void checkClientStatus() {
-		for(PKServerProtocol player : playersQueue)
+		for(Iterator<PKServerProtocol> it = playersQueue.iterator(); it.hasNext(); )
+		{
+			PKServerProtocol player = it.next();
 			if(!player.isConnected())
 			{
-				player.closeConnection();
-				playersQueue.remove(player);
 				connectedClients--;
+				player.closeConnection();
+				it.remove();
 			}
+		}
 		
-		/*
-		//Should fix this, because it cause ConcurrentModificationException
-		for(MatchThread match : matchList)
-			if(match.checkConnection()) 
-			{
-				connectedClients-=2;
-				match.end();
-				matchList.remove(match);
-			}
-		*/
+		for(Iterator<MatchThread> it = matchList.iterator(); it.hasNext(); ) 
+		{
+			MatchThread match = it.next();
+		    if (!match.checkConnection()) {
+		    	connectedClients-=2;
+				match.closeMatchConnection();
+		        it.remove();
+		    }
+		}
 	}
 	
 	public void drawGUI() {
@@ -135,7 +137,7 @@ public class PKServerController extends Thread implements ActionListener {
 				}
 				for(MatchThread match : matchList)
 				{
-					match.writeConnectionClosed(connectionClosed);
+					match.sendMessageToBoth(connectionClosed);
 				}
 				logger.closeLogger();
 				System.exit(0);

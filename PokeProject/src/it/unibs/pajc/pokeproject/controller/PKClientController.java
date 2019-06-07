@@ -398,6 +398,7 @@ public class PKClientController{
 						logger.writeLog(PKClientStrings.REMATCH_ANSWER_NO);
 						PKMessage rematchNo = new PKMessage(Commands.MSG_REMATCH, 0);
 						connector.sendMessage(rematchNo);
+						connected = false;
 						connector.closeConnection();
 						battlePanel.setVisible(false);
 						view.setBounds(view.getX(), view.getY(), mainPanel.getWidth()+16, mainPanel.getHeight()+39);
@@ -420,6 +421,7 @@ public class PKClientController{
 						logger.writeLog(PKClientStrings.REMATCH_ANSWER_NO);
 						PKMessage rematchNo = new PKMessage(Commands.MSG_REMATCH, 0);	
 						connector.sendMessage(rematchNo);
+						connected = false;
 						connector.closeConnection();
 						battlePanel.setVisible(false);
 						view.setBounds(view.getX(), view.getY(), mainPanel.getWidth()+16, mainPanel.getHeight()+39);
@@ -449,9 +451,15 @@ public class PKClientController{
 				if(e.getPropertyName().equalsIgnoreCase("rematch_no"))
 				{
 					logger.writeLog(PKClientStrings.REMATCH_NO);
+					PKMessage connectionClosed = new PKMessage(Commands.MSG_CONNECTION_CLOSED);
+					connector.sendMessage(connectionClosed);
+					connected = false;
+					connector.closeConnection();
 					dialog.dispose();
+					JOptionPane.showMessageDialog(null, "Other player did not want to have a rematch");
 					battlePanel.setVisible(false);
 					mainPanel.setVisible(true);
+					view.setBounds(view.getX(), view.getY(), mainPanel.getWidth()+16, mainPanel.getHeight()+39);
 				}
 			}	
 		});
