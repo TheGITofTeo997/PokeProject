@@ -36,6 +36,7 @@ public class BattlePanel extends JPanel implements KeyListener {
 	private JLabel lblFrontTrainerPoke;
 	private JLabel lblNameOpponentPoke;
 	private JLabel lblNameMyPoke;
+	private JLabel lblMoveText;
 	private JButton[] btnMoves;
 	private JProgressBar trainerHPbar;
 	private JProgressBar opponentHPbar;
@@ -97,7 +98,7 @@ public class BattlePanel extends JPanel implements KeyListener {
 		lblNameMyPoke.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 15));
 		add(lblNameMyPoke);
 		
-		JLabel lblMoveText = new JLabel("");
+		lblMoveText = new JLabel("");
 		lblMoveText.setForeground(Color.WHITE);
 		lblMoveText.setBounds(344, 327, 254, 62);
 		lblMoveText.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 10));
@@ -117,6 +118,9 @@ public class BattlePanel extends JPanel implements KeyListener {
 		btnMove1.setBounds(25, 323, 122, 31);
 		btnMove1.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 10));
 		btnMove1.setBorderPainted(false);
+		btnMove1.setSelected(true);
+		btnMove1.setBackground(Color.YELLOW);
+		
 		add(btnMove1);	
 		btnMove1.addMouseListener(new MouseAdapter() {
 			 int charIndex = 0;
@@ -146,7 +150,8 @@ public class BattlePanel extends JPanel implements KeyListener {
 		btnMove2 = new JButton("MOVE2");
 		btnMove2.setBounds(157, 323, 122, 31);
 		btnMove2.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 10));
-		btnMove1.setBorderPainted(false);
+		btnMove2.setBorderPainted(false);
+		btnMove2.setSelected(false);
 		add(btnMove2);
 		btnMove2.addMouseListener(new MouseAdapter() {
 			int charIndex = 0;
@@ -176,7 +181,8 @@ public class BattlePanel extends JPanel implements KeyListener {
 		btnMove3 = new JButton("MOVE3");
 		btnMove3.setBounds(25, 358, 122, 31);
 		btnMove3.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 10));
-		btnMove1.setBorderPainted(false);
+		btnMove3.setBorderPainted(false);
+		btnMove3.setSelected(false);
 		add(btnMove3);
 		btnMove3.addMouseListener(new MouseAdapter() {
 			int charIndex = 0;
@@ -206,7 +212,8 @@ public class BattlePanel extends JPanel implements KeyListener {
 		btnMove4 = new JButton("MOVE4");
 		btnMove4.setBounds(157, 358, 122, 31);
 		btnMove4.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 10));
-		btnMove1.setBorderPainted(false);
+		btnMove4.setBorderPainted(false);
+		btnMove4.setSelected(false);
 		add(btnMove4);
 		btnMove4.addMouseListener(new MouseAdapter() {
 			int charIndex = 0;
@@ -290,6 +297,7 @@ public class BattlePanel extends JPanel implements KeyListener {
 				}
 			});
 		}
+		setlblMoveText("Usa " + btnMoves[0].getText());
 	}
 	
 	public void setPokeHP(int trainerHP, int enemyHP) {
@@ -351,6 +359,23 @@ public class BattlePanel extends JPanel implements KeyListener {
 			l.actionPerformed(e);
 		}
 	}
+	
+	public void setlblMoveText(String text){
+		//metodo per animazione scrittura lblMoveText
+   	 moveTimer = new Timer(45, new ActionListener() {
+				int charIndex = 0;
+				public void actionPerformed(ActionEvent e) {
+					 String labelText = lblMoveText.getText();
+		                labelText += text.charAt(charIndex);
+		                lblMoveText.setText(labelText);
+		                charIndex++;
+		                if (charIndex >= text.length()) {
+		                    moveTimer.stop();
+		                }	
+				} 
+       });
+       moveTimer.start();
+	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
@@ -366,6 +391,86 @@ public class BattlePanel extends JPanel implements KeyListener {
 				e.getExtendedKeyCode() == KeyEvent.VK_NUMPAD3) btnMove3.doClick();
 		if(e.getExtendedKeyCode() == KeyEvent.VK_4 || 
 				e.getExtendedKeyCode() == KeyEvent.VK_NUMPAD4) btnMove4.doClick();
+		
+		if(e.getExtendedKeyCode() == KeyEvent.VK_RIGHT && btnMove1.isSelected()) {
+			moveTimer.stop();
+			lblMoveText.setText("");
+			btnMove1.setBackground(null);
+			btnMove1.setSelected(false);
+			btnMove2.setSelected(true);
+			btnMove2.setBackground(Color.YELLOW);
+			setlblMoveText("Usa " + btnMoves[1].getText());
+			}
+		if(e.getExtendedKeyCode() == KeyEvent.VK_RIGHT && btnMove3.isSelected()) {
+			moveTimer.stop();
+			lblMoveText.setText("");
+			btnMove3.setBackground(null);
+			btnMove3.setSelected(false);
+			btnMove4.setSelected(true);
+			btnMove4.setBackground(Color.YELLOW);
+			setlblMoveText("Usa " + btnMoves[3].getText());
+			
+		 	}
+		if(e.getExtendedKeyCode() == KeyEvent.VK_LEFT && btnMove2.isSelected()) {
+			moveTimer.stop();
+			lblMoveText.setText("");
+			btnMove2.setBackground(null);
+			btnMove2.setSelected(false);
+			btnMove1.setSelected(true);
+			btnMove1.setBackground(Color.YELLOW);
+			setlblMoveText("Usa " + btnMoves[0].getText());
+			}
+		if(e.getExtendedKeyCode() == KeyEvent.VK_LEFT && btnMove4.isSelected()) {
+			moveTimer.stop();
+			lblMoveText.setText("");
+			btnMove4.setBackground(null);
+			btnMove4.setSelected(false);
+			btnMove3.setSelected(true);
+			btnMove3.setBackground(Color.YELLOW);
+			setlblMoveText("Usa " + btnMoves[2].getText());
+		}
+		if(e.getExtendedKeyCode() == KeyEvent.VK_UP && btnMove3.isSelected()) {
+			moveTimer.stop();
+			lblMoveText.setText("");
+			btnMove3.setBackground(null);
+			btnMove3.setSelected(false);
+			btnMove1.setSelected(true);
+			btnMove1.setBackground(Color.YELLOW);
+			setlblMoveText("Usa " + btnMoves[0].getText());
+		}
+		if(e.getExtendedKeyCode() == KeyEvent.VK_UP && btnMove4.isSelected()) {
+			moveTimer.stop();
+			lblMoveText.setText("");
+			btnMove4.setBackground(null);
+			btnMove4.setSelected(false);
+			btnMove2.setSelected(true);
+			btnMove2.setBackground(Color.YELLOW);
+			setlblMoveText("Usa " + btnMoves[1].getText());
+		}
+		if(e.getExtendedKeyCode() == KeyEvent.VK_DOWN && btnMove1.isSelected()) {
+			moveTimer.stop();
+			lblMoveText.setText("");
+			btnMove1.setBackground(null);
+			btnMove1.setSelected(false);
+			btnMove3.setSelected(true);
+			btnMove3.setBackground(Color.YELLOW);
+			setlblMoveText("Usa " + btnMoves[2].getText());
+		}
+		if(e.getExtendedKeyCode() == KeyEvent.VK_DOWN && btnMove2.isSelected()) {
+			moveTimer.stop();
+			lblMoveText.setText("");
+			btnMove2.setBackground(null);
+			btnMove2.setSelected(false);
+			btnMove4.setSelected(true);
+			btnMove4.setBackground(Color.YELLOW);
+			setlblMoveText("Usa " + btnMoves[3].getText());
+		}
+		if(e.getExtendedKeyCode() == KeyEvent.VK_ENTER) {
+			if(btnMove1.isSelected()) btnMove1.doClick();
+			if(btnMove2.isSelected()) btnMove2.doClick();
+			if(btnMove3.isSelected()) btnMove3.doClick();
+			if(btnMove4.isSelected()) btnMove4.doClick();
+		}	
 		
 	}
 
