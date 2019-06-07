@@ -130,9 +130,11 @@ public class MatchThread implements Runnable {
 			
 			if(firstAttackerID == pokePlayerOne.getBattleID()) {
 				sendSelectedMoveMessage(pokePlayerOne, pokePlayerTwo, firstAttackerID, moveSelectedByOne, moveSelectedByTwo);
+				logger.writeLog(PKServerStrings.FIRST_ATTACKER_PLAYER_ONE);
 			}
 			else {
 				sendSelectedMoveMessage(pokePlayerTwo, pokePlayerOne, firstAttackerID, moveSelectedByTwo, moveSelectedByOne);
+				logger.writeLog(PKServerStrings.FIRST_ATTACKER_PLAYER_TWO);
 			}
 			
 			logger.writeLog(PKServerStrings.TURN_DONE);
@@ -242,18 +244,26 @@ public class MatchThread implements Runnable {
 	private void rematch(PKMessage msg) {
 		if(playerOne.getClientID() == msg.getClientID())
 			if(msg.getDataToCarry() == 1)
+			{
 				rematchPlayerOne = true;
+				logger.writeLog(PKServerStrings.PLAYER_ONE_AGREED_REMATCH);
+			}
 			else
 			{
 				PKMessage noRematch = new PKMessage(Commands.MSG_REMATCH_NO);
 				playerTwo.sendMessage(noRematch);
+				logger.writeLog(PKServerStrings.PLAYER_ONE_DID_NOT_AGREE_REMATCH);
 			}
 		else if(msg.getDataToCarry() == 1)
+		{
 			rematchPlayerTwo = true;
+			logger.writeLog(PKServerStrings.PLAYER_TWO_AGREED_REMATCH);
+		}
 		else
 		{
 			PKMessage noRematch = new PKMessage(Commands.MSG_REMATCH_NO);
 			playerOne.sendMessage(noRematch);
+			logger.writeLog(PKServerStrings.PLAYER_TWO_DID_NOT_AGREE_REMATCH);
 		}
 		if(rematchPlayerOne && rematchPlayerTwo)
 		{
@@ -262,6 +272,7 @@ public class MatchThread implements Runnable {
 			PKMessage rematch = new PKMessage(Commands.MSG_REMATCH_YES);
 			playerOne.sendMessage(rematch);
 			playerTwo.sendMessage(rematch);
+			logger.writeLog(PKServerStrings.REMATCH_MESSAGES_SENT);
 		}		
 	}
 	
@@ -278,6 +289,7 @@ public class MatchThread implements Runnable {
 		checkMessages.shutdown();
 		playerOne.closeConnection();
 		playerTwo.closeConnection();
+		logger.writeLog(PKServerStrings.MATCH_CONNECTION_CLOSED);
 	}
 	
 	public boolean checkConnection() {

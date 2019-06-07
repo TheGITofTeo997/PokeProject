@@ -59,7 +59,6 @@ public class PKServerProtocol extends Thread {
 								view.appendTextToConsole(PKServerStrings.MSG_ADDED_CORRECTLY);
 						}
 					} catch (ClassNotFoundException | IOException e) {
-						e.printStackTrace();
 					}
 				}
 			}, 0, 1, TimeUnit.SECONDS);
@@ -94,11 +93,11 @@ public class PKServerProtocol extends Thread {
 	}
 	
 	public void closeConnection() {
+		checkMessages.shutdown();
 		try {
-			checkMessages.shutdownNow();
+			socketPlayer.close();
 			fromClient.close();
 			toClient.close();
-			socketPlayer.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

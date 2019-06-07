@@ -82,12 +82,12 @@ public class PKClientController{
 		view.setLocationRelativeTo(null);
 		view.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
-				logger.closeLogger();
 				if(connected) {
 					PKMessage connectionClosed = new PKMessage(Commands.MSG_CONNECTION_CLOSED);
 					connector.sendMessage(connectionClosed);
 					connector.closeConnection();
 				}
+				logger.closeLogger();
 				System.exit(0);
 			}
 		});
@@ -251,7 +251,7 @@ public class PKClientController{
 					protected Void doInBackground() throws Exception {
 						int moveID = Integer.parseInt(e.getActionCommand());
 						PKMessage msg = new PKMessage(Commands.MSG_SELECTED_MOVE, moveID);
-						battleEnvironment.setOurMove(moveID);
+						//battleEnvironment.setOurMove(moveID);
 						connector.sendMessage(msg);
 						logger.writeLog(PKClientStrings.MOVE_SENT);
 						return null;

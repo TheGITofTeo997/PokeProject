@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -38,6 +39,7 @@ public class PKClientConnector {
 				try {
 					PKMessage msg = (PKMessage)fromServer.readObject();
 					env.executeCommand(msg);
+				} catch (SocketException e) {
 				} catch (ClassNotFoundException | IOException e) {
 					e.printStackTrace();
 				}
@@ -61,9 +63,9 @@ public class PKClientConnector {
 	public void closeConnection() {
 		checkMessages.shutdown();
 		try {
-			socket.close();
-			toServer.close();
 			fromServer.close();
+			toServer.close();
+			socket.close();
 			logger.writeLog(PKClientStrings.RESOURCES_CLOSED);
 		} catch (IOException e) {
 			e.printStackTrace();

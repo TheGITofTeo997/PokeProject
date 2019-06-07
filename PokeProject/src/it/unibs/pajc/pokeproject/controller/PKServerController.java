@@ -66,7 +66,7 @@ public class PKServerController extends Thread implements ActionListener {
 		ScheduledExecutorService checkClients = Executors.newSingleThreadScheduledExecutor();
 		checkClients.scheduleAtFixedRate(new Runnable() {
 			public void run() {
-				//eventually remove disconnected player
+				checkClientStatus();
 				startMatch();
 			}
 		}, 0, 1, TimeUnit.SECONDS);
@@ -108,6 +108,7 @@ public class PKServerController extends Thread implements ActionListener {
 				connectedClients--;
 			}
 		
+		/*
 		//Should fix this, because it cause ConcurrentModificationException
 		for(MatchThread match : matchList)
 			if(match.checkConnection()) 
@@ -116,6 +117,7 @@ public class PKServerController extends Thread implements ActionListener {
 				match.end();
 				matchList.remove(match);
 			}
+		*/
 	}
 	
 	public void drawGUI() {

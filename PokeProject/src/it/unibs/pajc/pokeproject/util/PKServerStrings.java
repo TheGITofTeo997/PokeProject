@@ -35,8 +35,16 @@ public class PKServerStrings {
 	public static final String SELECTED_MOVE_FROM_ONE = "-Received move selected by player one";
 	public static final String SELECTED_MOVE_FROM_TWO = "-Received move selected by player two";
 	public static final String TURN_DONE = "-Turn damage calculation and messages sending done";
-	public static final String SECOND_ATTACKER_DEAD = "Second attacker is dead. Pokemon name: ";
-	public static final String FIRST_ATTACKER_DEAD = "First attacker is dead. Pokemon name: ";
+	public static final String SECOND_ATTACKER_DEAD = "-Second attacker is dead. Pokemon name: ";
+	public static final String FIRST_ATTACKER_DEAD = "-First attacker is dead. Pokemon name: ";
+	public static final String MATCH_CONNECTION_CLOSED = "-Match connection closed by server";
+	public static final String REMATCH_MESSAGES_SENT = "-Rematch messages sent to both player";
+	public static final String PLAYER_TWO_DID_NOT_AGREE_REMATCH = "-Player two did not agree to rematch";
+	public static final String PLAYER_TWO_AGREED_REMATCH = "-Player two agreed to rematch";
+	public static final String PLAYER_ONE_DID_NOT_AGREE_REMATCH = "-Player one did not agree to rematch";
+	public static final String PLAYER_ONE_AGREED_REMATCH = "-Player one agreed to rematch";
+	public static final String FIRST_ATTACKER_PLAYER_ONE = "-Player one is the first to attack";
+	public static final String FIRST_ATTACKER_PLAYER_TWO = "-Player two is the first to attack";
 	
 	//View strings
 	public static final String FRAME_TITLE = "PokeServer v0.5.1";

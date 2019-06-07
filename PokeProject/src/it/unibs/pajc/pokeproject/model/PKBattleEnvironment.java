@@ -11,7 +11,7 @@ public class PKBattleEnvironment {
 	private Pokemon ourPokemon;
 	private Pokemon opponentPokemon;
 	
-	private String ourMove;
+	//private String ourMove;
 	
 	private ArrayList<PropertyChangeListener> listenerList;
 	
@@ -47,37 +47,31 @@ public class PKBattleEnvironment {
 			String opponentMove = opponentPokemon.getMove(msg.getDataToCarry()).getName();
 			e = new PropertyChangeEvent(this, "opponent_move", null, opponentMove);
 			firePropertyChanged(e);
-			break;
 			*/
+			break;
 		case MSG_RECEIVED_DAMAGE:
 			int receivedDamage = msg.getDataToCarry();
 			int ourRemainingHP = ourPokemon.getBattleHP()-receivedDamage;
-			System.out.println("Nostri HP iniziali turno: "+ ourPokemon.getBattleHP());
 			if(ourRemainingHP<0)
 				ourRemainingHP=0;
+			System.out.println("Nostri HP iniziali turno: "+ ourPokemon.getBattleHP() + ourPokemon.getName());
 			ourPokemon.setBattleHP(ourRemainingHP);
 			
 			System.out.println("Danno ricevuto da noi: " + receivedDamage + "\nHP rimasti a noi: " + ourRemainingHP);
 			System.out.println("****************************");
-			
 			e = new PropertyChangeEvent(this, "ourHP", -1, ourRemainingHP);
 			firePropertyChanged(e);
 			break;
 		case MSG_DONE_DAMAGE:
-			/*
-			e = new PropertyChangeEvent(this, "our_move", null, ourMove);
-			firePropertyChanged(e);
-			*/
 			int doneDamage = msg.getDataToCarry();
 			int opponentRemainingHP = opponentPokemon.getBattleHP()-doneDamage;
-			System.out.println("Loro HP iniziali turno: "+ opponentPokemon.getBattleHP());
+			System.out.println("Loro HP iniziali turno: "+ opponentPokemon.getBattleHP() + opponentPokemon.getName());
 			if(opponentRemainingHP<0)
 				opponentRemainingHP=0;
 			opponentPokemon.setBattleHP(opponentRemainingHP);
 			
 			System.out.println("Danno ricevuto dal nemico: " + doneDamage + "\nHP rimasti al nemico: " + opponentRemainingHP);
 			System.out.println("****************************");
-			
 			e = new PropertyChangeEvent(this, "opponentHP", -1, opponentRemainingHP);
 			firePropertyChanged(e);
 			break;
@@ -120,9 +114,11 @@ public class PKBattleEnvironment {
 		ourPokemon.setBattleHP(ourPokemon.getHP());
 	}
 	
+	/*
 	public void setOurMove(int moveID) {
 		ourMove = ourPokemon.getMove(moveID).getName();
 	}
+	*/
 	
 	public Pokemon getOpponentPokemon() {
 		return opponentPokemon;
