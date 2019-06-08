@@ -6,9 +6,15 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.Timer;
 
+import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.Image;
+import java.awt.LayoutManager;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Map.Entry;
 import java.util.TreeMap;
@@ -34,6 +40,13 @@ public class PokeChooserPanel extends JPanel implements ActionListener{
 	private JButton btnStartButton;
 	private JLabel pokemon;
 	private JRadioButton rdbtnChooseMe;
+	private JPanel infoPokemon;
+	private JLabel lblInfoIconPokemon;
+	private JLabel lblInfoNamePokemon;
+	private JLabel lblInfoTypePokemon;
+	private JLabel lblInfoHPPokemon;
+	private JLabel lblInfoAttackPokemon;
+	private JLabel lblInfoDefensePokemon;
 	
 	/**
 	 * Create the panel.
@@ -54,6 +67,40 @@ public class PokeChooserPanel extends JPanel implements ActionListener{
 				fireActionPerformed(arg);
 			}
 		});	
+		
+		infoPokemon = new JPanel();
+		infoPokemon.setVisible(false);
+		infoPokemon.setBackground(Color.GRAY);
+		infoPokemon.setLayout(null);
+		add(infoPokemon);
+		
+		lblInfoIconPokemon = new JLabel();
+		lblInfoIconPokemon.setVisible(false);
+		infoPokemon.add(lblInfoIconPokemon);
+		
+		lblInfoNamePokemon= new JLabel();
+		lblInfoNamePokemon.setForeground(Color.WHITE);
+		infoPokemon.add(lblInfoNamePokemon);
+		
+		lblInfoTypePokemon= new JLabel();
+		lblInfoTypePokemon.setVisible(false);
+		lblInfoTypePokemon.setForeground(Color.WHITE);
+		infoPokemon.add(lblInfoTypePokemon);
+		
+		lblInfoHPPokemon= new JLabel();
+		lblInfoHPPokemon.setVisible(false);
+		lblInfoHPPokemon.setForeground(Color.WHITE);
+		infoPokemon.add(lblInfoHPPokemon);
+		
+		lblInfoAttackPokemon= new JLabel();
+		lblInfoAttackPokemon.setVisible(false);
+		lblInfoAttackPokemon.setForeground(Color.WHITE);
+		infoPokemon.add(lblInfoAttackPokemon);
+		
+		lblInfoDefensePokemon= new JLabel();
+		lblInfoDefensePokemon.setForeground(Color.WHITE);
+		lblInfoIconPokemon.setVisible(false);
+		infoPokemon.add(lblInfoDefensePokemon);
 		
 		drawPokemons(db);
 		
@@ -81,11 +128,12 @@ public class PokeChooserPanel extends JPanel implements ActionListener{
 			}
 			
 			Pokemon toDraw = entry.getValue();
-			
+				
 			pokemon = new JLabel();
 			pokemon.setIcon(new ImageIcon(new ImageIcon(toDraw.getFrontSprite()).getImage().getScaledInstance(RES, RES, Image.SCALE_DEFAULT))); //gif scale
 			pokemon.setBounds(x, y, RES, RES);
 			add(pokemon);
+			
 			
 			rdbtnChooseMe = new JRadioButton(toDraw.getName());
 			rdbtnChooseMe.setOpaque(false);
@@ -97,6 +145,45 @@ public class PokeChooserPanel extends JPanel implements ActionListener{
 			
 			rdbtnChooseMe.addActionListener(this);
 			group.add(rdbtnChooseMe);
+			
+			pokemon.addMouseListener(new MouseAdapter() {
+				int x = pokemon.getBounds().x;
+				int y = pokemon.getBounds().y;
+				
+		         public void mouseEntered(MouseEvent me) {
+		        	 infoPokemon.setVisible(true);
+		        	 infoPokemon.setBounds(x, y, 176, 96);
+		        	 
+		        	 lblInfoIconPokemon.setVisible(true);
+		        	 lblInfoIconPokemon.setBounds(0,0, 48, 48);
+		        	 lblInfoIconPokemon.setIcon(new ImageIcon(new ImageIcon(toDraw.getFrontSprite()).getImage()
+		        			 .getScaledInstance(48, 48, Image.SCALE_DEFAULT)));
+		        	 
+		        	lblInfoNamePokemon.setVisible(true);
+		        	lblInfoNamePokemon.setBounds(60, 5, 140, 15);
+		        	lblInfoNamePokemon.setText(toDraw.getName().toUpperCase());
+		        	
+		        	lblInfoTypePokemon.setVisible(true);
+		        	lblInfoTypePokemon.setBounds(60, 25, 140, 15);
+		        	lblInfoTypePokemon.setText("TYPE: " +toDraw.getType().getTypeName());
+		        	
+		        	lblInfoHPPokemon.setVisible(true);
+		        	lblInfoHPPokemon.setBounds(60, 40, 140, 15);
+		        	lblInfoHPPokemon.setText("HP: " + toDraw.getHP());
+		        	
+		        	lblInfoAttackPokemon.setVisible(true);
+		        	lblInfoAttackPokemon.setBounds(60, 55, 140, 15);
+		        	lblInfoAttackPokemon.setText("ATTACK: " + toDraw.getAttack());
+		        	
+		        	lblInfoDefensePokemon.setVisible(true);
+		        	lblInfoDefensePokemon.setBounds(60, 70, 140, 15);
+		        	lblInfoDefensePokemon.setText("DEFENSE: " + toDraw.getDefense());
+		        	 
+		         }
+		         public void mouseExited(MouseEvent me) {
+		        	 infoPokemon.setVisible(false);
+		         }
+				});
 			
 			x = x + RES + HORIZONTAL_SPACING;
 		}
