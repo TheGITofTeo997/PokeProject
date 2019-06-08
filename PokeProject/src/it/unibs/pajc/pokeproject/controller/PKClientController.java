@@ -111,6 +111,7 @@ public class PKClientController{
 		
 		mainPanel.addSinglePlayerListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				multiplayer = false;
 				drawPokeChooserPanel();
 				view.setBounds(view.getX(), view.getY(), pokeChooserPanel.getWidth(), pokeChooserPanel.getHeight());
 				mainPanel.setVisible(false); 
@@ -453,7 +454,6 @@ public class PKClientController{
 						PKMessage rematchNo = new PKMessage(Commands.MSG_REMATCH, 0);
 						connector.sendMessage(rematchNo);
 						connected = false;
-						multiplayer = false;
 						connector.closeConnection();
 						battlePanel.setVisible(false);
 						view.setBounds(view.getX(), view.getY(), mainPanel.getWidth()+16, mainPanel.getHeight()+39);
@@ -477,7 +477,6 @@ public class PKClientController{
 						PKMessage rematchNo = new PKMessage(Commands.MSG_REMATCH, 0);	
 						connector.sendMessage(rematchNo);
 						connected = false;
-						multiplayer = false;
 						connector.closeConnection();
 						battlePanel.setVisible(false);
 						view.setBounds(view.getX(), view.getY(), mainPanel.getWidth()+16, mainPanel.getHeight()+39);
@@ -510,7 +509,6 @@ public class PKClientController{
 					PKMessage connectionClosed = new PKMessage(Commands.MSG_CONNECTION_CLOSED);
 					connector.sendMessage(connectionClosed);
 					connected = false;
-					multiplayer = false;
 					connector.closeConnection();
 					dialog.dispose();
 					JOptionPane.showMessageDialog(null, "Other player did not want to have a rematch");
