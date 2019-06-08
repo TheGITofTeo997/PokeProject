@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import it.unibs.pajc.pokeproject.util.PKMessage;
 
-public class PKBattleEnvironment {
+public class MultiplayerModel {
 
 	private Pokemon ourPokemon;
 	private Pokemon opponentPokemon;
@@ -15,7 +15,7 @@ public class PKBattleEnvironment {
 	
 	private ArrayList<PropertyChangeListener> listenerList;
 	
-	public PKBattleEnvironment() {
+	public MultiplayerModel() {
 		listenerList = new ArrayList<>();
 	}
 	public void executeCommand(PKMessage msg) {

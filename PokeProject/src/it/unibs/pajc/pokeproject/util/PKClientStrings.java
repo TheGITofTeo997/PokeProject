@@ -21,7 +21,8 @@ public class PKClientStrings {
 	public static final String CHOOSER_PANEL_SUCCESFULLY = "-Chooser panel drawn succesfully";
 	public static final String BATTLE_PANEL_SUCCESFULLY = "-Battle panel drawn succesfully";
 	public static final String ERROR_POPUP_SHOWN ="Error popup shown";
-	public static final String BATTLE_ENVIRONMENT_LISTENERS = "-Added property change listeners to battle environment";
+	public static final String MULTI_PLAYER_LISTENERS = "-Added property change listeners for multiplayer";
+	public static final String SINGLE_PLAYER_LISTENERS = "-Added property change listeners for singleplayer";
 	public static final String CONNECTED_SUCCESFULLY = "-Connected succesfully to server";
 	public static final String EXCEPTION_THROWN = "-Exception thrown: ";
 	public static final String POKEMON_SENT = "-Chosen pokemon sent succesfully";
@@ -35,7 +36,7 @@ public class PKClientStrings {
 	public static final String OPPONENT_HP = "-Updated opponent hp after the turn";
 	public static final String OUR_VICTORY = "-Match ended with our victory";
 	public static final String REMATCH_ANSWER_YES = "-Player decided to have a rematch";
-	public static final String REMATCH_ANSWER_NO = "-Player dediced to not have a rematch";
+	public static final String REMATCH_ANSWER_NO = "-Player decided to not have a rematch";
 	public static final String OPPONENT_VICTORY = "-Match ended with opponent victory";
 	public static final String REMATCH_YES = "-Both player agreed to have a rematch";
 	public static final String REMATCH_NO = "-At least one player did not agree to have a rematch";
@@ -46,4 +47,10 @@ public class PKClientStrings {
 	//View strings
 	public static final String BTN_STARTBATTLE_TEXT = "Start Battle ->";
 	public static final String FRAME_TITLE = "PokeBattle Client v0.6b";
+
+	public static final String SINGLE_PLAYER_POKEMONS = "-Set singleplayer pokemons";
+	public static final String PLAYER_HP = "-Updated player hp after the turn";
+	public static final String COMPUTER_HP = "-Updated computer hp after the turn";
+	public static final String START_BATTLE_SINGLE = "-Started singleplayer battle";
+	public static final String PLAYER_MOVE = "-Player selected move for this turn";
 }

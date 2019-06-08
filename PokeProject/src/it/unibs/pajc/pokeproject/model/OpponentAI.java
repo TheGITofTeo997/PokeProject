@@ -6,10 +6,10 @@ import java.util.Set;
 public class OpponentAI {
 
 	private PKLoader loader;
-	private SinglePlayerModel model;
+	private SingleplayerModel model;
 	private Set idSet;
 	
-	public OpponentAI(PKLoader loader, SinglePlayerModel model) {
+	public OpponentAI(PKLoader loader, SingleplayerModel model) {
 		this.loader = loader;
 		this.model = model;
 		idSet = loader.getPkDatabase().keySet();
@@ -26,6 +26,11 @@ public class OpponentAI {
 				selected = (Integer)obj;
 		    i++;
 		}
+		return selected;
+	}
+	
+	public int chooseMove() {
+		int selected = 1;
 		return selected;
 	}
 }

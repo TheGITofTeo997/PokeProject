@@ -5,14 +5,14 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
-public class SinglePlayerModel {
+public class SingleplayerModel {
 
 	private ArrayList<PropertyChangeListener> listenerList;
 	private Pokemon playerPoke;
 	private Pokemon computerPoke;
 	private PropertyChangeEvent e;
 	
-	public SinglePlayerModel() {
+	public SingleplayerModel() {
 		listenerList = new ArrayList<>();
 	}
 	
@@ -20,41 +20,75 @@ public class SinglePlayerModel {
 		this.playerPoke = playerPoke;
 		this.computerPoke = computerPoke;
 		
+		playerPoke.setBattleID(0);
+		computerPoke.setBattleID(1);
+		
 		playerPoke.setBattleHP(playerPoke.getHP());
 		computerPoke.setBattleHP(computerPoke.getHP());
 		
-		e = new PropertyChangeEvent(this, "battle_panel", false, true);
+		e = new PropertyChangeEvent(this, "start_battle", false, true);
+		firePropertyChanged(e);
 	}
 	
 	public void doTurnCalculation(int playerMove, int computerMove) {
 		int playerDamage = calcDamage(playerPoke, computerPoke, playerMove);
 		int computerDamage = calcDamage(computerPoke, playerPoke, computerMove);
+		int firstAttackerID = setPriorityBattle(playerPoke, computerPoke);
 		
-		int playerRemainingHP = playerPoke.getBattleHP()- computerDamage;
-		if(playerRemainingHP<0)
-			playerRemainingHP=0;
-		playerPoke.setBattleHP(playerRemainingHP);
-	
-		e = new PropertyChangeEvent(this, "playerHP", -1, playerRemainingHP);
-		firePropertyChanged(e);
-
 		int computerRemainingHP = computerPoke.getBattleHP()- playerDamage;
 		if(computerRemainingHP<0)
 			computerRemainingHP=0;
 		computerPoke.setBattleHP(computerRemainingHP);
 		
-		e = new PropertyChangeEvent(this, "computerHP", -1, computerRemainingHP);
-		firePropertyChanged(e);
+		int playerRemainingHP = playerPoke.getBattleHP()- computerDamage;
+		if(playerRemainingHP<0)
+			playerRemainingHP=0;
+		playerPoke.setBattleHP(playerRemainingHP);
 		
-		if(isDead(playerPoke)) 
+		if(firstAttackerID == 0)
 		{
-			e = new PropertyChangeEvent(this, "player_defeat", false, true);
+			
+			e = new PropertyChangeEvent(this, "computerHP", -1, computerRemainingHP);
 			firePropertyChanged(e);
+			
+			if(isDead(computerPoke))
+			{
+				e = new PropertyChangeEvent(this, "player_victory", false, true);
+				firePropertyChanged(e);
+			}
+			else
+			{
+				e = new PropertyChangeEvent(this, "playerHP", -1, playerRemainingHP);
+				firePropertyChanged(e);
+				
+				if(isDead(playerPoke)) 
+				{
+					e = new PropertyChangeEvent(this, "player_defeat", false, true);
+					firePropertyChanged(e);
+				}
+			}
 		}
-		else if(isDead(computerPoke))
+		else
 		{
-			e = new PropertyChangeEvent(this, "player_victory", false, true);
+			e = new PropertyChangeEvent(this, "playerHP", -1, playerRemainingHP);
 			firePropertyChanged(e);
+			
+			if(isDead(playerPoke)) 
+			{
+				e = new PropertyChangeEvent(this, "player_defeat", false, true);
+				firePropertyChanged(e);
+			}
+			else
+			{	
+				e = new PropertyChangeEvent(this, "computerHP", -1, computerRemainingHP);
+				firePropertyChanged(e);
+				
+				if(isDead(computerPoke))
+				{
+					e = new PropertyChangeEvent(this, "player_victory", false, true);
+					firePropertyChanged(e);
+				}
+			}
 		}
 	}
 	

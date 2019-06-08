@@ -17,13 +17,13 @@ public class PKClientConnector {
 	private String serverIp;
 	private Socket socket;
 	private ScheduledExecutorService checkMessages;
-	private PKBattleEnvironment env;
+	private MultiplayerModel model;
 	private ObjectInputStream fromServer;
 	private ObjectOutputStream toServer;
 	private Logger logger;
 	
-	public PKClientConnector(PKBattleEnvironment env, Logger logger) {
-		this.env = env;
+	public PKClientConnector(MultiplayerModel model, Logger logger) {
+		this.model = model;
 		this.logger = logger;
 	}
 	
@@ -38,7 +38,7 @@ public class PKClientConnector {
 			public void run() {
 				try {
 					PKMessage msg = (PKMessage)fromServer.readObject();
-					env.executeCommand(msg);
+					model.executeCommand(msg);
 				} catch (SocketException e) {
 				} catch (ClassNotFoundException | IOException e) {
 					e.printStackTrace();

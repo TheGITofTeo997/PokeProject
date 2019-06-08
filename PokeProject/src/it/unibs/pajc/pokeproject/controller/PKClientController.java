@@ -29,6 +29,8 @@ public class PKClientController{
 	
 	//Booleans for listeners control
 	private boolean connected;
+	private boolean multiplayer;
+	private boolean singleplayer;
 	
 	//Logger
 	private Logger logger;
@@ -36,12 +38,14 @@ public class PKClientController{
 	//Controller Components
 	private PKLoader loader;
 	private PKClientConnector connector;
-	private PKBattleEnvironment battleEnvironment;
-	private JFrame view;
-	private JDialog dialog;
+	private MultiplayerModel multiplayerModel;
+	private SingleplayerModel singleplayerModel;
+	private OpponentAI ai;
 	private int myPokeID;
 	
 	//View Components
+	private JFrame view;
+	private JDialog dialog;
 	private MainPanel mainPanel = null;
 	private IpPanel ipPanel = null;
 	private PokeChooserPanel pokeChooserPanel = null;
@@ -50,15 +54,19 @@ public class PKClientController{
 	
 	public PKClientController() {
 		connected = false;
+		singleplayer = false;
+		multiplayer = false;
 		logger = new Logger(PKClientStrings.LOGFILE);
 		loader = new PKLoader();
-		battleEnvironment = new PKBattleEnvironment();
-		connector = new PKClientConnector(battleEnvironment, logger);
+		multiplayerModel = new MultiplayerModel();
+		connector = new PKClientConnector(multiplayerModel, logger);
 	}
 		
 	public void setupClientUtils() {
 		loader.loadTypes();
 		loader.loadPokemon();
+		singleplayerModel = new SingleplayerModel();
+		ai = new OpponentAI(loader, singleplayerModel);
 		logger.writeLog(PKClientStrings.UTILS_SUCCESFULLY);
 	}
 	
@@ -118,18 +126,21 @@ public class PKClientController{
 			}
 		});
 		
-		addBattleEnvironmentListeners();
-		logger.writeLog(PKClientStrings.BATTLE_ENVIRONMENT_LISTENERS);
-		
 		logger.writeLog(PKClientStrings.MAIN_PANEL_SUCCESFULLY);
 	}
-	
 	
 	public void drawIpPanel() {
 		ipPanel = new IpPanel();
 		ipPanel.setBounds(0, 0, 663, 429);
 		ipPanel.setVisible(true);
 		view.getContentPane().add(ipPanel);
+		
+		if(!multiplayer)
+		{
+			addMultiplayerListeners();
+			multiplayer = true;
+			logger.writeLog(PKClientStrings.MULTI_PLAYER_LISTENERS);
+		}
 		
 		ipPanel.addBackButtonListener(new ActionListener() {
 			@Override
@@ -201,36 +212,59 @@ public class PKClientController{
 		view.getContentPane().add(pokeChooserPanel);
 		pokeChooserPanel.setVisible(true);
 		
-		pokeChooserPanel.addListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				SwingWorker<Void, Void> mySwingWorker = new SwingWorker<Void, Void>() {
-					protected Void doInBackground() throws Exception {
-						myPokeID = Integer.parseInt(e.getActionCommand());
-						battleEnvironment.setOurPokemon(loader.getPokemonFromDB(myPokeID));
-						PKMessage msg = new PKMessage(Commands.MSG_SELECTED_POKEMON, myPokeID);
-						connector.sendMessage(msg);
-						logger.writeLog(PKClientStrings.POKEMON_SENT);
-						return null;
-					}
-				};
+		if(multiplayer)
+		{
+			pokeChooserPanel.addListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					SwingWorker<Void, Void> mySwingWorker = new SwingWorker<Void, Void>() {
+						protected Void doInBackground() throws Exception {
+							myPokeID = Integer.parseInt(e.getActionCommand());
+							multiplayerModel.setOurPokemon(loader.getPokemonFromDB(myPokeID));
+							PKMessage msg = new PKMessage(Commands.MSG_SELECTED_POKEMON, myPokeID);
+							connector.sendMessage(msg);
+							logger.writeLog(PKClientStrings.POKEMON_SENT);
+							return null;
+						}
+					};
+					
+					Window win = SwingUtilities.getWindowAncestor((AbstractButton)e.getSource());
+					dialog = new JDialog(win, "Waiting...", ModalityType.APPLICATION_MODAL);
 				
-				Window win = SwingUtilities.getWindowAncestor((AbstractButton)e.getSource());
-				dialog = new JDialog(win, "Waiting...", ModalityType.APPLICATION_MODAL);
+					mySwingWorker.execute();
+	
+					JLabel lblGIFLabel = new JLabel();
+					lblGIFLabel.setIcon(new ImageIcon(PKClientController.class.getResource("/img/wait.gif")));
+					lblGIFLabel.setBounds(25, 83, 310, 100);
+					JPanel panel = new JPanel();
+					panel.add(lblGIFLabel);
+					dialog.add(panel);
+					dialog.pack();
+					dialog.setLocationRelativeTo(win);
+					dialog.setVisible(true);
+				}
+			});
 			
-				mySwingWorker.execute();
-
-				JLabel lblGIFLabel = new JLabel();
-				lblGIFLabel.setIcon(new ImageIcon(PKClientController.class.getResource("/img/wait.gif")));
-				lblGIFLabel.setBounds(25, 83, 310, 100);
-				JPanel panel = new JPanel();
-				panel.add(lblGIFLabel);
-				dialog.add(panel);
-				dialog.pack();
-				dialog.setLocationRelativeTo(win);
-				dialog.setVisible(true);
-			}
-		});
+		}
+		else
+		{
+			pokeChooserPanel.addListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					myPokeID = Integer.parseInt(e.getActionCommand());
+					int computerID = ai.chooseRandomPokemon();
+					singleplayerModel.setPokemons(loader.getPokemonFromDB(myPokeID), loader.getPokemonFromDB(computerID));
+					logger.writeLog(PKClientStrings.SINGLE_PLAYER_POKEMONS);
+				}
+			});
+		}
+		
+		if(!singleplayer && !multiplayer)
+		{
+			addSingleplayerListeners();
+			singleplayer = true;
+			logger.writeLog(PKClientStrings.SINGLE_PLAYER_LISTENERS);
+		}
 		
 		logger.writeLog(PKClientStrings.CHOOSER_PANEL_SUCCESFULLY);
 	}
@@ -241,44 +275,65 @@ public class PKClientController{
 		battlePanel.setVisible(true);
 		view.getContentPane().add(battlePanel);
 		pokeChooserPanel.setVisible(false);	
-		battlePanel.setSprites(battleEnvironment.getOurPokemon().getBackSprite(), battleEnvironment.getOpponentPokemon().getFrontSprite());
-		battlePanel.setPokeNames(battleEnvironment.getOurPokemon().getName(), battleEnvironment.getOpponentPokemon().getName());
-		battlePanel.setMoveNames(battleEnvironment.getOurPokemon().getMoveSet());
-		battlePanel.setPokeHP(battleEnvironment.getOurPokemon().getHP(), battleEnvironment.getOpponentPokemon().getHP());
-		battlePanel.addListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				SwingWorker<Void, Void> mySwingWorker = new SwingWorker<Void, Void>() {
-					protected Void doInBackground() throws Exception {
-						int moveID = Integer.parseInt(e.getActionCommand());
-						PKMessage msg = new PKMessage(Commands.MSG_SELECTED_MOVE, moveID);
-						//battleEnvironment.setOurMove(moveID);
-						connector.sendMessage(msg);
-						logger.writeLog(PKClientStrings.MOVE_SENT);
-						return null;
-					}
-				};
-				
-				Window win = SwingUtilities.getWindowAncestor((AbstractButton)e.getSource());
-				dialog = new JDialog(win, "Waiting...", ModalityType.APPLICATION_MODAL);	
-				
-				mySwingWorker.execute();
+		
+		if(multiplayer)
+		{
+			battlePanel.setSprites(multiplayerModel.getOurPokemon().getBackSprite(), multiplayerModel.getOpponentPokemon().getFrontSprite());
+			battlePanel.setPokeNames(multiplayerModel.getOurPokemon().getName(), multiplayerModel.getOpponentPokemon().getName());
+			battlePanel.setMoveNames(multiplayerModel.getOurPokemon().getMoveSet());
+			battlePanel.setPokeHP(multiplayerModel.getOurPokemon().getHP(), multiplayerModel.getOpponentPokemon().getHP());
+			battlePanel.addListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					SwingWorker<Void, Void> mySwingWorker = new SwingWorker<Void, Void>() {
+						protected Void doInBackground() throws Exception {
+							int moveID = Integer.parseInt(e.getActionCommand());
+							PKMessage msg = new PKMessage(Commands.MSG_SELECTED_MOVE, moveID);
+							//battleEnvironment.setOurMove(moveID);
+							connector.sendMessage(msg);
+							logger.writeLog(PKClientStrings.MOVE_SENT);
+							return null;
+						}
+					};
 					
-				JLabel lblGIFLabel = new JLabel();
-				lblGIFLabel.setIcon(new ImageIcon(new ImageIcon(PokeChooserPanel.class.getResource("/img/miniwait.gif")).getImage().getScaledInstance(64, 64, Image.SCALE_DEFAULT)));	
-				lblGIFLabel.setBounds(25, 83, 64, 64);
-				JPanel panel = new JPanel();
-				panel.add(lblGIFLabel);
-				dialog.add(panel);
-				dialog.pack();
-				dialog.setLocationRelativeTo(win);
-				dialog.setVisible(true);
-			}
-		});		
+					Window win = SwingUtilities.getWindowAncestor((AbstractButton)e.getSource());
+					dialog = new JDialog(win, "Waiting...", ModalityType.APPLICATION_MODAL);	
+					
+					mySwingWorker.execute();
+						
+					JLabel lblGIFLabel = new JLabel();
+					lblGIFLabel.setIcon(new ImageIcon(new ImageIcon(PokeChooserPanel.class.getResource("/img/miniwait.gif")).getImage().getScaledInstance(64, 64, Image.SCALE_DEFAULT)));	
+					lblGIFLabel.setBounds(25, 83, 64, 64);
+					JPanel panel = new JPanel();
+					panel.add(lblGIFLabel);
+					dialog.add(panel);
+					dialog.pack();
+					dialog.setLocationRelativeTo(win);
+					dialog.setVisible(true);
+				}
+			});	
+		}
+		else
+		{
+			battlePanel.setSprites(singleplayerModel.getPlayerPokemon().getBackSprite(), singleplayerModel.getComputerPokemon().getFrontSprite());
+			battlePanel.setPokeNames(singleplayerModel.getPlayerPokemon().getName(), singleplayerModel.getComputerPokemon().getName());
+			battlePanel.setMoveNames(singleplayerModel.getPlayerPokemon().getMoveSet());
+			battlePanel.setPokeHP(singleplayerModel.getPlayerPokemon().getHP(), singleplayerModel.getComputerPokemon().getHP());
+			battlePanel.addListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					int playerMoveID = Integer.parseInt(e.getActionCommand());
+					int computerMoveID = ai.chooseMove();
+					singleplayerModel.doTurnCalculation(playerMoveID, computerMoveID);
+					logger.writeLog(PKClientStrings.PLAYER_MOVE);
+				}
+				
+			});
+		}
 		logger.writeLog(PKClientStrings.BATTLE_PANEL_SUCCESFULLY);
 	}
 	
-	private void addBattleEnvironmentListeners() {
-		battleEnvironment.addPropertyListener(new PropertyChangeListener() {
+	private void addMultiplayerListeners() {
+		multiplayerModel.addPropertyListener(new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent e) {
 				if(e.getPropertyName().equalsIgnoreCase("connection_closed"))
@@ -299,7 +354,7 @@ public class PKClientController{
 			}
 		});
 		
-		battleEnvironment.addPropertyListener(new PropertyChangeListener() {
+		multiplayerModel.addPropertyListener(new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent e) {
 				if(e.getPropertyName().equalsIgnoreCase("connection"))
@@ -307,7 +362,7 @@ public class PKClientController{
 			}
 		});
 		
-		battleEnvironment.addPropertyListener(new PropertyChangeListener() {
+		multiplayerModel.addPropertyListener(new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent e) {
 				if(e.getPropertyName().equalsIgnoreCase("player_found"))
@@ -321,13 +376,13 @@ public class PKClientController{
 			}
 		});
 		
-		battleEnvironment.addPropertyListener(new PropertyChangeListener() {
+		multiplayerModel.addPropertyListener(new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent e) {
 				if(e.getPropertyName().equalsIgnoreCase("opponent"))
 				{
 					logger.writeLog(PKClientStrings.OPPONENT_POKEMON);
-					battleEnvironment.setOpponentPokemon(loader.getPokemonFromDB((Integer)e.getNewValue()));
+					multiplayerModel.setOpponentPokemon(loader.getPokemonFromDB((Integer)e.getNewValue()));
 					dialog.dispose();
 					drawBattlePanel();
 					view.setBounds(view.getX(), view.getY(), battlePanel.getWidth()+16, battlePanel.getHeight()+39);
@@ -363,7 +418,7 @@ public class PKClientController{
 		});
 		*/
 		
-		battleEnvironment.addPropertyListener(new PropertyChangeListener() {
+		multiplayerModel.addPropertyListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent e) {
 				if(e.getPropertyName().equalsIgnoreCase("ourHP")) {
 					logger.writeLog(PKClientStrings.OUR_HP);
@@ -378,7 +433,7 @@ public class PKClientController{
 			}
 		});	
 		
-		battleEnvironment.addPropertyListener(new PropertyChangeListener() {
+		multiplayerModel.addPropertyListener(new PropertyChangeListener() {
 			@SuppressWarnings("static-access")
 			@Override
 			public void propertyChange(PropertyChangeEvent e) {
@@ -399,6 +454,7 @@ public class PKClientController{
 						PKMessage rematchNo = new PKMessage(Commands.MSG_REMATCH, 0);
 						connector.sendMessage(rematchNo);
 						connected = false;
+						multiplayer = false;
 						connector.closeConnection();
 						battlePanel.setVisible(false);
 						view.setBounds(view.getX(), view.getY(), mainPanel.getWidth()+16, mainPanel.getHeight()+39);
@@ -422,6 +478,7 @@ public class PKClientController{
 						PKMessage rematchNo = new PKMessage(Commands.MSG_REMATCH, 0);	
 						connector.sendMessage(rematchNo);
 						connected = false;
+						multiplayer = false;
 						connector.closeConnection();
 						battlePanel.setVisible(false);
 						view.setBounds(view.getX(), view.getY(), mainPanel.getWidth()+16, mainPanel.getHeight()+39);
@@ -431,7 +488,7 @@ public class PKClientController{
 			}
 		});
 		
-		battleEnvironment.addPropertyListener(new PropertyChangeListener() {
+		multiplayerModel.addPropertyListener(new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent e) {
 				if(e.getPropertyName().equalsIgnoreCase("rematch_yes"))
@@ -445,7 +502,7 @@ public class PKClientController{
 			}	
 		});
 		
-		battleEnvironment.addPropertyListener(new PropertyChangeListener() {
+		multiplayerModel.addPropertyListener(new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent e) {
 				if(e.getPropertyName().equalsIgnoreCase("rematch_no"))
@@ -454,12 +511,93 @@ public class PKClientController{
 					PKMessage connectionClosed = new PKMessage(Commands.MSG_CONNECTION_CLOSED);
 					connector.sendMessage(connectionClosed);
 					connected = false;
+					multiplayer = false;
 					connector.closeConnection();
 					dialog.dispose();
 					JOptionPane.showMessageDialog(null, "Other player did not want to have a rematch");
 					battlePanel.setVisible(false);
 					mainPanel.setVisible(true);
 					view.setBounds(view.getX(), view.getY(), mainPanel.getWidth()+16, mainPanel.getHeight()+39);
+				}
+			}	
+		});
+	}
+	
+	private void addSingleplayerListeners() {
+		singleplayerModel.addPropertyListener(new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent e) {
+				if(e.getPropertyName().equalsIgnoreCase("start_battle"))
+				{
+					logger.writeLog(PKClientStrings.START_BATTLE_SINGLE);
+					drawBattlePanel();
+					view.setBounds(view.getX(), view.getY(), battlePanel.getWidth()+16, battlePanel.getHeight()+39);
+				}
+			}	
+		});
+		
+		singleplayerModel.addPropertyListener(new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent e) {
+				if(e.getPropertyName().equalsIgnoreCase("playerHP")) {
+					logger.writeLog(PKClientStrings.PLAYER_HP);
+					battlePanel.setTrainerHPLevel((Integer)e.getNewValue());
+				}
+				else if(e.getPropertyName().equalsIgnoreCase("computerHP")) {
+					logger.writeLog(PKClientStrings.COMPUTER_HP);
+					battlePanel.setOpponentHPLevel((Integer)e.getNewValue());
+				}
+			}	
+		});
+		
+		singleplayerModel.addPropertyListener(new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent e) {
+				if(e.getPropertyName().equalsIgnoreCase("player_victory"))
+				{
+					logger.writeLog(PKClientStrings.OUR_VICTORY);
+					JOptionPane.showMessageDialog(null, "You Won!");
+					int reply = JOptionPane.showConfirmDialog(null, "You won, but do you want to have a rematch?", "Rematch?", JOptionPane.YES_NO_OPTION);
+					if (reply == JOptionPane.YES_OPTION) 
+					{
+						logger.writeLog(PKClientStrings.REMATCH_ANSWER_YES);
+						battlePanel.setVisible(false);
+						drawPokeChooserPanel();
+						view.setBounds(view.getX(), view.getY(), pokeChooserPanel.getWidth()+16, pokeChooserPanel.getHeight()+39);
+					}
+					else 
+					{
+						logger.writeLog(PKClientStrings.REMATCH_ANSWER_NO);
+						battlePanel.setVisible(false);
+						view.setBounds(view.getX(), view.getY(), mainPanel.getWidth()+16, mainPanel.getHeight()+39);
+						mainPanel.setVisible(true);
+					}
+				}
+			}	
+		});
+		
+		singleplayerModel.addPropertyListener(new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent e) {
+				if(e.getPropertyName().equalsIgnoreCase("player_defeat"))
+				{
+					logger.writeLog(PKClientStrings.OPPONENT_VICTORY);
+					JOptionPane.showMessageDialog(null, "You Lost!");
+					int reply = JOptionPane.showConfirmDialog(null, "You lost, but do you want to have a rematch?", "Rematch?", JOptionPane.YES_NO_OPTION);
+					if (reply == JOptionPane.YES_OPTION) 
+					{
+						logger.writeLog(PKClientStrings.REMATCH_ANSWER_YES);
+						battlePanel.setVisible(false);
+						drawPokeChooserPanel();
+						view.setBounds(view.getX(), view.getY(), pokeChooserPanel.getWidth()+16, pokeChooserPanel.getHeight()+39);
+					}
+					else 
+					{
+						logger.writeLog(PKClientStrings.REMATCH_ANSWER_NO);
+						battlePanel.setVisible(false);
+						view.setBounds(view.getX(), view.getY(), mainPanel.getWidth()+16, mainPanel.getHeight()+39);
+						mainPanel.setVisible(true);
+					}
 				}
 			}	
 		});
