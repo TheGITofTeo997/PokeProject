@@ -7,12 +7,14 @@ public class OpponentAI {
 
 	private PKLoader loader;
 	private SingleplayerModel model;
-	private Set idSet;
+	private Set<Integer> idSet;
+	private int[] movePoints;
 	
 	public OpponentAI(PKLoader loader, SingleplayerModel model) {
 		this.loader = loader;
 		this.model = model;
 		idSet = loader.getPkDatabase().keySet();
+		movePoints = new int[4];
 	}
 	
 	public int chooseRandomPokemon() {
@@ -30,7 +32,13 @@ public class OpponentAI {
 	}
 	
 	public int chooseMove() {
-		int selected = 1;
+		int selected = 0;
+		
+		for(int i = 0; i < movePoints.length; i++)
+			movePoints[i] = model.calcDamage(model.getComputerPokemon(), model.getPlayerPokemon(), i);
+		
+		for (int i = 0; i < movePoints.length; i++) 
+		    selected = movePoints[i] > movePoints[selected] ? i : selected;
 		return selected;
 	}
 }
