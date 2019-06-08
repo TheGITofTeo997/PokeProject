@@ -13,7 +13,6 @@ import it.unibs.pajc.pokeproject.view.PKServerWindow;
 public class PKServerProtocol extends Thread {
 	
 	//Local Components
-	
 	private Socket socketPlayer;
 	private ObjectInputStream fromClient; //inputStream for received messages
 	private ObjectOutputStream toClient; //outputStream to write messages
@@ -44,7 +43,7 @@ public class PKServerProtocol extends Thread {
 				public void run() {
 					try {
 						PKMessage msg = (PKMessage)fromClient.readObject();
-						view.appendTextToConsole("\nServer received " + msg.getCommandBody() + "from: " + (1+clientID));
+						view.appendTextToConsole(PKServerStrings.SERVER_RECEIVED + msg.getCommandBody() + PKServerStrings.FROM + (1+clientID));
 						//this if-else is 'used' one time, need to think about it
 						if(!connection && msg.getCommandBody() == Commands.MSG_TEST_CONNECTION) {
 							connection = true;

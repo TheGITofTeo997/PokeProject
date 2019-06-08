@@ -20,6 +20,7 @@ public class PKServerController extends Thread implements ActionListener {
 	
 	//Local Components
 	private static final int SERVER_PORT = 50000;
+	private static final int PLAYER_NEEDED_FOR_MATCH = 2;
 	private int connectedClients;
 	
 	//Controller Components
@@ -36,8 +37,8 @@ public class PKServerController extends Thread implements ActionListener {
 	public PKServerController() {
 		playersQueue = new LinkedList<>();
 		matchList = new ArrayList<>();
-		playerExecutor = Executors.newFixedThreadPool(64);
-		matchExecutor = Executors.newFixedThreadPool(32);
+		playerExecutor = Executors.newFixedThreadPool(16);
+		matchExecutor = Executors.newFixedThreadPool(8);
 		logger = new Logger(PKServerStrings.LOGFILE);
 		loader = new PKLoader();
 	}
@@ -90,7 +91,7 @@ public class PKServerController extends Thread implements ActionListener {
 	}
 	
 	public void startMatch() {
-		if(playersQueue.size() >= 2) {
+		if(playersQueue.size() >= PLAYER_NEEDED_FOR_MATCH) {
 			PKServerProtocol player1 = playersQueue.poll();
 			PKServerProtocol player2 = playersQueue.poll();
 			MatchThread match = new MatchThread(player1, player2, loader);

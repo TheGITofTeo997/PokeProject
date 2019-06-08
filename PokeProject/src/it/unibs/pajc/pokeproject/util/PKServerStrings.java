@@ -9,6 +9,8 @@ package it.unibs.pajc.pokeproject.util;
 public class PKServerStrings {
 	
 	//Logging strings for server controller
+	public static final String FROM = "from: ";
+	public static final String SERVER_RECEIVED = "\nServer received ";
 	public static final String LOGFILE = "serverLog.txt";
 	public static final String GUI_SUCCESFULLY = "\n-Gui drawn succesfully";
 	public static final String SERVER_STARTED_SUCCESFULLY = "\n-[OK]Server started on port 50000...";
