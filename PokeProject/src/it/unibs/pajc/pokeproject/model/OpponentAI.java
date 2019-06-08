@@ -5,13 +5,11 @@ import java.util.Set;
 
 public class OpponentAI {
 
-	private PKLoader loader;
 	private SingleplayerModel model;
 	private Set<Integer> idSet;
 	private int[] movePoints;
 	
 	public OpponentAI(PKLoader loader, SingleplayerModel model) {
-		this.loader = loader;
 		this.model = model;
 		idSet = loader.getPkDatabase().keySet();
 		movePoints = new int[4];

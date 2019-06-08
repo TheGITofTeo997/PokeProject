@@ -26,7 +26,6 @@ import it.unibs.pajc.pokeproject.util.*;
 import it.unibs.pajc.pokeproject.view.*;
 
 public class PKClientController{
-	
 	//Booleans for listeners control
 	private boolean connected;
 	private boolean multiplayer;
@@ -35,7 +34,7 @@ public class PKClientController{
 	//Logger
 	private Logger logger;
 	
-	//Controller Components
+	//Model Components
 	private PKLoader loader;
 	private PKClientConnector connector;
 	private MultiplayerModel multiplayerModel;
@@ -174,7 +173,7 @@ public class PKClientController{
 				};
 			
 				Window win = SwingUtilities.getWindowAncestor((AbstractButton)e.getSource());
-				dialog = new JDialog(win, "Waiting...", ModalityType.APPLICATION_MODAL);
+				dialog = new JDialog(win, PKClientStrings.WAITING, ModalityType.APPLICATION_MODAL);
 				
 				mySwingWorker.addPropertyChangeListener(new PropertyChangeListener() {
 					@Override
@@ -229,7 +228,7 @@ public class PKClientController{
 					};
 					
 					Window win = SwingUtilities.getWindowAncestor((AbstractButton)e.getSource());
-					dialog = new JDialog(win, "Waiting...", ModalityType.APPLICATION_MODAL);
+					dialog = new JDialog(win, PKClientStrings.WAITING, ModalityType.APPLICATION_MODAL);
 				
 					mySwingWorker.execute();
 	
@@ -296,7 +295,7 @@ public class PKClientController{
 					};
 					
 					Window win = SwingUtilities.getWindowAncestor((AbstractButton)e.getSource());
-					dialog = new JDialog(win, "Waiting...", ModalityType.APPLICATION_MODAL);	
+					dialog = new JDialog(win, PKClientStrings.WAITING, ModalityType.APPLICATION_MODAL);	
 					
 					mySwingWorker.execute();
 						
@@ -336,7 +335,7 @@ public class PKClientController{
 		multiplayerModel.addPropertyListener(new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent e) {
-				if(e.getPropertyName().equalsIgnoreCase("connection_closed"))
+				if(e.getPropertyName().equalsIgnoreCase(PKClientStrings.CONNECTION_CLOSED_PROPERTY))
 				{
 					showErrorPopup();
 					if(ipPanel.isVisible())
@@ -357,7 +356,7 @@ public class PKClientController{
 		multiplayerModel.addPropertyListener(new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent e) {
-				if(e.getPropertyName().equalsIgnoreCase("connection"))
+				if(e.getPropertyName().equalsIgnoreCase(PKClientStrings.CONNECTION_PROPERTY))
 					logger.writeLog(PKClientStrings.CONNECTION_ONLINE);
 			}
 		});
@@ -365,7 +364,7 @@ public class PKClientController{
 		multiplayerModel.addPropertyListener(new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent e) {
-				if(e.getPropertyName().equalsIgnoreCase("player_found"))
+				if(e.getPropertyName().equalsIgnoreCase(PKClientStrings.PLAYER_FOUND_PROPERTY))
 				{
 					logger.writeLog(PKClientStrings.PLAYER_FOUND);
 					dialog.dispose();
@@ -379,7 +378,7 @@ public class PKClientController{
 		multiplayerModel.addPropertyListener(new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent e) {
-				if(e.getPropertyName().equalsIgnoreCase("opponent"))
+				if(e.getPropertyName().equalsIgnoreCase(PKClientStrings.OPPONENT_PROPERTY))
 				{
 					logger.writeLog(PKClientStrings.OPPONENT_POKEMON);
 					multiplayerModel.setOpponentPokemon(loader.getPokemonFromDB((Integer)e.getNewValue()));
@@ -396,7 +395,7 @@ public class PKClientController{
 		battleEnvironment.addPropertyListener(new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent e) {
-				if(e.getPropertyName().equalsIgnoreCase("opponent_move"))
+				if(e.getPropertyName().equalsIgnoreCase(PKClientStrings.OPPONENT_MOVE_PROPERTY))
 				{
 					logger.writeLog(PKClientStrings.OPPONENT_MOVE);
 					battlePanel.writeTextInMoveBox(battleEnvironment.getOpponentPokemon().getName() + " nemico usa " + e.getNewValue());
@@ -409,7 +408,7 @@ public class PKClientController{
 		battleEnvironment.addPropertyListener(new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent e) {
-				if(e.getPropertyName().equalsIgnoreCase("our_move"))
+				if(e.getPropertyName().equalsIgnoreCase(PKClientStrings.OUR_MOVE_PROPERTY))
 				{
 					logger.writeLog(PKClientStrings.OPPONENT_MOVE);
 					battlePanel.writeTextInMoveBox(battleEnvironment.getOurPokemon().getName() + " usa " + e.getNewValue());
@@ -420,12 +419,12 @@ public class PKClientController{
 		
 		multiplayerModel.addPropertyListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent e) {
-				if(e.getPropertyName().equalsIgnoreCase("ourHP")) {
+				if(e.getPropertyName().equalsIgnoreCase(PKClientStrings.OUR_HP_PROPERTY)) {
 					logger.writeLog(PKClientStrings.OUR_HP);
 					battlePanel.setTrainerHPLevel((Integer)e.getNewValue());
 					dialog.dispose();
 				}
-				else if(e.getPropertyName().equalsIgnoreCase("opponentHP")) {
+				else if(e.getPropertyName().equalsIgnoreCase(PKClientStrings.OPPONENT_HP_PROPERTY)) {
 					logger.writeLog(PKClientStrings.OPPONENT_HP);
 					battlePanel.setOpponentHPLevel((Integer)e.getNewValue());
 					dialog.dispose();
@@ -437,11 +436,11 @@ public class PKClientController{
 			@SuppressWarnings("static-access")
 			@Override
 			public void propertyChange(PropertyChangeEvent e) {
-				if(e.getPropertyName().equalsIgnoreCase("ourVictory")) {
+				if(e.getPropertyName().equalsIgnoreCase(PKClientStrings.OUR_VICTORY_PROPERTY)) {
 					logger.writeLog(PKClientStrings.OUR_VICTORY);
 					JOptionPane victory = new JOptionPane();
-					victory.showMessageDialog(null, "You Won!");
-					int reply = JOptionPane.showConfirmDialog(null, "You won, but do you want to have a rematch?", "Rematch?", JOptionPane.YES_NO_OPTION);
+					victory.showMessageDialog(null, PKClientStrings.YOU_WON);
+					int reply = JOptionPane.showConfirmDialog(null, PKClientStrings.REMATCH_QUESTION_WON, PKClientStrings.REMATCH_TITLE, JOptionPane.YES_NO_OPTION);
 					if (reply == JOptionPane.YES_OPTION) 
 					{
 						logger.writeLog(PKClientStrings.REMATCH_ANSWER_YES);
@@ -461,11 +460,11 @@ public class PKClientController{
 						mainPanel.setVisible(true);
 					}
 				}
-				else if(e.getPropertyName().equalsIgnoreCase("opponentVictory")) {
+				else if(e.getPropertyName().equalsIgnoreCase(PKClientStrings.OPPONENT_VICTORY_PROPERTY)) {
 					logger.writeLog(PKClientStrings.OPPONENT_VICTORY);
 					JOptionPane victory = new JOptionPane();
-					victory.showMessageDialog(null, "You Lost!");
-					int reply = JOptionPane.showConfirmDialog(null, "You lost, but do you want to have a rematch?", "Rematch?", JOptionPane.YES_NO_OPTION);
+					victory.showMessageDialog(null, PKClientStrings.YOU_LOST);
+					int reply = JOptionPane.showConfirmDialog(null, PKClientStrings.REMATCH_QUESTION_LOST, PKClientStrings.REMATCH_TITLE, JOptionPane.YES_NO_OPTION);
 					if (reply == JOptionPane.YES_OPTION) 
 					{				
 						logger.writeLog(PKClientStrings.REMATCH_ANSWER_YES);
@@ -491,7 +490,7 @@ public class PKClientController{
 		multiplayerModel.addPropertyListener(new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent e) {
-				if(e.getPropertyName().equalsIgnoreCase("rematch_yes"))
+				if(e.getPropertyName().equalsIgnoreCase(PKClientStrings.REMATCH_YES_PROPERTY))
 				{
 					logger.writeLog(PKClientStrings.REMATCH_YES);
 					dialog.dispose();
@@ -505,7 +504,7 @@ public class PKClientController{
 		multiplayerModel.addPropertyListener(new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent e) {
-				if(e.getPropertyName().equalsIgnoreCase("rematch_no"))
+				if(e.getPropertyName().equalsIgnoreCase(PKClientStrings.REMATCH_NO_PROPERTY))
 				{
 					logger.writeLog(PKClientStrings.REMATCH_NO);
 					PKMessage connectionClosed = new PKMessage(Commands.MSG_CONNECTION_CLOSED);
@@ -527,7 +526,7 @@ public class PKClientController{
 		singleplayerModel.addPropertyListener(new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent e) {
-				if(e.getPropertyName().equalsIgnoreCase("start_battle"))
+				if(e.getPropertyName().equalsIgnoreCase(PKClientStrings.START_BATTLE_PROPERTY))
 				{
 					logger.writeLog(PKClientStrings.START_BATTLE_SINGLE);
 					drawBattlePanel();
@@ -539,11 +538,11 @@ public class PKClientController{
 		singleplayerModel.addPropertyListener(new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent e) {
-				if(e.getPropertyName().equalsIgnoreCase("playerHP")) {
+				if(e.getPropertyName().equalsIgnoreCase(PKClientStrings.PLAYER_HP_PROPERTY)) {
 					logger.writeLog(PKClientStrings.PLAYER_HP);
 					battlePanel.setTrainerHPLevel((Integer)e.getNewValue());
 				}
-				else if(e.getPropertyName().equalsIgnoreCase("computerHP")) {
+				else if(e.getPropertyName().equalsIgnoreCase(PKClientStrings.COMPUTER_HP_PROPERTY)) {
 					logger.writeLog(PKClientStrings.COMPUTER_HP);
 					battlePanel.setOpponentHPLevel((Integer)e.getNewValue());
 				}
@@ -553,11 +552,11 @@ public class PKClientController{
 		singleplayerModel.addPropertyListener(new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent e) {
-				if(e.getPropertyName().equalsIgnoreCase("player_victory"))
+				if(e.getPropertyName().equalsIgnoreCase(PKClientStrings.PLAYER_VICTORY_PROPERTY))
 				{
 					logger.writeLog(PKClientStrings.OUR_VICTORY);
-					JOptionPane.showMessageDialog(null, "You Won!");
-					int reply = JOptionPane.showConfirmDialog(null, "You won, but do you want to have a rematch?", "Rematch?", JOptionPane.YES_NO_OPTION);
+					JOptionPane.showMessageDialog(null, PKClientStrings.YOU_WON);
+					int reply = JOptionPane.showConfirmDialog(null, PKClientStrings.REMATCH_QUESTION_WON, PKClientStrings.REMATCH_TITLE, JOptionPane.YES_NO_OPTION);
 					if (reply == JOptionPane.YES_OPTION) 
 					{
 						logger.writeLog(PKClientStrings.REMATCH_ANSWER_YES);
@@ -579,11 +578,11 @@ public class PKClientController{
 		singleplayerModel.addPropertyListener(new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent e) {
-				if(e.getPropertyName().equalsIgnoreCase("player_defeat"))
+				if(e.getPropertyName().equalsIgnoreCase(PKClientStrings.PLAYER_DEFEAT_PROPERTY))
 				{
 					logger.writeLog(PKClientStrings.OPPONENT_VICTORY);
-					JOptionPane.showMessageDialog(null, "You Lost!");
-					int reply = JOptionPane.showConfirmDialog(null, "You lost, but do you want to have a rematch?", "Rematch?", JOptionPane.YES_NO_OPTION);
+					JOptionPane.showMessageDialog(null, PKClientStrings.YOU_LOST);
+					int reply = JOptionPane.showConfirmDialog(null, PKClientStrings.REMATCH_QUESTION_LOST, PKClientStrings.REMATCH_TITLE, JOptionPane.YES_NO_OPTION);
 					if (reply == JOptionPane.YES_OPTION) 
 					{
 						logger.writeLog(PKClientStrings.REMATCH_ANSWER_YES);
@@ -607,7 +606,7 @@ public class PKClientController{
 	public void showErrorPopup() {
 		JOptionPane error = new JOptionPane();
 		error.setBounds(view.getBounds());
-		error.showMessageDialog(view, PKClientStrings.CONNECTION_ERROR, "Warning", JOptionPane.ERROR_MESSAGE);
+		error.showMessageDialog(view, PKClientStrings.CONNECTION_ERROR, PKClientStrings.WARNING, JOptionPane.ERROR_MESSAGE);
 		logger.writeLog(PKClientStrings.ERROR_POPUP_SHOWN);
 	}
 

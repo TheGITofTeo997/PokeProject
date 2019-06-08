@@ -9,6 +9,10 @@ import java.util.TreeMap;
 
 public class PKLoader {
 	
+	private static final String BACK_GIF_DIR = "data\\gif\\back";
+	private static final String FRONT_GIF_DIR = "data\\gif\\front";
+	private static final String TYPE_DIR = "data\\type";
+	private static final String POKEMON_DIR = "data\\pokemon";
 	private static final String PK_DATABASE_LOCATION = "pkDatabase.dat";
 	private static final String TYPE_DATABASE_LOCATION = "typeDatabase.dat";
 	private static final String GIF_EXT = "gif";
@@ -102,7 +106,7 @@ public class PKLoader {
 	}
 	
 	private TreeMap<Integer, Pokemon> readPokemons() {	
-		File pokemonDir = new File("data\\pokemon");
+		File pokemonDir = new File(POKEMON_DIR);
 		TreeMap<Integer, Pokemon> pkDatabase = new TreeMap<>();
 		if(pokemonDir.exists() && pokemonDir.isDirectory()) 
 		{
@@ -147,7 +151,7 @@ public class PKLoader {
 	}
 	
 	private ArrayList<PKType> readTypes() {
-		File typeDir = new File("data\\type");
+		File typeDir = new File(TYPE_DIR);
 		ArrayList<PKType> typeDatabase = new ArrayList<>();
 		if(typeDir.exists() && typeDir.isDirectory()) 
 		{
@@ -190,7 +194,7 @@ public class PKLoader {
 	}
 	
 	private URL getFrontSpriteURL(String pokemonName) {
-		File typeDir = new File("data\\gif\\front");
+		File typeDir = new File(FRONT_GIF_DIR);
 		if(typeDir.exists() && typeDir.isDirectory()) 
 		{
 			File[] theList = typeDir.listFiles();
@@ -213,7 +217,7 @@ public class PKLoader {
 	}
 	
 	private URL getBackSpriteURL(String pokemonName) {
-		File typeDir = new File("data\\gif\\back");
+		File typeDir = new File(BACK_GIF_DIR);
 		if(typeDir.exists() && typeDir.isDirectory()) 
 		{
 			File[] theList = typeDir.listFiles();

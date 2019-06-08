@@ -13,6 +13,12 @@ import java.util.Date;
  */
 public class Logger {
 
+	private static final String OS_VERSION = "os.version";
+	private static final String OS_NAME = "os.name";
+	private static final String OS_ARCH = "os.arch";
+	private static final String OS_INFORMATION = "OS information: ";
+	private static final String APPLICATION_STARTED_ON = "Application started on: ";
+	private static final String LOGFILE_TITLE = "Logfile v1.0";
 	private File logFile;
 	private BufferedWriter writer;
 	
@@ -26,9 +32,9 @@ public class Logger {
 		}
 		
 		Date date = new Date();
-		writeLog("Logfile v0.2");
-        writeLog("Application started on: " + new Timestamp(date.getTime()).toString());
-        writeLog("OS information: " + System.getProperty("os.arch") + ", " + System.getProperty("os.name") + ", " + System.getProperty("os.version"));
+		writeLog(LOGFILE_TITLE);
+        writeLog(APPLICATION_STARTED_ON + new Timestamp(date.getTime()).toString());
+        writeLog(OS_INFORMATION + System.getProperty(OS_ARCH) + ", " + System.getProperty(OS_NAME) + ", " + System.getProperty(OS_VERSION));
 	}
 	
 	public synchronized void writeLog(String text) {

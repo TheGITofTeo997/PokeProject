@@ -8,9 +8,6 @@ package it.unibs.pajc.pokeproject.util;
  */
 
 public class PKClientStrings {
-
-	//Misc strings
-	public static final String CONNECTION_ERROR = "Cannot connect to the Server, please check your connection.";
 	
 	//Logging strings
 	public static final String LOGFILE = "clientLog.txt";
@@ -43,14 +40,38 @@ public class PKClientStrings {
 	public static final String CHECK_MESSAGES = "-Check messages task created";
 	public static final String MESSAGE_SENDING_FAILURE = "-Message was not send because of exception: ";
 	public static final String RESOURCES_CLOSED = "-Socket and output/input streams closed";
-	
-	//View strings
-	public static final String BTN_STARTBATTLE_TEXT = "Start Battle ->";
-	public static final String FRAME_TITLE = "PokeBattle Client v0.6b";
-
 	public static final String SINGLE_PLAYER_POKEMONS = "-Set singleplayer pokemons";
 	public static final String PLAYER_HP = "-Updated player hp after the turn";
 	public static final String COMPUTER_HP = "-Updated computer hp after the turn";
 	public static final String START_BATTLE_SINGLE = "-Started singleplayer battle";
 	public static final String PLAYER_MOVE = "-Player selected move for this turn";
+	
+	//View strings
+	public static final String BTN_STARTBATTLE_TEXT = "Start Battle ->";
+	public static final String FRAME_TITLE = "PokeBattle Client v0.6b";
+	public static final String CONNECTION_ERROR = "Cannot connect to the Server, please check your connection.";
+	public static final String WARNING = "Warning";
+	public static final String WAITING = "Waiting...";
+	public static final String REMATCH_QUESTION_WON = "You won, but do you want to have a rematch?";
+	public static final String YOU_WON = "You Won!";
+	public static final String YOU_LOST = "You Lost!";
+	public static final String REMATCH_TITLE = "Rematch?";
+	public static final String REMATCH_QUESTION_LOST = "You lost, but do you want to have a rematch?";
+
+	//Properties
+	public static final String CONNECTION_CLOSED_PROPERTY = "connection_closed";
+	public static final String CONNECTION_PROPERTY = "connection";
+	public static final String PLAYER_FOUND_PROPERTY = "player_fond";
+	public static final String OPPONENT_PROPERTY = "opponent";
+	public static final String OUR_HP_PROPERTY = "our_hp";
+	public static final String OPPONENT_HP_PROPERTY = "opponent_hp";
+	public static final String OUR_VICTORY_PROPERTY = "our_victory";
+	public static final String OPPONENT_VICTORY_PROPERTY = "opponent_victory";
+	public static final String REMATCH_YES_PROPERTY = "rematch_yes";
+	public static final String REMATCH_NO_PROPERTY = "rematch_no";
+	public static final String START_BATTLE_PROPERTY = "start_battle";
+	public static final String PLAYER_HP_PROPERTY = "player_hp";
+	public static final String COMPUTER_HP_PROPERTY = "computer_hp";
+	public static final String PLAYER_VICTORY_PROPERTY = "player_victory";
+	public static final String PLAYER_DEFEAT_PROPERTY = "player_defeat";
 }

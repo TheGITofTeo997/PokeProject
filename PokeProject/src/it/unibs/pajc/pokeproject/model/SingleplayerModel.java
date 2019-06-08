@@ -1,6 +1,9 @@
 package it.unibs.pajc.pokeproject.model;
 
 import java.util.concurrent.ThreadLocalRandom;
+
+import it.unibs.pajc.pokeproject.util.PKClientStrings;
+
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -26,7 +29,7 @@ public class SingleplayerModel {
 		playerPoke.setBattleHP(playerPoke.getHP());
 		computerPoke.setBattleHP(computerPoke.getHP());
 		
-		e = new PropertyChangeEvent(this, "start_battle", false, true);
+		e = new PropertyChangeEvent(this, PKClientStrings.START_BATTLE_PROPERTY , false, true);
 		firePropertyChanged(e);
 	}
 	
@@ -48,44 +51,44 @@ public class SingleplayerModel {
 		if(firstAttackerID == 0)
 		{
 			
-			e = new PropertyChangeEvent(this, "computerHP", -1, computerRemainingHP);
+			e = new PropertyChangeEvent(this, PKClientStrings.COMPUTER_HP_PROPERTY, -1, computerRemainingHP);
 			firePropertyChanged(e);
 			
 			if(isDead(computerPoke))
 			{
-				e = new PropertyChangeEvent(this, "player_victory", false, true);
+				e = new PropertyChangeEvent(this, PKClientStrings.PLAYER_VICTORY_PROPERTY, false, true);
 				firePropertyChanged(e);
 			}
 			else
 			{
-				e = new PropertyChangeEvent(this, "playerHP", -1, playerRemainingHP);
+				e = new PropertyChangeEvent(this, PKClientStrings.PLAYER_HP_PROPERTY, -1, playerRemainingHP);
 				firePropertyChanged(e);
 				
 				if(isDead(playerPoke)) 
 				{
-					e = new PropertyChangeEvent(this, "player_defeat", false, true);
+					e = new PropertyChangeEvent(this, PKClientStrings.PLAYER_DEFEAT_PROPERTY, false, true);
 					firePropertyChanged(e);
 				}
 			}
 		}
 		else
 		{
-			e = new PropertyChangeEvent(this, "playerHP", -1, playerRemainingHP);
+			e = new PropertyChangeEvent(this, PKClientStrings.PLAYER_HP_PROPERTY, -1, playerRemainingHP);
 			firePropertyChanged(e);
 			
 			if(isDead(playerPoke)) 
 			{
-				e = new PropertyChangeEvent(this, "player_defeat", false, true);
+				e = new PropertyChangeEvent(this, PKClientStrings.PLAYER_DEFEAT_PROPERTY, false, true);
 				firePropertyChanged(e);
 			}
 			else
 			{	
-				e = new PropertyChangeEvent(this, "computerHP", -1, computerRemainingHP);
+				e = new PropertyChangeEvent(this, PKClientStrings.COMPUTER_HP_PROPERTY, -1, computerRemainingHP);
 				firePropertyChanged(e);
 				
 				if(isDead(computerPoke))
 				{
-					e = new PropertyChangeEvent(this, "player_victory", false, true);
+					e = new PropertyChangeEvent(this, PKClientStrings.PLAYER_VICTORY_PROPERTY, false, true);
 					firePropertyChanged(e);
 				}
 			}

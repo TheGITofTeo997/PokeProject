@@ -29,6 +29,12 @@ import javax.swing.JButton;
 
 public class BattlePanel extends JPanel implements KeyListener {
 	
+	private static final String MOVE4 = "MOVE4";
+	private static final String MOVE3 = "MOVE3";
+	private static final String MOVE2 = "MOVE2";
+	private static final String MOVE1 = "MOVE1";
+	private static final String PKMN_RBYGSC_FONT = "PKMN RBYGSC";
+	private static final String USA = "Usa ";
 	private static final long serialVersionUID = 6693764125058218350L;
 	private static final String PKM_FONT = "PKMN_RBYGSC.ttf";
 	
@@ -90,18 +96,18 @@ public class BattlePanel extends JPanel implements KeyListener {
 		lblNameOpponentPoke = new JLabel("");
 		lblNameOpponentPoke.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblNameOpponentPoke.setBounds(111, 39, 155, 22);
-		lblNameOpponentPoke.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 15));
+		lblNameOpponentPoke.setFont(new Font(PKMN_RBYGSC_FONT, Font.PLAIN, 15));
 		add(lblNameOpponentPoke);
 		
 		lblNameMyPoke = new JLabel("");
 		lblNameMyPoke.setBounds(387, 217, 155, 24);
-		lblNameMyPoke.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 15));
+		lblNameMyPoke.setFont(new Font(PKMN_RBYGSC_FONT, Font.PLAIN, 15));
 		add(lblNameMyPoke);
 		
 		lblMoveText = new JLabel("");
 		lblMoveText.setForeground(Color.WHITE);
 		lblMoveText.setBounds(344, 327, 254, 62);
-		lblMoveText.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 10));
+		lblMoveText.setFont(new Font(PKMN_RBYGSC_FONT, Font.PLAIN, 10));
 		add(lblMoveText);
 		
 		JLabel lblEnemyHPLabel = new JLabel();
@@ -114,9 +120,9 @@ public class BattlePanel extends JPanel implements KeyListener {
 		lblTrainerHPLabel.setIcon(new ImageIcon(new ImageIcon(BattlePanel.class.getResource("/img/inbattle/utils/battlePlayerBoxD.png")).getImage().getScaledInstance(lblTrainerHPLabel.getWidth(), lblTrainerHPLabel.getHeight(), Image.SCALE_DEFAULT))); //box scale
 		add(lblTrainerHPLabel);
 		
-		btnMove1 = new JButton("MOVE1");
+		btnMove1 = new JButton(MOVE1);
 		btnMove1.setBounds(25, 323, 122, 31);
-		btnMove1.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 10));
+		btnMove1.setFont(new Font(PKMN_RBYGSC_FONT, Font.PLAIN, 10));
 		btnMove1.setBorderPainted(false);
 		btnMove1.setSelected(true);
 		btnMove1.setBackground(Color.YELLOW);
@@ -126,7 +132,7 @@ public class BattlePanel extends JPanel implements KeyListener {
 			 int charIndex = 0;
 	         public void mouseEntered(MouseEvent me) {
 	        	 charIndex = 0;
-	        	 String text = "Usa " + btnMoves[0].getText();
+	        	 String text = USA + btnMoves[0].getText();
 	        	 moveTimer = new Timer(75, new ActionListener() {
  	                @Override
  	                public void actionPerformed(ActionEvent ev) {
@@ -147,9 +153,9 @@ public class BattlePanel extends JPanel implements KeyListener {
 	         }
 			});
 		
-		btnMove2 = new JButton("MOVE2");
+		btnMove2 = new JButton(MOVE2);
 		btnMove2.setBounds(157, 323, 122, 31);
-		btnMove2.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 10));
+		btnMove2.setFont(new Font(PKMN_RBYGSC_FONT, Font.PLAIN, 10));
 		btnMove2.setBorderPainted(false);
 		btnMove2.setSelected(false);
 		add(btnMove2);
@@ -157,7 +163,7 @@ public class BattlePanel extends JPanel implements KeyListener {
 			int charIndex = 0;
 	         public void mouseEntered(MouseEvent me) {
 	        	 charIndex = 0;
-	        	 String text = "Usa " + btnMoves[1].getText();
+	        	 String text = USA + btnMoves[1].getText();
 	        	 moveTimer = new Timer(75, new ActionListener() {
 	                @Override
 	                public void actionPerformed(ActionEvent ev) {
@@ -178,9 +184,9 @@ public class BattlePanel extends JPanel implements KeyListener {
 	         }
 			});
 		
-		btnMove3 = new JButton("MOVE3");
+		btnMove3 = new JButton(MOVE3);
 		btnMove3.setBounds(25, 358, 122, 31);
-		btnMove3.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 10));
+		btnMove3.setFont(new Font(PKMN_RBYGSC_FONT, Font.PLAIN, 10));
 		btnMove3.setBorderPainted(false);
 		btnMove3.setSelected(false);
 		add(btnMove3);
@@ -188,7 +194,7 @@ public class BattlePanel extends JPanel implements KeyListener {
 			int charIndex = 0;
 	         public void mouseEntered(MouseEvent me) {
 	        	 charIndex = 0;
-	        	 String text = "Usa " + btnMoves[2].getText();
+	        	 String text = USA + btnMoves[2].getText();
 	        	 moveTimer = new Timer(75, new ActionListener() {
 	                @Override
 	                public void actionPerformed(ActionEvent ev) {
@@ -209,9 +215,9 @@ public class BattlePanel extends JPanel implements KeyListener {
 	         }
 			});
 		
-		btnMove4 = new JButton("MOVE4");
+		btnMove4 = new JButton(MOVE4);
 		btnMove4.setBounds(157, 358, 122, 31);
-		btnMove4.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 10));
+		btnMove4.setFont(new Font(PKMN_RBYGSC_FONT, Font.PLAIN, 10));
 		btnMove4.setBorderPainted(false);
 		btnMove4.setSelected(false);
 		add(btnMove4);
@@ -219,7 +225,7 @@ public class BattlePanel extends JPanel implements KeyListener {
 			int charIndex = 0;
 	         public void mouseEntered(MouseEvent me) {
 	        	 charIndex = 0;
-	        	 String text = "Usa " + btnMoves[3].getText();
+	        	 String text = USA + btnMoves[3].getText();
 	        	 moveTimer = new Timer(75, new ActionListener() {
 	                @Override
 	                public void actionPerformed(ActionEvent ev) {
@@ -269,10 +275,6 @@ public class BattlePanel extends JPanel implements KeyListener {
 		background.setIcon(new ImageIcon(new ImageIcon(BattlePanel.class.getResource("/img/inbattle/battlebgField.png")).getImage().getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_DEFAULT))); //back scale
 		background.setBounds(0, 0, 618, 400);
 		add(background);
-		
-		
-		
-		
 	}
 	
 	public void setSprites(URL backSpriteUrl, URL frontSpriteUrl) {
@@ -297,7 +299,7 @@ public class BattlePanel extends JPanel implements KeyListener {
 				}
 			});
 		}
-		setlblMoveText("Usa " + btnMoves[0].getText());
+		setlblMoveText(USA + btnMoves[0].getText());
 	}
 	
 	public void setPokeHP(int trainerHP, int enemyHP) {
@@ -307,7 +309,6 @@ public class BattlePanel extends JPanel implements KeyListener {
 	
 	private void setBarColor(JProgressBar bar) {
 		int percentage = (int)((double)bar.getValue()/bar.getMaximum()*100);
-		System.out.println(percentage + "%");
 		if(percentage>50) 
 			bar.setForeground(Color.GREEN);
 		else if(percentage>20 && percentage<=50) 
@@ -399,7 +400,7 @@ public class BattlePanel extends JPanel implements KeyListener {
 			btnMove1.setSelected(false);
 			btnMove2.setSelected(true);
 			btnMove2.setBackground(Color.YELLOW);
-			setlblMoveText("Usa " + btnMoves[1].getText());
+			setlblMoveText(USA + btnMoves[1].getText());
 			}
 		if(e.getExtendedKeyCode() == KeyEvent.VK_RIGHT && btnMove3.isSelected()) {
 			moveTimer.stop();
@@ -408,7 +409,7 @@ public class BattlePanel extends JPanel implements KeyListener {
 			btnMove3.setSelected(false);
 			btnMove4.setSelected(true);
 			btnMove4.setBackground(Color.YELLOW);
-			setlblMoveText("Usa " + btnMoves[3].getText());
+			setlblMoveText(USA + btnMoves[3].getText());
 			
 		 	}
 		if(e.getExtendedKeyCode() == KeyEvent.VK_LEFT && btnMove2.isSelected()) {
@@ -418,7 +419,7 @@ public class BattlePanel extends JPanel implements KeyListener {
 			btnMove2.setSelected(false);
 			btnMove1.setSelected(true);
 			btnMove1.setBackground(Color.YELLOW);
-			setlblMoveText("Usa " + btnMoves[0].getText());
+			setlblMoveText(USA + btnMoves[0].getText());
 			}
 		if(e.getExtendedKeyCode() == KeyEvent.VK_LEFT && btnMove4.isSelected()) {
 			moveTimer.stop();
@@ -427,7 +428,7 @@ public class BattlePanel extends JPanel implements KeyListener {
 			btnMove4.setSelected(false);
 			btnMove3.setSelected(true);
 			btnMove3.setBackground(Color.YELLOW);
-			setlblMoveText("Usa " + btnMoves[2].getText());
+			setlblMoveText(USA + btnMoves[2].getText());
 		}
 		if(e.getExtendedKeyCode() == KeyEvent.VK_UP && btnMove3.isSelected()) {
 			moveTimer.stop();
@@ -436,7 +437,7 @@ public class BattlePanel extends JPanel implements KeyListener {
 			btnMove3.setSelected(false);
 			btnMove1.setSelected(true);
 			btnMove1.setBackground(Color.YELLOW);
-			setlblMoveText("Usa " + btnMoves[0].getText());
+			setlblMoveText(USA + btnMoves[0].getText());
 		}
 		if(e.getExtendedKeyCode() == KeyEvent.VK_UP && btnMove4.isSelected()) {
 			moveTimer.stop();
@@ -445,7 +446,7 @@ public class BattlePanel extends JPanel implements KeyListener {
 			btnMove4.setSelected(false);
 			btnMove2.setSelected(true);
 			btnMove2.setBackground(Color.YELLOW);
-			setlblMoveText("Usa " + btnMoves[1].getText());
+			setlblMoveText(USA + btnMoves[1].getText());
 		}
 		if(e.getExtendedKeyCode() == KeyEvent.VK_DOWN && btnMove1.isSelected()) {
 			moveTimer.stop();
@@ -454,7 +455,7 @@ public class BattlePanel extends JPanel implements KeyListener {
 			btnMove1.setSelected(false);
 			btnMove3.setSelected(true);
 			btnMove3.setBackground(Color.YELLOW);
-			setlblMoveText("Usa " + btnMoves[2].getText());
+			setlblMoveText(USA + btnMoves[2].getText());
 		}
 		if(e.getExtendedKeyCode() == KeyEvent.VK_DOWN && btnMove2.isSelected()) {
 			moveTimer.stop();
@@ -463,7 +464,7 @@ public class BattlePanel extends JPanel implements KeyListener {
 			btnMove2.setSelected(false);
 			btnMove4.setSelected(true);
 			btnMove4.setBackground(Color.YELLOW);
-			setlblMoveText("Usa " + btnMoves[3].getText());
+			setlblMoveText(USA + btnMoves[3].getText());
 		}
 		if(e.getExtendedKeyCode() == KeyEvent.VK_ENTER) {
 			if(btnMove1.isSelected()) btnMove1.doClick();
