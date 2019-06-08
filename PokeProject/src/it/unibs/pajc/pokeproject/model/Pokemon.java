@@ -116,4 +116,8 @@ public class Pokemon implements Serializable {
 	public void setMove(int moveID, PKMove move) {
 		moves[moveID] = move;
 	}
+	
+	public boolean hasStab(int moveID) {
+		return moves[moveID].getType().equals(type);
+	}
 }

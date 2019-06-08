@@ -7,6 +7,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 import it.unibs.pajc.pokeproject.model.PKLoader;
+import it.unibs.pajc.pokeproject.model.PKMove;
 import it.unibs.pajc.pokeproject.model.Pokemon;
 import it.unibs.pajc.pokeproject.util.*;
 
@@ -300,11 +301,13 @@ public class MatchThread implements Runnable {
 	}
 	
 	private int calcDamage(Pokemon attacker, Pokemon defender, int moveID) {
+		PKMove move = attacker.getMove(moveID);
 		double N = ThreadLocalRandom.current().nextDouble(0.85, 1);
-		double stab = (attacker.getType().getTypeName().compareToIgnoreCase(attacker.getMove(moveID).getTypeName())==0) ? 1.5 : 1;
-		double damage = ((((2*attacker.getLevel()+10)*attacker.getAttack()*attacker.getMove(moveID).getPwr()) / 
-				(250*defender.getDefense()) ) + 2) * stab * attacker.getMove(moveID).getType().getEffectiveness(defender.getType().getTypeName())
+		double stab = (attacker.hasStab(moveID)) ? 1.5 : 1;
+		double damage = ((((2*attacker.getLevel()+10)*attacker.getAttack()*move.getPwr()) / 
+				(250*defender.getDefense()) ) + 2) * stab *move.getType().getEffectiveness(defender.getType())
 				* N;
+		if(damage < 1) damage = 0;
 		return (int)damage;
 	}
 	

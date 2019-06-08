@@ -13,8 +13,8 @@ public class PKType implements Serializable{
 		this.type = type;
 	}
 	
-	public double getEffectiveness(String type) {
-		return effectivenessTable.get(type);
+	public double getEffectiveness(PKType type) {
+		return effectivenessTable.get(type.getTypeName());
 	}
 	
 	public String getTypeName() {
@@ -23,5 +23,9 @@ public class PKType implements Serializable{
 	
 	public void setEffectivenessEntry(String type, double eff) {
 		effectivenessTable.put(type, eff);
+	}
+	
+	public boolean equals(PKType type) {
+		return type.getTypeName().equals(this.type);
 	}
 }
