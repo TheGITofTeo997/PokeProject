@@ -6,12 +6,9 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.Timer;
 
 import java.awt.Color;
-import java.awt.FlowLayout;
 import java.awt.Image;
-import java.awt.LayoutManager;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -78,26 +75,26 @@ public class PokeChooserPanel extends JPanel implements ActionListener{
 		lblInfoIconPokemon.setVisible(false);
 		infoPokemon.add(lblInfoIconPokemon);
 		
-		lblInfoNamePokemon= new JLabel();
+		lblInfoNamePokemon = new JLabel();
 		lblInfoNamePokemon.setForeground(Color.WHITE);
 		infoPokemon.add(lblInfoNamePokemon);
 		
-		lblInfoTypePokemon= new JLabel();
+		lblInfoTypePokemon = new JLabel();
 		lblInfoTypePokemon.setVisible(false);
 		lblInfoTypePokemon.setForeground(Color.WHITE);
 		infoPokemon.add(lblInfoTypePokemon);
 		
-		lblInfoHPPokemon= new JLabel();
+		lblInfoHPPokemon = new JLabel();
 		lblInfoHPPokemon.setVisible(false);
 		lblInfoHPPokemon.setForeground(Color.WHITE);
 		infoPokemon.add(lblInfoHPPokemon);
 		
-		lblInfoAttackPokemon= new JLabel();
+		lblInfoAttackPokemon = new JLabel();
 		lblInfoAttackPokemon.setVisible(false);
 		lblInfoAttackPokemon.setForeground(Color.WHITE);
 		infoPokemon.add(lblInfoAttackPokemon);
 		
-		lblInfoDefensePokemon= new JLabel();
+		lblInfoDefensePokemon = new JLabel();
 		lblInfoDefensePokemon.setForeground(Color.WHITE);
 		lblInfoIconPokemon.setVisible(false);
 		infoPokemon.add(lblInfoDefensePokemon);
