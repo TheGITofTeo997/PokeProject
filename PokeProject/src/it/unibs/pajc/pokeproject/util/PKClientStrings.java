@@ -70,8 +70,14 @@ public class PKClientStrings {
 	public static final String REMATCH_YES_PROPERTY = "rematch_yes";
 	public static final String REMATCH_NO_PROPERTY = "rematch_no";
 	public static final String START_BATTLE_PROPERTY = "start_battle";
-	public static final String PLAYER_HP_PROPERTY = "player_hp";
-	public static final String COMPUTER_HP_PROPERTY = "computer_hp";
+	public static final String COMPLETE_TURN_PLAYER_FIRST_PROPERTY = "complete_player_first";
+	public static final String COMPLETE_TURN_COMPUTER_FIRST_PROPERTY = "complete_computer_first";
+	public static final String HALF_TURN_PLAYER_FIRST_PROPERTY = "half_player_first";
+	public static final String HALF_TURN_COMPUTER_FIRST_PROPERTY = "half_computer_first";
 	public static final String PLAYER_VICTORY_PROPERTY = "player_victory";
 	public static final String PLAYER_DEFEAT_PROPERTY = "player_defeat";
+	public static final String COMPLETE_TURN_US_FIRST_PROPERTY = "complete_us_first";
+	public static final String COMPLETE_TURN_OPP_FIRST_PROPERTY = "complete_opponent_first";
+	public static final String HALF_TURN_US_FIRST_PROPERTY = "half_us_first";
+	public static final String HALF_TURN_OPP_FIRST_PROPERTY = "half_opponent_first";
 }

@@ -5,22 +5,27 @@ import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.concurrent.CountDownLatch;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
+import javax.swing.SwingWorker;
 import javax.swing.Timer;
 
 import it.unibs.pajc.pokeproject.model.PKMove;
@@ -53,11 +58,7 @@ public class BattlePanel extends JPanel implements KeyListener {
 	
 	private ArrayList<ActionListener> listenerList = new ArrayList<>();
 	
-	private Timer trainerHPTimer;
-	private Timer opponentHPTimer;
 	private Timer moveTimer;
-	private ActionListener trainerHPdelay;
-	private ActionListener opponentHPdelay;
 
 	/**
 	 * Create the panel.
@@ -106,7 +107,7 @@ public class BattlePanel extends JPanel implements KeyListener {
 		
 		lblMoveText = new JLabel("");
 		lblMoveText.setForeground(Color.WHITE);
-		lblMoveText.setBounds(344, 327, 254, 62);
+		lblMoveText.setBounds(349, 323, 269, 69);
 		lblMoveText.setFont(new Font(PKMN_RBYGSC_FONT, Font.PLAIN, 10));
 		add(lblMoveText);
 		
@@ -307,6 +308,209 @@ public class BattlePanel extends JPanel implements KeyListener {
 		opponentHPbar.setMaximum(enemyHP);
 	}
 	
+	public void doTurnUpdate(boolean trainerBar, int firstAttackerHP, int secondAttackerHP, String firstMove, String firstEffect, String secondMove, String secondEffect) {
+		int delay = 50;
+		
+        new Timer(delay, new ActionListener() {
+
+        	int charIndex = 0;
+        	int counter = 0;
+        	boolean firstText = false;
+        	boolean secondText = false;
+        	boolean thirdText = false;
+        	boolean fourthText = false;
+        	boolean waitBetween = true;
+        	boolean correctionText = false;
+        	JProgressBar secondAttackerBar;
+        	JProgressBar firstAttackerBar;
+        	JLabel label = lblMoveText;
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	if(trainerBar)
+            	{
+            		secondAttackerBar = trainerHPbar;
+            		firstAttackerBar = opponentHPbar;
+            	}
+            	else
+            	{
+            		secondAttackerBar = opponentHPbar;
+            		firstAttackerBar = trainerHPbar;
+            		
+            	}
+            	if(charIndex < firstMove.length() && !firstText)
+            	{
+            		if(!label.getText().equals("") && !correctionText)
+            		{
+            			correctionText = true;
+            			label.setText("");
+            		}
+					String labelText = label.getText();
+		               labelText += firstMove.charAt(charIndex);
+		               label.setText(labelText);
+		               charIndex++;
+		               if (charIndex >= firstMove.length()) {
+		            	   firstText = true;
+		            	   correctionText = false;
+		            	   charIndex = 0;
+		                	return;
+		                }
+            	}
+            	else if(secondAttackerBar.getValue() > secondAttackerHP && counter % 4 == 0) {
+            		secondAttackerBar.setValue(secondAttackerBar.getValue()-1);
+            		setBarColor(secondAttackerBar);
+            		counter++;
+            	}
+            	else if(secondAttackerBar.getValue() > secondAttackerHP)
+            	{
+            		counter++;
+            		return;
+            	}
+            	else if(secondAttackerBar.getValue() == (secondAttackerHP) && charIndex < firstEffect.length() && !secondText)
+				{
+            		if(label.getText().equals(firstMove))
+            		{
+            			label.setText("");
+            			return;
+            		}
+					 String labelText = label.getText();
+		                labelText += firstEffect.charAt(charIndex);
+		                label.setText(labelText);
+		                charIndex++;
+		                if (charIndex >= firstEffect.length()) {
+	            			secondText = true;
+	            			charIndex = 0;
+	            			counter = 0;
+		                	return;
+		                }	
+				}
+            	else if(waitBetween)
+            	{
+            		counter++;
+            		if(counter % 7 == 0)
+            			waitBetween = false;
+            	}
+            	else if(charIndex < secondMove.length() && !thirdText)
+            	{
+            		if(label.getText().equals(firstEffect) || label.getText().equals(firstMove))
+            			label.setText("");
+				 String labelText = label.getText();
+	                labelText += secondMove.charAt(charIndex);
+	                label.setText(labelText);
+	                charIndex++;
+	                if (charIndex >= secondMove.length()) {
+            			thirdText = true;
+            			charIndex = 0;
+            			counter = 0;
+	                	return;
+	                }
+            	}
+            	else if(firstAttackerBar.getValue() > firstAttackerHP && counter % 4 == 0)
+            	{
+            		firstAttackerBar.setValue(firstAttackerBar.getValue()-1);
+            		setBarColor(firstAttackerBar);
+            		counter++;
+            	}
+            	else if(firstAttackerBar.getValue() > firstAttackerHP)
+            	{
+            		counter++;
+            		return;
+            	}
+            	else if(firstAttackerBar.getValue() == (firstAttackerHP) && charIndex < secondEffect.length() && !fourthText)
+            	{
+            		if(label.getText().equals(secondMove))
+            			label.setText("");
+				 String labelText = label.getText();
+	                labelText += secondEffect.charAt(charIndex);
+	                label.setText(labelText);
+	                charIndex++;
+	                if (charIndex >= secondEffect.length()) {
+            			fourthText = true;
+            			charIndex = 0;
+            			counter = 0;
+	                	return;
+	                }
+            	}
+            	else
+            	{
+            		((Timer)e.getSource()).stop();
+            	}
+            }
+         }).start();
+    }
+	
+	public void doTurnUpdate(boolean trainerBar, int secondAttackerHP, String firstMove, String firstEffect) {
+		int delay = 50;
+		
+        new Timer(delay, new ActionListener() {
+
+        	int charIndex = 0;
+        	int counter = 0;
+        	boolean firstText = false;
+        	boolean secondText = false;
+        	boolean correctionText = false;
+        	JProgressBar secondAttackerBar;
+        	JLabel label = lblMoveText;
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	if(trainerBar)
+            	{
+            		secondAttackerBar = trainerHPbar;
+            	}
+            	else
+            	{
+            		secondAttackerBar = opponentHPbar;
+            	}
+            	if(charIndex < firstMove.length() && !firstText)
+            	{
+            		if(!label.getText().equals("") && !correctionText)
+            		{
+            			correctionText = true;
+            			label.setText("");
+            		}
+					String labelText = label.getText();
+		               labelText += firstMove.charAt(charIndex);
+		               label.setText(labelText);
+		               charIndex++;
+		               if (charIndex >= firstMove.length()) {
+		            	   firstText = true;
+		            	   charIndex = 0;
+		                	return;
+		                }
+            	}
+            	else if(secondAttackerBar.getValue() > secondAttackerHP && counter % 4 == 0) {
+            		secondAttackerBar.setValue(secondAttackerBar.getValue()-1);
+            		setBarColor(secondAttackerBar);
+            		counter++;
+            	}
+            	else if(secondAttackerBar.getValue() > secondAttackerHP)
+            	{
+            		counter++;
+            		return;
+            	}
+            	else if(secondAttackerBar.getValue() == (secondAttackerHP) && charIndex < firstEffect.length() && !secondText)
+				{
+            		if(label.getText().equals(firstMove))
+            			label.setText("");
+					 String labelText = label.getText();
+		                labelText += firstEffect.charAt(charIndex);
+		                label.setText(labelText);
+		                charIndex++;
+		                if (charIndex >= firstEffect.length()) {
+	            			secondText = true;
+	            			charIndex = 0;
+	            			counter = 0;
+		                	return;
+		                }	
+				}
+            	else
+            	{
+            		((Timer)e.getSource()).stop();
+            	}
+            }
+         }).start();
+    }
+	
+	
 	private void setBarColor(JProgressBar bar) {
 		int percentage = (int)((double)bar.getValue()/bar.getMaximum()*100);
 		if(percentage>50) 
@@ -315,50 +519,6 @@ public class BattlePanel extends JPanel implements KeyListener {
 			bar.setForeground(Color.ORANGE);
 		else
 			bar.setForeground(Color.RED);
-	}
-	
-	public void setTrainerHPLevel(int value) {
-		trainerHPdelay = new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(trainerHPbar.getValue() > value) {
-					trainerHPbar.setValue(trainerHPbar.getValue()-1);
-					setBarColor(trainerHPbar);
-				}
-				else
-				trainerHPTimer.stop();
-			}
-			
-		};
-		trainerHPTimer = new Timer(200, trainerHPdelay);
-		trainerHPTimer.start();
-	}
-	
-	public void setOpponentHPLevel(int value) {
-		opponentHPdelay = new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(opponentHPbar.getValue() > value) {
-					opponentHPbar.setValue(opponentHPbar.getValue()-1);
-					setBarColor(opponentHPbar);
-				}
-				else
-				opponentHPTimer.stop();
-			}
-			
-		};
-		opponentHPTimer = new Timer(200, opponentHPdelay);
-		opponentHPTimer.start();
-	}
-	
-	public void addListener(ActionListener e) {
-			listenerList.add(e);
-	}
-	
-	private void fireActionPerformed(ActionEvent e) {
-		for(ActionListener l : listenerList) {
-			l.actionPerformed(e);
-		}
 	}
 	
 	public void setlblMoveText(String text){
@@ -478,4 +638,14 @@ public class BattlePanel extends JPanel implements KeyListener {
 	@Override
 	public void keyReleased(KeyEvent e) {		
 	}
+	
+	public void addListener(ActionListener e) {
+		listenerList.add(e);
+	}
+
+	private void fireActionPerformed(ActionEvent e) {
+		for(ActionListener l : listenerList) {
+			l.actionPerformed(e);
+		}
+}
 }

@@ -29,6 +29,8 @@ public class MatchThread implements Runnable {
 	private int moveSelectedByOne;
 	private int moveSelectedByTwo;
 	
+	private double effectiveness;
+	
 	private boolean rematchPlayerOne;
 	private boolean rematchPlayerTwo;
 	
@@ -154,82 +156,75 @@ public class MatchThread implements Runnable {
 	
 	private void sendSelectedMoveMessage(Pokemon firstAttacker, Pokemon secondAttacker, int firstAttackerID, int firstMove, int secondMove) {
 		int damageFirstAttacker = calcDamage(firstAttacker, secondAttacker, firstMove);
+		double firstAttackerEff = effectiveness;
 		int damageSecondAttacker = calcDamage(secondAttacker, firstAttacker, secondMove);
+		double secondAttackerEff = effectiveness;
 		
 		//remaining health remaining
 		firstAttacker.setBattleHP(firstAttacker.getBattleHP() - damageSecondAttacker);
 		secondAttacker.setBattleHP(secondAttacker.getBattleHP() - damageFirstAttacker);
 		
-		//optimistic message creation
-		PKMessage damageDoneByFirst = new PKMessage(Commands.MSG_DONE_DAMAGE, damageFirstAttacker);
-		PKMessage moveOfFirstAttacker = new PKMessage(Commands.MSG_OPPONENT_MOVE, firstMove);
-		PKMessage damageReceivedBySecond = new PKMessage(Commands.MSG_RECEIVED_DAMAGE, damageFirstAttacker);
+	
+		PKTurnMessage turnMessageForOne;
+		PKTurnMessage turnMessageForTwo;
+		PKMessage battleOver;
 		
-		//message sending
-		if(isDead(secondAttacker))
+		if(firstAttackerID == playerOne.getClientID())
 		{
-			logger.writeLog(PKServerStrings.SECOND_ATTACKER_DEAD + secondAttacker.getName());
-			PKMessage battleOver = new PKMessage(Commands.MSG_BATTLE_OVER);
-			if(playerOne.getClientID() == firstAttackerID)
-			{
-				//messages for first to attack
-				playerOne.sendMessage(damageDoneByFirst);
+			if(isDead(secondAttacker)) {
+				battleOver = new PKMessage(Commands.MSG_BATTLE_OVER);
+				turnMessageForOne = new PKTurnMessage(Commands.MSG_TURN, false, secondAttacker.getBattleHP(), 
+						firstAttacker.getBattleHP(), -1, firstMove, -1, firstAttackerEff);
+				turnMessageForTwo = new PKTurnMessage(Commands.MSG_TURN, true, firstAttacker.getBattleHP(), 
+						secondAttacker.getBattleHP(), firstMove, -1, firstAttackerEff, -1);	
+				playerOne.sendMessage(turnMessageForOne);
+				playerTwo.sendMessage(turnMessageForTwo);
 				playerOne.sendMessage(battleOver);
-				
-				//messages for second to attack
-				playerTwo.sendMessage(moveOfFirstAttacker);
-				playerTwo.sendMessage(damageReceivedBySecond);
 				playerTwo.sendMessage(battleOver);
 			}
-			else
+			else 
 			{
-				//messages for first to attack
-				playerTwo.sendMessage(damageDoneByFirst);
-				playerTwo.sendMessage(battleOver);
-				
-				//messages for second to attack
-				playerOne.sendMessage(moveOfFirstAttacker);
-				playerOne.sendMessage(damageReceivedBySecond);
-				playerOne.sendMessage(battleOver);
+				turnMessageForOne = new PKTurnMessage(Commands.MSG_TURN, false, secondAttacker.getBattleHP(), 
+						firstAttacker.getBattleHP(), secondMove, firstMove, secondAttackerEff, firstAttackerEff);
+				turnMessageForTwo = new PKTurnMessage(Commands.MSG_TURN, true, firstAttacker.getBattleHP(), 
+						secondAttacker.getBattleHP(), firstMove, secondMove, firstAttackerEff, secondAttackerEff);
+				playerOne.sendMessage(turnMessageForOne);
+				playerTwo.sendMessage(turnMessageForTwo);
+				if(isDead(firstAttacker))
+				{
+					battleOver = new PKMessage(Commands.MSG_BATTLE_OVER);
+					playerOne.sendMessage(battleOver);
+					playerTwo.sendMessage(battleOver);
+				}
 			}
 		}
-		else 
+		else
 		{
-			//creation of remaining messages
-			PKMessage damageReceivedByFirst = new PKMessage(Commands.MSG_RECEIVED_DAMAGE, damageSecondAttacker);
-			PKMessage moveOfSecondAttacker = new PKMessage(Commands.MSG_OPPONENT_MOVE, secondMove);
-			PKMessage damageDoneBySecond = new PKMessage(Commands.MSG_DONE_DAMAGE, damageSecondAttacker);
-				
-			if(playerOne.getClientID() == firstAttackerID)
-			{
-				//messages for first to attack
-				playerOne.sendMessage(damageDoneByFirst);
-				playerOne.sendMessage(moveOfSecondAttacker);
-				playerOne.sendMessage(damageReceivedByFirst);
-					
-				//messages for second to attack
-				playerTwo.sendMessage(moveOfFirstAttacker);
-				playerTwo.sendMessage(damageReceivedBySecond);
-				playerTwo.sendMessage(damageDoneBySecond);
-			}
-			else
-			{
-				//messages for first to attack
-				playerTwo.sendMessage(damageDoneByFirst);
-				playerTwo.sendMessage(moveOfSecondAttacker);
-				playerTwo.sendMessage(damageReceivedByFirst);
-					
-				//messages for second to attack
-				playerOne.sendMessage(moveOfFirstAttacker);
-				playerOne.sendMessage(damageReceivedBySecond);
-				playerOne.sendMessage(damageDoneBySecond);
-			}
-			if(isDead(firstAttacker))
-			{
-				logger.writeLog(PKServerStrings.FIRST_ATTACKER_DEAD + firstAttacker.getName());
-				PKMessage battleOver = new PKMessage(Commands.MSG_BATTLE_OVER);
+			if(isDead(secondAttacker)) {
+				battleOver = new PKMessage(Commands.MSG_BATTLE_OVER);
+				turnMessageForTwo = new PKTurnMessage(Commands.MSG_TURN, false, secondAttacker.getBattleHP(), 
+						firstAttacker.getBattleHP(), -1, firstMove, -1, firstAttackerEff);
+				turnMessageForOne = new PKTurnMessage(Commands.MSG_TURN, true, firstAttacker.getBattleHP(), 
+						secondAttacker.getBattleHP(), firstMove, -1, firstAttackerEff, -1);	
+				playerOne.sendMessage(turnMessageForOne);
+				playerTwo.sendMessage(turnMessageForTwo);
 				playerOne.sendMessage(battleOver);
 				playerTwo.sendMessage(battleOver);
+			}
+			else 
+			{
+				turnMessageForTwo = new PKTurnMessage(Commands.MSG_TURN, false, secondAttacker.getBattleHP(), 
+						firstAttacker.getBattleHP(), secondMove, firstMove, secondAttackerEff, firstAttackerEff);
+				turnMessageForOne = new PKTurnMessage(Commands.MSG_TURN, true, firstAttacker.getBattleHP(), 
+						secondAttacker.getBattleHP(), firstMove, secondMove, firstAttackerEff, secondAttackerEff);
+				playerOne.sendMessage(turnMessageForOne);
+				playerTwo.sendMessage(turnMessageForTwo);
+				if(isDead(firstAttacker))
+				{
+					battleOver = new PKMessage(Commands.MSG_BATTLE_OVER);
+					playerOne.sendMessage(battleOver);
+					playerTwo.sendMessage(battleOver);
+				}
 			}
 		}
 	}
@@ -302,10 +297,11 @@ public class MatchThread implements Runnable {
 	
 	private int calcDamage(Pokemon attacker, Pokemon defender, int moveID) {
 		PKMove move = attacker.getMove(moveID);
+		effectiveness = move.getType().getEffectiveness(defender.getType());
 		double N = ThreadLocalRandom.current().nextDouble(0.85, 1);
 		double stab = (attacker.hasStab(moveID)) ? 1.5 : 1;
 		double damage = ((((2*attacker.getLevel()+10)*attacker.getAttack()*move.getPwr()) / 
-				(250*defender.getDefense()) ) + 2) * stab *move.getType().getEffectiveness(defender.getType())
+				(250*defender.getDefense()) ) + 2) * stab *effectiveness
 				* N;
 		if(damage < 1) damage = 0;
 		return (int)damage;
