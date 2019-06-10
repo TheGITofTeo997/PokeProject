@@ -333,6 +333,7 @@ public class PKClientController{
 	}
 	
 	private void addMultiplayerListeners() {
+		
 		multiplayerModel.addPropertyListener(new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent e) {
@@ -392,46 +393,30 @@ public class PKClientController{
 			}
 		});
 		
-		/*
-		battleEnvironment.addPropertyListener(new PropertyChangeListener() {
-			@Override
-			public void propertyChange(PropertyChangeEvent e) {
-				if(e.getPropertyName().equalsIgnoreCase(PKClientStrings.OPPONENT_MOVE_PROPERTY))
-				{
-					logger.writeLog(PKClientStrings.OPPONENT_MOVE);
-					battlePanel.writeTextInMoveBox(battleEnvironment.getOpponentPokemon().getName() + " nemico usa " + e.getNewValue());
-				}
-			}
-		});
-		*/
-		
-		/*
-		battleEnvironment.addPropertyListener(new PropertyChangeListener() {
-			@Override
-			public void propertyChange(PropertyChangeEvent e) {
-				if(e.getPropertyName().equalsIgnoreCase(PKClientStrings.OUR_MOVE_PROPERTY))
-				{
-					logger.writeLog(PKClientStrings.OPPONENT_MOVE);
-					battlePanel.writeTextInMoveBox(battleEnvironment.getOurPokemon().getName() + " usa " + e.getNewValue());
-				}
-			}
-		});
-		*/
 		
 		multiplayerModel.addPropertyListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent e) {
-				if(e.getPropertyName().equalsIgnoreCase(PKClientStrings.OUR_HP_PROPERTY)) {
-					logger.writeLog(PKClientStrings.OUR_HP);
-					battlePanel.setTrainerHPLevel((Integer)e.getNewValue());
+				if(e.getPropertyName().equalsIgnoreCase(PKClientStrings.COMPLETE_TURN_US_FIRST_PROPERTY)) {
 					dialog.dispose();
+					battlePanel.doTurnUpdate(false, multiplayerModel.getOurHP(), multiplayerModel.getOpponetHP(), multiplayerModel.getOurMove(), 
+							multiplayerModel.getOurEffect(), multiplayerModel.getOpponentMove(), multiplayerModel.getOpponentEffect());
 				}
-				else if(e.getPropertyName().equalsIgnoreCase(PKClientStrings.OPPONENT_HP_PROPERTY)) {
-					logger.writeLog(PKClientStrings.OPPONENT_HP);
-					battlePanel.setOpponentHPLevel((Integer)e.getNewValue());
+				else if(e.getPropertyName().equalsIgnoreCase(PKClientStrings.COMPLETE_TURN_OPP_FIRST_PROPERTY)) {
 					dialog.dispose();
+					battlePanel.doTurnUpdate(true, multiplayerModel.getOpponetHP(), multiplayerModel.getOurHP(), multiplayerModel.getOpponentMove(), 
+							multiplayerModel.getOpponentEffect(), multiplayerModel.getOurMove(), multiplayerModel.getOurEffect());
+				}
+				else if(e.getPropertyName().equalsIgnoreCase(PKClientStrings.HALF_TURN_US_FIRST_PROPERTY)) {
+					dialog.dispose();
+					battlePanel.doTurnUpdate(false, multiplayerModel.getOpponetHP(), multiplayerModel.getOurMove(), multiplayerModel.getOurEffect());
+				}
+				else if(e.getPropertyName().equalsIgnoreCase(PKClientStrings.HALF_TURN_OPP_FIRST_PROPERTY)) {
+					dialog.dispose();
+					battlePanel.doTurnUpdate(true, multiplayerModel.getOurHP(), multiplayerModel.getOpponentMove(), multiplayerModel.getOpponentEffect());
 				}
 			}
 		});	
+		
 		
 		multiplayerModel.addPropertyListener(new PropertyChangeListener() {
 			@SuppressWarnings("static-access")
@@ -536,13 +521,19 @@ public class PKClientController{
 		singleplayerModel.addPropertyListener(new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent e) {
-				if(e.getPropertyName().equalsIgnoreCase(PKClientStrings.PLAYER_HP_PROPERTY)) {
-					logger.writeLog(PKClientStrings.PLAYER_HP);
-					battlePanel.setTrainerHPLevel((Integer)e.getNewValue());
+				if(e.getPropertyName().equalsIgnoreCase(PKClientStrings.COMPLETE_TURN_COMPUTER_FIRST_PROPERTY)) {
+					battlePanel.doTurnUpdate(true, singleplayerModel.getComputerHP(), singleplayerModel.getPlayerHP(), singleplayerModel.getComputerMove(),
+							singleplayerModel.getComputerEffect(), singleplayerModel.getPlayerMove(), singleplayerModel.getPlayerEffect());
 				}
-				else if(e.getPropertyName().equalsIgnoreCase(PKClientStrings.COMPUTER_HP_PROPERTY)) {
-					logger.writeLog(PKClientStrings.COMPUTER_HP);
-					battlePanel.setOpponentHPLevel((Integer)e.getNewValue());
+				else if(e.getPropertyName().equalsIgnoreCase(PKClientStrings.COMPLETE_TURN_PLAYER_FIRST_PROPERTY)) {
+					battlePanel.doTurnUpdate(false, singleplayerModel.getPlayerHP(), singleplayerModel.getComputerHP(), singleplayerModel.getPlayerMove(),
+							singleplayerModel.getPlayerEffect(), singleplayerModel.getComputerMove(), singleplayerModel.getComputerEffect());
+				}
+				else if(e.getPropertyName().equalsIgnoreCase(PKClientStrings.HALF_TURN_COMPUTER_FIRST_PROPERTY)) {
+					battlePanel.doTurnUpdate(true, singleplayerModel.getPlayerHP(), singleplayerModel.getComputerMove(), singleplayerModel.getComputerEffect());
+				}
+				else if(e.getPropertyName().equalsIgnoreCase(PKClientStrings.HALF_TURN_PLAYER_FIRST_PROPERTY)) {
+					battlePanel.doTurnUpdate(false, singleplayerModel.getComputerHP(), singleplayerModel.getPlayerMove(), singleplayerModel.getPlayerEffect());
 				}
 			}	
 		});

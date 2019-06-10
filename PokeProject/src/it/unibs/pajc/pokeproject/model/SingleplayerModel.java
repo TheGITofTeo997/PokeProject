@@ -13,6 +13,11 @@ public class SingleplayerModel {
 	private ArrayList<PropertyChangeListener> listenerList;
 	private Pokemon playerPoke;
 	private Pokemon computerPoke;
+	private int playerMoveID;
+	private int computerMoveID;
+	private double effectiveness;
+	private String playerEffect;
+	private String computerEffect;
 	private PropertyChangeEvent e;
 	
 	public SingleplayerModel() {
@@ -33,9 +38,17 @@ public class SingleplayerModel {
 		firePropertyChanged(e);
 	}
 	
-	public void doTurnCalculation(int playerMove, int computerMove) {
-		int playerDamage = calcDamage(playerPoke, computerPoke, playerMove);
-		int computerDamage = calcDamage(computerPoke, playerPoke, computerMove);
+	public void doTurnCalculation(int playerMoveID, int computerMoveID) {
+		this.playerMoveID = playerMoveID;
+		this.computerMoveID = computerMoveID;
+		int playerDamage = calcDamage(playerPoke, computerPoke, playerMoveID);
+		if(effectiveness == 2) playerEffect = "E' superefficace!";
+		else if(effectiveness == 1) playerEffect = "";
+		else playerEffect = "Non e' molto efficace";
+		int computerDamage = calcDamage(computerPoke, playerPoke, computerMoveID);
+		if(effectiveness == 2) computerEffect = "E' superefficace!";
+		else if(effectiveness == 1) computerEffect = "";
+		else computerEffect = "Non e' molto efficace";
 		int firstAttackerID = setPriorityBattle(playerPoke, computerPoke);
 		
 		int computerRemainingHP = computerPoke.getBattleHP()- playerDamage;
@@ -49,22 +62,21 @@ public class SingleplayerModel {
 		playerPoke.setBattleHP(playerRemainingHP);
 		
 		if(firstAttackerID == 0)
-		{
-			
-			e = new PropertyChangeEvent(this, PKClientStrings.COMPUTER_HP_PROPERTY, -1, computerRemainingHP);
-			firePropertyChanged(e);
-			
+		{	
 			if(isDead(computerPoke))
 			{
+				e = new PropertyChangeEvent(this, PKClientStrings.HALF_TURN_PLAYER_FIRST_PROPERTY, false, true);
+				firePropertyChanged(e);
+				
 				e = new PropertyChangeEvent(this, PKClientStrings.PLAYER_VICTORY_PROPERTY, false, true);
 				firePropertyChanged(e);
 			}
-			else
+			else 
 			{
-				e = new PropertyChangeEvent(this, PKClientStrings.PLAYER_HP_PROPERTY, -1, playerRemainingHP);
+				e = new PropertyChangeEvent(this, PKClientStrings.COMPLETE_TURN_PLAYER_FIRST_PROPERTY, false, true);
 				firePropertyChanged(e);
 				
-				if(isDead(playerPoke)) 
+				if(isDead(playerPoke))
 				{
 					e = new PropertyChangeEvent(this, PKClientStrings.PLAYER_DEFEAT_PROPERTY, false, true);
 					firePropertyChanged(e);
@@ -72,18 +84,18 @@ public class SingleplayerModel {
 			}
 		}
 		else
-		{
-			e = new PropertyChangeEvent(this, PKClientStrings.PLAYER_HP_PROPERTY, -1, playerRemainingHP);
-			firePropertyChanged(e);
-			
+		{	
 			if(isDead(playerPoke)) 
 			{
+				e = new PropertyChangeEvent(this, PKClientStrings.HALF_TURN_COMPUTER_FIRST_PROPERTY, false, true);
+				firePropertyChanged(e);
+				
 				e = new PropertyChangeEvent(this, PKClientStrings.PLAYER_DEFEAT_PROPERTY, false, true);
 				firePropertyChanged(e);
 			}
 			else
 			{	
-				e = new PropertyChangeEvent(this, PKClientStrings.COMPUTER_HP_PROPERTY, -1, computerRemainingHP);
+				e = new PropertyChangeEvent(this, PKClientStrings.COMPLETE_TURN_COMPUTER_FIRST_PROPERTY, false, true);
 				firePropertyChanged(e);
 				
 				if(isDead(computerPoke))
@@ -97,10 +109,11 @@ public class SingleplayerModel {
 	
 	public int calcDamage(Pokemon attacker, Pokemon defender, int moveID) {
 		PKMove move = attacker.getMove(moveID);
+		effectiveness = move.getType().getEffectiveness(defender.getType());
 		double N = ThreadLocalRandom.current().nextDouble(0.85, 1);
 		double stab = (attacker.hasStab(moveID)) ? 1.5 : 1;
 		double damage = ((((2*attacker.getLevel()+10)*attacker.getAttack()*move.getPwr()) / 
-				(250*defender.getDefense()) ) + 2) * stab *move.getType().getEffectiveness(defender.getType())
+				(250*defender.getDefense()) ) + 2) * stab *effectiveness
 				* N;
 		if(damage < 1) damage = 0;
 		return (int)damage;
@@ -135,5 +148,29 @@ public class SingleplayerModel {
 	public void firePropertyChanged(PropertyChangeEvent e) {
 		for(PropertyChangeListener l : listenerList)
 			l.propertyChange(e);
+	}
+
+	public int getComputerHP() {
+		return computerPoke.getBattleHP();
+	}
+
+	public int getPlayerHP() {
+		return playerPoke.getBattleHP();
+	}
+
+	public String getComputerMove() {
+		return computerPoke.getName() + " nemico usa " + computerPoke.getMove(computerMoveID).getName();
+	}
+
+	public String getComputerEffect() {
+		return computerEffect;
+	}
+
+	public String getPlayerMove() {
+		return playerPoke.getName() + " usa " + playerPoke.getMove(playerMoveID).getName();
+	}
+
+	public String getPlayerEffect() {
+		return playerEffect;
 	}
 }
