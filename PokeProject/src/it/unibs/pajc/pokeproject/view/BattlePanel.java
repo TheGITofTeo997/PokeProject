@@ -5,27 +5,19 @@ import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.concurrent.CountDownLatch;
-
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
-import javax.swing.SwingWorker;
 import javax.swing.Timer;
 
 import it.unibs.pajc.pokeproject.model.PKMove;
@@ -129,30 +121,6 @@ public class BattlePanel extends JPanel implements KeyListener {
 		btnMove1.setBackground(Color.YELLOW);
 		
 		add(btnMove1);	
-		btnMove1.addMouseListener(new MouseAdapter() {
-			 int charIndex = 0;
-	         public void mouseEntered(MouseEvent me) {
-	        	 charIndex = 0;
-	        	 String text = USA + btnMoves[0].getText();
-	        	 moveTimer = new Timer(75, new ActionListener() {
- 	                @Override
- 	                public void actionPerformed(ActionEvent ev) {
- 	                    String labelText = lblMoveText.getText();
- 	                    labelText += text.charAt(charIndex);
- 	                    lblMoveText.setText(labelText);
- 	                    charIndex++;
- 	                    if (charIndex >= text.length()) {
- 	                        moveTimer.stop();
- 	                    }
- 	                }
- 	            });
- 	            moveTimer.start();
-	         }
-	         public void mouseExited(MouseEvent me) {
-	        	 lblMoveText.setText("");
-	        	 moveTimer.stop();
-	         }
-			});
 		
 		btnMove2 = new JButton(MOVE2);
 		btnMove2.setBounds(157, 323, 122, 31);
@@ -160,30 +128,7 @@ public class BattlePanel extends JPanel implements KeyListener {
 		btnMove2.setBorderPainted(false);
 		btnMove2.setSelected(false);
 		add(btnMove2);
-		btnMove2.addMouseListener(new MouseAdapter() {
-			int charIndex = 0;
-	         public void mouseEntered(MouseEvent me) {
-	        	 charIndex = 0;
-	        	 String text = USA + btnMoves[1].getText();
-	        	 moveTimer = new Timer(75, new ActionListener() {
-	                @Override
-	                public void actionPerformed(ActionEvent ev) {
-	                    String labelText = lblMoveText.getText();
-	                    labelText += text.charAt(charIndex);
-	                    lblMoveText.setText(labelText);
-	                    charIndex++;
-	                    if (charIndex >= text.length()) {
-	                        moveTimer.stop();
-	                    }
-	                }
-	            });
-	            moveTimer.start();
-	         }
-	         public void mouseExited(MouseEvent me) {
-	        	 lblMoveText.setText("");
-	        	 moveTimer.stop();
-	         }
-			});
+		
 		
 		btnMove3 = new JButton(MOVE3);
 		btnMove3.setBounds(25, 358, 122, 31);
@@ -191,30 +136,7 @@ public class BattlePanel extends JPanel implements KeyListener {
 		btnMove3.setBorderPainted(false);
 		btnMove3.setSelected(false);
 		add(btnMove3);
-		btnMove3.addMouseListener(new MouseAdapter() {
-			int charIndex = 0;
-	         public void mouseEntered(MouseEvent me) {
-	        	 charIndex = 0;
-	        	 String text = USA + btnMoves[2].getText();
-	        	 moveTimer = new Timer(75, new ActionListener() {
-	                @Override
-	                public void actionPerformed(ActionEvent ev) {
-	                    String labelText = lblMoveText.getText();
-	                    labelText += text.charAt(charIndex);
-	                    lblMoveText.setText(labelText);
-	                    charIndex++;
-	                    if (charIndex >= text.length()) {
-	                        moveTimer.stop();
-	                    }
-	                }
-	            });
-	            moveTimer.start();
-	         }
-	         public void mouseExited(MouseEvent me) {
-	        	 lblMoveText.setText("");
-	        	 moveTimer.stop();
-	         }
-			});
+		
 		
 		btnMove4 = new JButton(MOVE4);
 		btnMove4.setBounds(157, 358, 122, 31);
@@ -222,30 +144,7 @@ public class BattlePanel extends JPanel implements KeyListener {
 		btnMove4.setBorderPainted(false);
 		btnMove4.setSelected(false);
 		add(btnMove4);
-		btnMove4.addMouseListener(new MouseAdapter() {
-			int charIndex = 0;
-	         public void mouseEntered(MouseEvent me) {
-	        	 charIndex = 0;
-	        	 String text = USA + btnMoves[3].getText();
-	        	 moveTimer = new Timer(75, new ActionListener() {
-	                @Override
-	                public void actionPerformed(ActionEvent ev) {
-	                    String labelText = lblMoveText.getText();
-	                    labelText += text.charAt(charIndex);
-	                    lblMoveText.setText(labelText);
-	                    charIndex++;
-	                    if (charIndex >= text.length()) {
-	                        moveTimer.stop();
-	                    }
-	                }
-	            });
-	            moveTimer.start();
-	         }
-	         public void mouseExited(MouseEvent me) {
-	        	 lblMoveText.setText("");
-	        	 moveTimer.stop();
-	         }
-			});
+		
 		
 		btnMoves = new JButton[]{btnMove1, btnMove2, btnMove3, btnMove4};
 				

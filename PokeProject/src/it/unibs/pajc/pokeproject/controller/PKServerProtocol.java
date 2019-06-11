@@ -17,7 +17,7 @@ public class PKServerProtocol extends Thread {
 	private ObjectInputStream fromClient; //inputStream for received messages
 	private ObjectOutputStream toClient; //outputStream to write messages
 	private ArrayBlockingQueue<PKMessage> toProcess; //queue where to put messages
-	private ScheduledExecutorService checkMessages;
+	private ScheduledExecutorService checkMessages; //serve per controllare ogni sec se c'è un messaggio
 	private int clientID;
 	private static int idGen=0;
 	private boolean connection; //boolean for connection check

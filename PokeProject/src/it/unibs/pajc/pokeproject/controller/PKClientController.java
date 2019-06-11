@@ -284,11 +284,11 @@ public class PKClientController{
 			battlePanel.setPokeHP(multiplayerModel.getOurPokemon().getHP(), multiplayerModel.getOpponentPokemon().getHP());
 			battlePanel.addListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					//SwingWorker serve per fare delle operazioni in background mentre si lavora anche con la view
 					SwingWorker<Void, Void> mySwingWorker = new SwingWorker<Void, Void>() {
 						protected Void doInBackground() throws Exception {
 							int moveID = Integer.parseInt(e.getActionCommand());
 							PKMessage msg = new PKMessage(Commands.MSG_SELECTED_MOVE, moveID);
-							//battleEnvironment.setOurMove(moveID);
 							connector.sendMessage(msg);
 							logger.writeLog(PKClientStrings.MOVE_SENT);
 							return null;
@@ -396,20 +396,24 @@ public class PKClientController{
 		
 		multiplayerModel.addPropertyListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent e) {
+				//io attacco per primo e c'è anche attacco dell'avversario
 				if(e.getPropertyName().equalsIgnoreCase(PKClientStrings.COMPLETE_TURN_US_FIRST_PROPERTY)) {
 					dialog.dispose();
 					battlePanel.doTurnUpdate(false, multiplayerModel.getOurHP(), multiplayerModel.getOpponetHP(), multiplayerModel.getOurMove(), 
 							multiplayerModel.getOurEffect(), multiplayerModel.getOpponentMove(), multiplayerModel.getOpponentEffect());
 				}
+				//avversario attacca per primo e c'è anche il mio attacco
 				else if(e.getPropertyName().equalsIgnoreCase(PKClientStrings.COMPLETE_TURN_OPP_FIRST_PROPERTY)) {
 					dialog.dispose();
 					battlePanel.doTurnUpdate(true, multiplayerModel.getOpponetHP(), multiplayerModel.getOurHP(), multiplayerModel.getOpponentMove(), 
 							multiplayerModel.getOpponentEffect(), multiplayerModel.getOurMove(), multiplayerModel.getOurEffect());
 				}
+				//io attacco e avversario muore
 				else if(e.getPropertyName().equalsIgnoreCase(PKClientStrings.HALF_TURN_US_FIRST_PROPERTY)) {
 					dialog.dispose();
 					battlePanel.doTurnUpdate(false, multiplayerModel.getOpponetHP(), multiplayerModel.getOurMove(), multiplayerModel.getOurEffect());
 				}
+				//avv attacca e io muoio
 				else if(e.getPropertyName().equalsIgnoreCase(PKClientStrings.HALF_TURN_OPP_FIRST_PROPERTY)) {
 					dialog.dispose();
 					battlePanel.doTurnUpdate(true, multiplayerModel.getOurHP(), multiplayerModel.getOpponentMove(), multiplayerModel.getOpponentEffect());
