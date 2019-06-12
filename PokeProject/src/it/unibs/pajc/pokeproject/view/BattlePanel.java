@@ -44,6 +44,10 @@ public class BattlePanel extends JPanel implements KeyListener {
 	private JButton[] btnMoves;
 	private JProgressBar trainerHPbar;
 	private JProgressBar opponentHPbar;
+	private boolean btnMove1Selected;
+	private boolean btnMove2Selected;
+	private boolean btnMove3Selected;
+	private boolean btnMove4Selected;
 	private JButton btnMove1;
 	private JButton btnMove2;
 	private JButton btnMove3;
@@ -117,8 +121,9 @@ public class BattlePanel extends JPanel implements KeyListener {
 		btnMove1 = new JButton(MOVE1);
 		btnMove1.setBounds(25, 323, 122, 31);
 		btnMove1.setFont(new Font(PKMN_RBYGSC_FONT, Font.PLAIN, 10));
+		btnMove1.setFocusable(false);
 		btnMove1.setBorderPainted(false);
-		btnMove1.setSelected(true);
+		btnMove1Selected = true;
 		btnMove1.setBackground(Color.YELLOW);
 		
 		add(btnMove1);	
@@ -126,24 +131,27 @@ public class BattlePanel extends JPanel implements KeyListener {
 		btnMove2 = new JButton(MOVE2);
 		btnMove2.setBounds(157, 323, 122, 31);
 		btnMove2.setFont(new Font(PKMN_RBYGSC_FONT, Font.PLAIN, 10));
+		btnMove2.setFocusable(false);
 		btnMove2.setBorderPainted(false);
-		btnMove2.setSelected(false);
+		btnMove2Selected = false;
 		add(btnMove2);
 		
 		
 		btnMove3 = new JButton(MOVE3);
 		btnMove3.setBounds(25, 358, 122, 31);
 		btnMove3.setFont(new Font(PKMN_RBYGSC_FONT, Font.PLAIN, 10));
+		btnMove3.setFocusable(false);
 		btnMove3.setBorderPainted(false);
-		btnMove3.setSelected(false);
+		btnMove3Selected = false;
 		add(btnMove3);
 		
 		
 		btnMove4 = new JButton(MOVE4);
 		btnMove4.setBounds(157, 358, 122, 31);
 		btnMove4.setFont(new Font(PKMN_RBYGSC_FONT, Font.PLAIN, 10));
+		btnMove4.setFocusable(false);
 		btnMove4.setBorderPainted(false);
-		btnMove4.setSelected(false);
+		btnMove4Selected = false;
 		add(btnMove4);
 		
 		
@@ -457,100 +465,100 @@ public class BattlePanel extends JPanel implements KeyListener {
 				e.getExtendedKeyCode() == KeyEvent.VK_NUMPAD4) btnMove4.doClick();
 		}
 		
-		if(e.getExtendedKeyCode() == KeyEvent.VK_RIGHT && btnMove1.isSelected()) {
+		if(e.getExtendedKeyCode() == KeyEvent.VK_RIGHT && btnMove1Selected) {
 			if(!t.isRunning()) {
 			moveTimer.stop();
 			lblMoveText.setText("");
 			btnMove1.setBackground(null);
-			btnMove1.setSelected(false);
-			btnMove2.setSelected(true);
+			btnMove1Selected = false;
+			btnMove2Selected = true;
 			btnMove2.setBackground(Color.YELLOW);
 			setlblMoveText(USA + btnMoves[1].getText());
 			}
 			}
-		if(e.getExtendedKeyCode() == KeyEvent.VK_RIGHT && btnMove3.isSelected()) {
+		if(e.getExtendedKeyCode() == KeyEvent.VK_RIGHT && btnMove3Selected) {
 			if(!t.isRunning()) {
 			moveTimer.stop();
 			lblMoveText.setText("");
 			btnMove3.setBackground(null);
-			btnMove3.setSelected(false);
-			btnMove4.setSelected(true);
+			btnMove3Selected = false;
+			btnMove4Selected = true;
 			btnMove4.setBackground(Color.YELLOW);
 			setlblMoveText(USA + btnMoves[3].getText());
 				}
 		 	}
-		if(e.getExtendedKeyCode() == KeyEvent.VK_LEFT && btnMove2.isSelected()) {
+		if(e.getExtendedKeyCode() == KeyEvent.VK_LEFT && btnMove2Selected) {
 			if(!t.isRunning()) {
 			moveTimer.stop();
 			lblMoveText.setText("");
 			btnMove2.setBackground(null);
-			btnMove2.setSelected(false);
-			btnMove1.setSelected(true);
+			btnMove2Selected = false;
+			btnMove1Selected = true;
 			btnMove1.setBackground(Color.YELLOW);
 			setlblMoveText(USA + btnMoves[0].getText());
 				}
 			}
-		if(e.getExtendedKeyCode() == KeyEvent.VK_LEFT && btnMove4.isSelected()) {
+		if(e.getExtendedKeyCode() == KeyEvent.VK_LEFT && btnMove4Selected) {
 			if(!t.isRunning()) {
 			moveTimer.stop();
 			lblMoveText.setText("");
 			btnMove4.setBackground(null);
-			btnMove4.setSelected(false);
-			btnMove3.setSelected(true);
+			btnMove4Selected = false;
+			btnMove3Selected = true;
 			btnMove3.setBackground(Color.YELLOW);
 			setlblMoveText(USA + btnMoves[2].getText());
 			}
 		}
-		if(e.getExtendedKeyCode() == KeyEvent.VK_UP && btnMove3.isSelected()) {
+		if(e.getExtendedKeyCode() == KeyEvent.VK_UP && btnMove3Selected) {
 			if(!t.isRunning()) {
 			moveTimer.stop();
 			lblMoveText.setText("");
 			btnMove3.setBackground(null);
-			btnMove3.setSelected(false);
-			btnMove1.setSelected(true);
+			btnMove3Selected = false;
+			btnMove1Selected = true;
 			btnMove1.setBackground(Color.YELLOW);
 			setlblMoveText(USA + btnMoves[0].getText());
 			}
 		}
-		if(e.getExtendedKeyCode() == KeyEvent.VK_UP && btnMove4.isSelected()) {
+		if(e.getExtendedKeyCode() == KeyEvent.VK_UP && btnMove4Selected) {
 			if(!t.isRunning()) {
 			moveTimer.stop();
 			lblMoveText.setText("");
 			btnMove4.setBackground(null);
-			btnMove4.setSelected(false);
-			btnMove2.setSelected(true);
+			btnMove4Selected = false;
+			btnMove2Selected = true;
 			btnMove2.setBackground(Color.YELLOW);
 			setlblMoveText(USA + btnMoves[1].getText());
 			}
 		}
-		if(e.getExtendedKeyCode() == KeyEvent.VK_DOWN && btnMove1.isSelected()) {
+		if(e.getExtendedKeyCode() == KeyEvent.VK_DOWN && btnMove1Selected) {
 			if(!t.isRunning()) {
 			moveTimer.stop();
 			lblMoveText.setText("");
 			btnMove1.setBackground(null);
-			btnMove1.setSelected(false);
-			btnMove3.setSelected(true);
+			btnMove1Selected = false;
+			btnMove3Selected = true;
 			btnMove3.setBackground(Color.YELLOW);
 			setlblMoveText(USA + btnMoves[2].getText());
 		}
 		}
-		if(e.getExtendedKeyCode() == KeyEvent.VK_DOWN && btnMove2.isSelected()) {
+		if(e.getExtendedKeyCode() == KeyEvent.VK_DOWN && btnMove2Selected) {
 			if(!t.isRunning()) {
 			moveTimer.stop();
 			lblMoveText.setText("");
 			btnMove2.setBackground(null);
-			btnMove2.setSelected(false);
-			btnMove4.setSelected(true);
+			btnMove2Selected = false;
+			btnMove4Selected = true;
 			btnMove4.setBackground(Color.YELLOW);
 			setlblMoveText(USA + btnMoves[3].getText());
 			}
 		}
 		if(e.getExtendedKeyCode() == KeyEvent.VK_ENTER) {
 			if(!t.isRunning()) {
-			if(btnMove1.isSelected()) btnMove1.doClick();
-			if(btnMove2.isSelected()) btnMove2.doClick();
-			if(btnMove3.isSelected()) btnMove3.doClick();
-			if(btnMove4.isSelected()) btnMove4.doClick();
+			if(btnMove1Selected) btnMove1.doClick();
+			if(btnMove2Selected) btnMove2.doClick();
+			if(btnMove3Selected) btnMove3.doClick();
+			if(btnMove4Selected) btnMove4.doClick();
 			}
 		}	
 		
