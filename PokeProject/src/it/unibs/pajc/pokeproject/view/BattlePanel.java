@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -51,7 +52,7 @@ public class BattlePanel extends JPanel implements KeyListener {
 	private ArrayList<ActionListener> listenerList = new ArrayList<>();
 	
 	private Timer moveTimer;
-
+	private Timer t  = new Timer(0, null);
 	/**
 	 * Create the panel.
 	 */
@@ -208,10 +209,10 @@ public class BattlePanel extends JPanel implements KeyListener {
 	}
 	
 	public void doTurnUpdate(boolean trainerBar, int firstAttackerHP, int secondAttackerHP, String firstMove, String firstEffect, String secondMove, String secondEffect) {
-		int delay = 50;
+			int delay = 20;
 		
-		moveTimer = new Timer(delay, new ActionListener() {
-
+			t = new Timer(delay, new ActionListener() {
+			
         	int charIndex = 0;
         	int counter = 0;
         	boolean firstText = false;
@@ -335,14 +336,13 @@ public class BattlePanel extends JPanel implements KeyListener {
             	}
             }
          });
-		moveTimer.start();
+					t.start();
     }
 	
 	public void doTurnUpdate(boolean trainerBar, int secondAttackerHP, String firstMove, String firstEffect) {
-		int delay = 50;
+		int delay = 20;
 		
-		moveTimer = new Timer(delay, new ActionListener() {
-
+			t = new Timer(delay, new ActionListener() {
         	int charIndex = 0;
         	int counter = 0;
         	boolean firstText = false;
@@ -408,7 +408,7 @@ public class BattlePanel extends JPanel implements KeyListener {
             	}
             }
          });
-		moveTimer.start();
+					t.start();
     }
 	
 	
@@ -445,6 +445,7 @@ public class BattlePanel extends JPanel implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		if(!t.isRunning()) {
 		if(e.getExtendedKeyCode() == KeyEvent.VK_1 || 
 				e.getExtendedKeyCode() == KeyEvent.VK_NUMPAD1) btnMove1.doClick();
 		if(e.getExtendedKeyCode() == KeyEvent.VK_2 || 
@@ -453,8 +454,10 @@ public class BattlePanel extends JPanel implements KeyListener {
 				e.getExtendedKeyCode() == KeyEvent.VK_NUMPAD3) btnMove3.doClick();
 		if(e.getExtendedKeyCode() == KeyEvent.VK_4 || 
 				e.getExtendedKeyCode() == KeyEvent.VK_NUMPAD4) btnMove4.doClick();
+		}
 		
 		if(e.getExtendedKeyCode() == KeyEvent.VK_RIGHT && btnMove1.isSelected()) {
+			if(!t.isRunning()) {
 			moveTimer.stop();
 			lblMoveText.setText("");
 			btnMove1.setBackground(null);
@@ -462,8 +465,10 @@ public class BattlePanel extends JPanel implements KeyListener {
 			btnMove2.setSelected(true);
 			btnMove2.setBackground(Color.YELLOW);
 			setlblMoveText(USA + btnMoves[1].getText());
+			}
 			}
 		if(e.getExtendedKeyCode() == KeyEvent.VK_RIGHT && btnMove3.isSelected()) {
+			if(!t.isRunning()) {
 			moveTimer.stop();
 			lblMoveText.setText("");
 			btnMove3.setBackground(null);
@@ -471,9 +476,10 @@ public class BattlePanel extends JPanel implements KeyListener {
 			btnMove4.setSelected(true);
 			btnMove4.setBackground(Color.YELLOW);
 			setlblMoveText(USA + btnMoves[3].getText());
-			
+				}
 		 	}
 		if(e.getExtendedKeyCode() == KeyEvent.VK_LEFT && btnMove2.isSelected()) {
+			if(!t.isRunning()) {
 			moveTimer.stop();
 			lblMoveText.setText("");
 			btnMove2.setBackground(null);
@@ -481,8 +487,10 @@ public class BattlePanel extends JPanel implements KeyListener {
 			btnMove1.setSelected(true);
 			btnMove1.setBackground(Color.YELLOW);
 			setlblMoveText(USA + btnMoves[0].getText());
+				}
 			}
 		if(e.getExtendedKeyCode() == KeyEvent.VK_LEFT && btnMove4.isSelected()) {
+			if(!t.isRunning()) {
 			moveTimer.stop();
 			lblMoveText.setText("");
 			btnMove4.setBackground(null);
@@ -490,8 +498,10 @@ public class BattlePanel extends JPanel implements KeyListener {
 			btnMove3.setSelected(true);
 			btnMove3.setBackground(Color.YELLOW);
 			setlblMoveText(USA + btnMoves[2].getText());
+			}
 		}
 		if(e.getExtendedKeyCode() == KeyEvent.VK_UP && btnMove3.isSelected()) {
+			if(!t.isRunning()) {
 			moveTimer.stop();
 			lblMoveText.setText("");
 			btnMove3.setBackground(null);
@@ -499,8 +509,10 @@ public class BattlePanel extends JPanel implements KeyListener {
 			btnMove1.setSelected(true);
 			btnMove1.setBackground(Color.YELLOW);
 			setlblMoveText(USA + btnMoves[0].getText());
+			}
 		}
 		if(e.getExtendedKeyCode() == KeyEvent.VK_UP && btnMove4.isSelected()) {
+			if(!t.isRunning()) {
 			moveTimer.stop();
 			lblMoveText.setText("");
 			btnMove4.setBackground(null);
@@ -508,8 +520,10 @@ public class BattlePanel extends JPanel implements KeyListener {
 			btnMove2.setSelected(true);
 			btnMove2.setBackground(Color.YELLOW);
 			setlblMoveText(USA + btnMoves[1].getText());
+			}
 		}
 		if(e.getExtendedKeyCode() == KeyEvent.VK_DOWN && btnMove1.isSelected()) {
+			if(!t.isRunning()) {
 			moveTimer.stop();
 			lblMoveText.setText("");
 			btnMove1.setBackground(null);
@@ -518,7 +532,9 @@ public class BattlePanel extends JPanel implements KeyListener {
 			btnMove3.setBackground(Color.YELLOW);
 			setlblMoveText(USA + btnMoves[2].getText());
 		}
+		}
 		if(e.getExtendedKeyCode() == KeyEvent.VK_DOWN && btnMove2.isSelected()) {
+			if(!t.isRunning()) {
 			moveTimer.stop();
 			lblMoveText.setText("");
 			btnMove2.setBackground(null);
@@ -526,12 +542,15 @@ public class BattlePanel extends JPanel implements KeyListener {
 			btnMove4.setSelected(true);
 			btnMove4.setBackground(Color.YELLOW);
 			setlblMoveText(USA + btnMoves[3].getText());
+			}
 		}
 		if(e.getExtendedKeyCode() == KeyEvent.VK_ENTER) {
+			if(!t.isRunning()) {
 			if(btnMove1.isSelected()) btnMove1.doClick();
 			if(btnMove2.isSelected()) btnMove2.doClick();
 			if(btnMove3.isSelected()) btnMove3.doClick();
 			if(btnMove4.isSelected()) btnMove4.doClick();
+			}
 		}	
 		
 	}
