@@ -161,8 +161,6 @@ public class MatchThread implements Runnable {
 		double secondAttackerEff = effectiveness;
 		
 		//remaining health remaining
-		firstAttacker.setBattleHP(firstAttacker.getBattleHP() - damageSecondAttacker);
-		secondAttacker.setBattleHP(secondAttacker.getBattleHP() - damageFirstAttacker);
 		
 	
 		PKTurnMessage turnMessageForOne;
@@ -172,6 +170,7 @@ public class MatchThread implements Runnable {
 		if(firstAttackerID == playerOne.getClientID())
 		{
 			if(isDead(secondAttacker)) {
+				secondAttacker.setBattleHP(secondAttacker.getBattleHP() - damageFirstAttacker);
 				battleOver = new PKMessage(Commands.MSG_BATTLE_OVER);
 				turnMessageForOne = new PKTurnMessage(Commands.MSG_TURN, false, secondAttacker.getBattleHP(), 
 						firstAttacker.getBattleHP(), -1, firstMove, -1, firstAttackerEff);
@@ -184,6 +183,8 @@ public class MatchThread implements Runnable {
 			}
 			else 
 			{
+				secondAttacker.setBattleHP(secondAttacker.getBattleHP() - damageFirstAttacker);
+				firstAttacker.setBattleHP(firstAttacker.getBattleHP() - damageSecondAttacker);
 				turnMessageForOne = new PKTurnMessage(Commands.MSG_TURN, false, secondAttacker.getBattleHP(), 
 						firstAttacker.getBattleHP(), secondMove, firstMove, secondAttackerEff, firstAttackerEff);
 				turnMessageForTwo = new PKTurnMessage(Commands.MSG_TURN, true, firstAttacker.getBattleHP(), 
@@ -201,6 +202,7 @@ public class MatchThread implements Runnable {
 		else
 		{
 			if(isDead(secondAttacker)) {
+				secondAttacker.setBattleHP(secondAttacker.getBattleHP() - damageFirstAttacker);
 				battleOver = new PKMessage(Commands.MSG_BATTLE_OVER);
 				turnMessageForTwo = new PKTurnMessage(Commands.MSG_TURN, false, secondAttacker.getBattleHP(), 
 						firstAttacker.getBattleHP(), -1, firstMove, -1, firstAttackerEff);
@@ -213,6 +215,8 @@ public class MatchThread implements Runnable {
 			}
 			else 
 			{
+				secondAttacker.setBattleHP(secondAttacker.getBattleHP() - damageFirstAttacker);
+				firstAttacker.setBattleHP(firstAttacker.getBattleHP() - damageSecondAttacker);
 				turnMessageForTwo = new PKTurnMessage(Commands.MSG_TURN, false, secondAttacker.getBattleHP(), 
 						firstAttacker.getBattleHP(), secondMove, firstMove, secondAttackerEff, firstAttackerEff);
 				turnMessageForOne = new PKTurnMessage(Commands.MSG_TURN, true, firstAttacker.getBattleHP(), 
