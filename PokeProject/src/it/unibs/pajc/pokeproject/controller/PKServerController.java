@@ -63,7 +63,7 @@ public class PKServerController extends Thread implements ActionListener {
 	
 	public void openConnection() {
 		connectedClients = 0;
-		
+		//scheduleExecutorService per pianificare un azione periodica
 		ScheduledExecutorService checkClients = Executors.newSingleThreadScheduledExecutor();
 		checkClients.scheduleAtFixedRate(new Runnable() {
 			public void run() {

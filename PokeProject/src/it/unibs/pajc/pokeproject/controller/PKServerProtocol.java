@@ -16,10 +16,10 @@ public class PKServerProtocol extends Thread {
 	private Socket socketPlayer;
 	private ObjectInputStream fromClient; //inputStream for received messages
 	private ObjectOutputStream toClient; //outputStream to write messages
-	private ArrayBlockingQueue<PKMessage> toProcess; //queue where to put messages
+	private ArrayBlockingQueue<PKMessage> toProcess; //queue where to put messages FIFO
 	private ScheduledExecutorService checkMessages; //serve per controllare ogni sec se c'è un messaggio
 	private int clientID;
-	private static int idGen=0;
+	private static int idGen=0; //id Client che si connette
 	private boolean connection; //boolean for connection check
 
 	//View Components
@@ -38,6 +38,7 @@ public class PKServerProtocol extends Thread {
 		try {		
 			toClient = new ObjectOutputStream(socketPlayer.getOutputStream());
 			fromClient = new ObjectInputStream(socketPlayer.getInputStream());
+			//scheduleExecutor azione periodica
 			checkMessages = Executors.newSingleThreadScheduledExecutor();
 			checkMessages.scheduleAtFixedRate(new Runnable() {
 				public void run() {

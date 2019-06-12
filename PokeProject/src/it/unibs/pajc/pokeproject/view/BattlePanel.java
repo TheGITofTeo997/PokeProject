@@ -210,7 +210,7 @@ public class BattlePanel extends JPanel implements KeyListener {
 	public void doTurnUpdate(boolean trainerBar, int firstAttackerHP, int secondAttackerHP, String firstMove, String firstEffect, String secondMove, String secondEffect) {
 		int delay = 50;
 		
-        new Timer(delay, new ActionListener() {
+		moveTimer = new Timer(delay, new ActionListener() {
 
         	int charIndex = 0;
         	int counter = 0;
@@ -334,13 +334,14 @@ public class BattlePanel extends JPanel implements KeyListener {
             		((Timer)e.getSource()).stop();
             	}
             }
-         }).start();
+         });
+		moveTimer.start();
     }
 	
 	public void doTurnUpdate(boolean trainerBar, int secondAttackerHP, String firstMove, String firstEffect) {
 		int delay = 50;
 		
-        new Timer(delay, new ActionListener() {
+		moveTimer = new Timer(delay, new ActionListener() {
 
         	int charIndex = 0;
         	int counter = 0;
@@ -406,7 +407,8 @@ public class BattlePanel extends JPanel implements KeyListener {
             		((Timer)e.getSource()).stop();
             	}
             }
-         }).start();
+         });
+		moveTimer.start();
     }
 	
 	
