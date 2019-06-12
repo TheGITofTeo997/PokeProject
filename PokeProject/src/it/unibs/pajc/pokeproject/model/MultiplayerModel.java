@@ -49,8 +49,6 @@ public class MultiplayerModel {
 		case MSG_TURN:
 			PKTurnMessage realMsg= (PKTurnMessage)msg;
 			opponentFirst = realMsg.getOpponentFirst();
-			ourPokemon.setBattleHP(realMsg.getPlayerHP());
-			opponentPokemon.setBattleHP(realMsg.getOpponentHP());
 			ourMoveID = realMsg.getPlayerMoveID();
 			opponentMoveID = realMsg.getOpponentMoveID();
 			double ourEff = realMsg.getEffectivenessPlayer();
@@ -66,6 +64,7 @@ public class MultiplayerModel {
 			
 			if(!opponentFirst)
 			{	
+				opponentPokemon.setBattleHP(realMsg.getOpponentHP());
 				if(isDead(opponentPokemon))
 				{
 					e = new PropertyChangeEvent(this, PKClientStrings.HALF_TURN_US_FIRST_PROPERTY, false, true);
@@ -73,12 +72,14 @@ public class MultiplayerModel {
 				}
 				else 
 				{
+					ourPokemon.setBattleHP(realMsg.getPlayerHP());
 					e = new PropertyChangeEvent(this, PKClientStrings.COMPLETE_TURN_US_FIRST_PROPERTY, false, true);
 					firePropertyChanged(e);
 				}
 			}
 			else
 			{	
+				ourPokemon.setBattleHP(realMsg.getPlayerHP());
 				if(isDead(ourPokemon)) 
 				{
 					e = new PropertyChangeEvent(this, PKClientStrings.HALF_TURN_OPP_FIRST_PROPERTY, false, true);
@@ -86,6 +87,7 @@ public class MultiplayerModel {
 				}
 				else
 				{	
+					opponentPokemon.setBattleHP(realMsg.getOpponentHP());
 					e = new PropertyChangeEvent(this, PKClientStrings.COMPLETE_TURN_OPP_FIRST_PROPERTY, false, true);
 					firePropertyChanged(e);
 				}
@@ -147,7 +149,7 @@ public class MultiplayerModel {
 		return opponentFirst;
 	}
 	
-	public int getOpponetHP() {
+	public int getOpponentHP() {
 		return opponentPokemon.getBattleHP();
 	}
 

@@ -137,7 +137,7 @@ public class MatchThread implements Runnable {
 		{ // everything is ready
 			int firstAttackerID = setPriorityBattle(pokePlayerOne, pokePlayerTwo);
 			
-			if(firstAttackerID == pokePlayerOne.getBattleID()) {
+			if(firstAttackerID == playerOne.getClientID()) {
 				sendSelectedMoveMessage(pokePlayerOne, pokePlayerTwo, firstAttackerID, moveSelectedByOne, moveSelectedByTwo);
 				logger.writeLog(PKServerStrings.FIRST_ATTACKER_PLAYER_ONE);
 			}
@@ -169,8 +169,8 @@ public class MatchThread implements Runnable {
 		
 		if(firstAttackerID == playerOne.getClientID())
 		{
+			secondAttacker.setBattleHP(secondAttacker.getBattleHP() - damageFirstAttacker);
 			if(isDead(secondAttacker)) {
-				secondAttacker.setBattleHP(secondAttacker.getBattleHP() - damageFirstAttacker);
 				battleOver = new PKMessage(Commands.MSG_BATTLE_OVER);
 				turnMessageForOne = new PKTurnMessage(Commands.MSG_TURN, false, secondAttacker.getBattleHP(), 
 						firstAttacker.getBattleHP(), -1, firstMove, -1, firstAttackerEff);
@@ -183,7 +183,6 @@ public class MatchThread implements Runnable {
 			}
 			else 
 			{
-				secondAttacker.setBattleHP(secondAttacker.getBattleHP() - damageFirstAttacker);
 				firstAttacker.setBattleHP(firstAttacker.getBattleHP() - damageSecondAttacker);
 				turnMessageForOne = new PKTurnMessage(Commands.MSG_TURN, false, secondAttacker.getBattleHP(), 
 						firstAttacker.getBattleHP(), secondMove, firstMove, secondAttackerEff, firstAttackerEff);
@@ -201,13 +200,13 @@ public class MatchThread implements Runnable {
 		}
 		else
 		{
+			secondAttacker.setBattleHP(secondAttacker.getBattleHP() - damageFirstAttacker);
 			if(isDead(secondAttacker)) {
-				secondAttacker.setBattleHP(secondAttacker.getBattleHP() - damageFirstAttacker);
 				battleOver = new PKMessage(Commands.MSG_BATTLE_OVER);
-				turnMessageForTwo = new PKTurnMessage(Commands.MSG_TURN, false, secondAttacker.getBattleHP(), 
-						firstAttacker.getBattleHP(), -1, firstMove, -1, firstAttackerEff);
 				turnMessageForOne = new PKTurnMessage(Commands.MSG_TURN, true, firstAttacker.getBattleHP(), 
 						secondAttacker.getBattleHP(), firstMove, -1, firstAttackerEff, -1);	
+				turnMessageForTwo = new PKTurnMessage(Commands.MSG_TURN, false, secondAttacker.getBattleHP(), 
+						firstAttacker.getBattleHP(), -1, firstMove, -1, firstAttackerEff);
 				playerOne.sendMessage(turnMessageForOne);
 				playerTwo.sendMessage(turnMessageForTwo);
 				playerOne.sendMessage(battleOver);
@@ -215,12 +214,11 @@ public class MatchThread implements Runnable {
 			}
 			else 
 			{
-				secondAttacker.setBattleHP(secondAttacker.getBattleHP() - damageFirstAttacker);
 				firstAttacker.setBattleHP(firstAttacker.getBattleHP() - damageSecondAttacker);
-				turnMessageForTwo = new PKTurnMessage(Commands.MSG_TURN, false, secondAttacker.getBattleHP(), 
-						firstAttacker.getBattleHP(), secondMove, firstMove, secondAttackerEff, firstAttackerEff);
 				turnMessageForOne = new PKTurnMessage(Commands.MSG_TURN, true, firstAttacker.getBattleHP(), 
 						secondAttacker.getBattleHP(), firstMove, secondMove, firstAttackerEff, secondAttackerEff);
+				turnMessageForTwo = new PKTurnMessage(Commands.MSG_TURN, false, secondAttacker.getBattleHP(), 
+						firstAttacker.getBattleHP(), secondMove, firstMove, secondAttackerEff, firstAttackerEff);
 				playerOne.sendMessage(turnMessageForOne);
 				playerTwo.sendMessage(turnMessageForTwo);
 				if(isDead(firstAttacker))

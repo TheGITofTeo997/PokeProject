@@ -399,19 +399,19 @@ public class PKClientController{
 				//io attacco per primo e c'è anche attacco dell'avversario
 				if(e.getPropertyName().equalsIgnoreCase(PKClientStrings.COMPLETE_TURN_US_FIRST_PROPERTY)) {
 					dialog.dispose();
-					battlePanel.doTurnUpdate(false, multiplayerModel.getOurHP(), multiplayerModel.getOpponetHP(), multiplayerModel.getOurMove(), 
+					battlePanel.doTurnUpdate(false, multiplayerModel.getOurHP(), multiplayerModel.getOpponentHP(), multiplayerModel.getOurMove(), 
 							multiplayerModel.getOurEffect(), multiplayerModel.getOpponentMove(), multiplayerModel.getOpponentEffect());
 				}
 				//avversario attacca per primo e c'è anche il mio attacco
 				else if(e.getPropertyName().equalsIgnoreCase(PKClientStrings.COMPLETE_TURN_OPP_FIRST_PROPERTY)) {
 					dialog.dispose();
-					battlePanel.doTurnUpdate(true, multiplayerModel.getOpponetHP(), multiplayerModel.getOurHP(), multiplayerModel.getOpponentMove(), 
+					battlePanel.doTurnUpdate(true, multiplayerModel.getOpponentHP(), multiplayerModel.getOurHP(), multiplayerModel.getOpponentMove(), 
 							multiplayerModel.getOpponentEffect(), multiplayerModel.getOurMove(), multiplayerModel.getOurEffect());
 				}
 				//io attacco e avversario muore
 				else if(e.getPropertyName().equalsIgnoreCase(PKClientStrings.HALF_TURN_US_FIRST_PROPERTY)) {
 					dialog.dispose();
-					battlePanel.doTurnUpdate(false, multiplayerModel.getOpponetHP(), multiplayerModel.getOurMove(), multiplayerModel.getOurEffect());
+					battlePanel.doTurnUpdate(false, multiplayerModel.getOpponentHP(), multiplayerModel.getOurMove(), multiplayerModel.getOurEffect());
 				}
 				//avv attacca e io muoio
 				else if(e.getPropertyName().equalsIgnoreCase(PKClientStrings.HALF_TURN_OPP_FIRST_PROPERTY)) {
