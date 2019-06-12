@@ -210,7 +210,7 @@ public class BattlePanel extends JPanel implements KeyListener {
 	
 	public void doTurnUpdate(boolean trainerBar, int firstAttackerHP, int secondAttackerHP, String firstMove, String firstEffect, String secondMove, String secondEffect) {
 			int delay = 20;
-		
+			moveTimer.stop();
 			t = new Timer(delay, new ActionListener() {
 			
         	int charIndex = 0;
@@ -340,6 +340,7 @@ public class BattlePanel extends JPanel implements KeyListener {
     }
 	
 	public void doTurnUpdate(boolean trainerBar, int secondAttackerHP, String firstMove, String firstEffect) {
+		moveTimer.stop();
 		int delay = 20;
 		
 			t = new Timer(delay, new ActionListener() {
