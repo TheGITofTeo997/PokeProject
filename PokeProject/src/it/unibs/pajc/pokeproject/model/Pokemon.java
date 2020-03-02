@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.*;
 import java.net.URL;
 
+//pokemon
 public class Pokemon implements Serializable {
 	private static final long serialVersionUID = 9044885598484847739L;
 	private static final int NUMBER_OF_MOVES = 4;
